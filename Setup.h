@@ -4,9 +4,9 @@
 
 void setup() {
 
-  Serial.begin(115200);
 
   if(ASF_DEBUG_MODE){
+    Serial.begin(115200);
     // Wait for serial port to be opened, remove this line for 'standalone' operation
     while (!Serial) { delay(1); }
   }
@@ -40,40 +40,4 @@ void setup() {
   musicPlayer.playFullFile(STARTSOUND);
   if(ASF_DEBUG_MODE) Serial.println(F("✓✓✓ ⋅ PLAYER READY "));
   
-}
-
-
-
-/**********************
-* FILES FUNCTIONS
-***********************/
-
-/// File listing helper
-void printDirectory(File dir, int numTabs) {
-   while(true) {
-
-     File entry =  dir.openNextFile();
-     if (! entry) {
-       // no more files
-       //Serial.println("**nomorefiles**");
-       break;
-     }
-     for (uint8_t i=0; i<numTabs; i++) {
-       Serial.print('\t');
-     }
-     char filename[100];
-     entry.getName(filename,100);
-     if (entry.isDirectory()) {
-      Serial.print("📁 ");
-      Serial.print(filename);
-      Serial.println("/");
-      printDirectory(entry, numTabs+1);
-     } else {
-       Serial.print(filename);
-       // files have sizes, directories do not
-       Serial.print("\t\t");
-       Serial.println(entry.size(), DEC);
-     }
-     entry.close();
-   }
 }
