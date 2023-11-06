@@ -1,9 +1,7 @@
 /**********************
 * SETUP
 ***********************/
-
 void setup() {
-
 
   if(ASF_DEBUG_MODE){
     Serial.begin(115200);
@@ -11,6 +9,7 @@ void setup() {
     while (!Serial) { delay(1); }
   }
   delay(500);
+
   if(ASF_DEBUG_MODE){
     Serial.print(F("FdS Player: "));
     Serial.print(" - DEBUG MODE - ");
@@ -38,6 +37,5 @@ void setup() {
 
   // Play a file in the background, REQUIRES interrupts!  
   musicPlayer.playFullFile(STARTSOUND);
-  if(ASF_DEBUG_MODE) Serial.println(F("✓✓✓ ⋅ PLAYER READY "));
   
 }

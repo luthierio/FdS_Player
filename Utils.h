@@ -1,4 +1,3 @@
-
 /**********************
 * FILES FUNCTIONS
 ***********************/
@@ -8,6 +7,8 @@ void printDirectory(File dir, int numTabs) {
    while(true) {
 
      File entry =  dir.openNextFile();
+     char dirname[100];
+
      if (! entry) {
        // no more files
        //Serial.println("**nomorefiles**");
@@ -18,6 +19,7 @@ void printDirectory(File dir, int numTabs) {
      }
      char filename[100];
      entry.getName(filename,100);
+
      if (entry.isDirectory()) {
       Serial.print("📁 ");
       Serial.print(filename);

@@ -8,10 +8,20 @@ void loop() {
   if (Serial.available()) {
     char c = Serial.read();
 
+    if (c == 'r') {
+       aSoundPath.set("/00 Renée Lebas/14 L'accordéoniste.mp3");
+    }
+    if (c == 'y') {
+      aSoundPath.set("track001.mp3");
+    }
+    if (c == 'u') {
+      aSoundPath.set("track002.mp3");
+    }
     // if we get an 's' on the serial console, play it!
     if (c == 'a') {
-      if(ASF_DEBUG_MODE) Serial.println(F("⋅⋅⋅ ⋅ Playing UTF-8 File"));
-      musicPlayer.startPlayingFile("/00 Renée Lebas/14 L'accordéoniste.mp3");
+      if(ASF_DEBUG_MODE) Serial.println(F(" ⋅ Playing UTF-8 File ⋅ "));
+      musicPlayer.startPlayingFile(aSoundPath.get());
+      if(ASF_DEBUG_MODE) Serial.println(aSoundPath.get());
     }
     // if we get an 's' on the serial console, stop!
     if (c == 's') {
