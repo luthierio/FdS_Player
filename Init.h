@@ -18,5 +18,5 @@ Adafruit_VS1053_FilePlayer musicPlayer =
 ***********************/
 #include "Classes.h"
 
-PathFile aSound(STARTSOUND);
 Path aSoundPath(STARTSOUND);
+char  activeSoundPath[512];

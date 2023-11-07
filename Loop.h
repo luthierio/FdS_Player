@@ -8,6 +8,20 @@ void loop() {
   if (Serial.available()) {
     char c = Serial.read();
 
+    if (c == '0') {
+      getFilePathByNum(SD, activeSoundPath, 0, 14);
+      Serial.println(activeSoundPath);
+      aSoundPath = Path(activeSoundPath);
+      if(ASF_DEBUG_MODE) Serial.println(aSoundPath.dirNum());
+      if(ASF_DEBUG_MODE) Serial.println(aSoundPath.fileNum());
+
+    }
+    if (c == '1') {
+      getFilePathByNum(SD, activeSoundPath, 1, 2);
+      Serial.println(activeSoundPath);
+      aSoundPath = Path(activeSoundPath);
+    }
+
     if (c == 'r') {
        aSoundPath = Path("/00 Renée Lebas/14 L'accordéoniste.mp3");
     }

@@ -2,6 +2,7 @@
 #include "Arduino.h"
 #include <SdFat.h>
 
+
 class Path {
 
   private:
@@ -56,7 +57,7 @@ class Path {
     }
     
     uint8_t fileNum() {        
-      return this->getNum(this->filename());
+      return this->getNum(this->filename()); 
     } 
     uint8_t dirNum() {  
       const char * first = strchr( this->path, '/' ) + 1;      
