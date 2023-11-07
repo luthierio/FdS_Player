@@ -9,19 +9,33 @@ void loop() {
     char c = Serial.read();
 
     if (c == 'r') {
-       aSoundPath.set("/00 Renée Lebas/14 L'accordéoniste.mp3");
+       aSoundPath = Path("/00 Renée Lebas/14 L'accordéoniste.mp3");
+    }
+    if (c == 't') {
+      aSoundPath = Path("/01 Django/02 Saint Louis Blues [ I Got Rhythm (1941)].mp3");
     }
     if (c == 'y') {
-      aSoundPath.set("track001.mp3");
+      aSoundPath = Path("track001.mp3");
     }
     if (c == 'u') {
-      aSoundPath.set("track002.mp3");
+      aSoundPath = Path("/track002.mp3");
     }
     // if we get an 's' on the serial console, play it!
     if (c == 'a') {
       if(ASF_DEBUG_MODE) Serial.println(F(" ⋅ Playing UTF-8 File ⋅ "));
       musicPlayer.startPlayingFile(aSoundPath.get());
       if(ASF_DEBUG_MODE) Serial.println(aSoundPath.get());
+    }
+    if (c == 'i') {
+      if(ASF_DEBUG_MODE) Serial.println(F(""));
+      if(ASF_DEBUG_MODE) Serial.println(F(" ⋅⋅⋅ Infos ⋅⋅⋅ "));
+      if(ASF_DEBUG_MODE) Serial.println(aSoundPath.filename());
+      if(ASF_DEBUG_MODE) Serial.println(aSoundPath.suffix());
+      if(ASF_DEBUG_MODE) Serial.println(aSoundPath.dirNum());
+      if(ASF_DEBUG_MODE) Serial.println(aSoundPath.fileNum());
+      char dirname[255];
+      aSoundPath.getDirname(dirname,255);
+      if(ASF_DEBUG_MODE) Serial.println(dirname);
     }
     // if we get an 's' on the serial console, stop!
     if (c == 's') {
