@@ -69,7 +69,7 @@ void loop() {
     if (c == 'l') {
       AUDIO.stopPlaying();
       // list files
-      if(ASF_DEBUG_MODE) printDirectory(SD.open("/"), 1);
+      if(ASF_DEBUG_MODE) FS.print(SD.open("/"), 1, &Serial);
     }
   }
   if (!AUDIO.stopped()) {

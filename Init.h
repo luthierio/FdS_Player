@@ -2,7 +2,7 @@
 * FAT Files
 ***********************/
 SdFat SD;
-FileManager FM(&SD);
+FileSystem FS(&SD);
 
 /**********************
 * AUDIO CARD VS1053
@@ -41,7 +41,7 @@ char  activeSoundPath[512];
 /**********************
 * State
 ***********************/
-//Toutes les variables qui changent d'état certaines impliquent un recalcul important => deux états
+//Toutes les variables à sauvegarder sur la carte SD
 struct t_state{
   uint8_t dirNum = 0;
   uint8_t fileNum = 0;
