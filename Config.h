@@ -1,7 +1,12 @@
 /**********************
 * DEBUG
 ***********************/
-#define ASF_DEBUG_MODE 1
+#define ASF_DEBUG_MODE false
+#define ASF_SLEEP_MODE false // Indique qu'il faut s'endormir de force
+#define ASF_SPLASH_MODE false //Affiche le splash, sauvegarde en cours etc...
+#define SLEEPING false 
+#define LOADED false
+
 /**********************
 * CONFIG CONST
 ***********************/
@@ -26,4 +31,50 @@
 #define VS1053_DREQ     9       // VS1053 Data request, ideally an Interrupt pin
 #define SPI_SPEED SD_SCK_MHZ(4) // Required to int SD: SD.begin(CARDCS,SPI_SPEED)
 
+/**********************
+* PITCH
+***********************/
+// AICTRL0 from table below. Voir https://www.vlsi.fi/fileadmin/software/VS10XX/pitchshifter.pdf
+// AICTRL0 = +16384 × ratio/100. Voir https://www.vlsi.fi/fileadmin/software/VS10XX/pitchshifter.pdf
+#define MIN_PITCH_STEP      0   
+#define MAX_PITCH_STEP      10  
+#define MIN_PITCH_RATIO        70  
+#define MAX_PITCH_RATIO        134
+#define MIN_PITCH_TEMPO_RATIO  50  
+#define MAX_PITCH_TEMPO_RATIO  145 
 
+/**********************
+* INPUTS PINS
+***********************/
+
+// TRAD INPTS
+#define VOLUME_PIN A1 
+#define VOLUME 10           // Defaut volume
+
+/**********************
+* Multiplex
+***********************/
+#define PIN_ADDR_A 13
+#define PIN_ADDR_B 12
+#define PIN_ADDR_C 11
+#define PIN_SIG    A0                           // Broche de signal
+
+/**********************
+* Interface
+***********************/
+const byte ROT_D_PIN[2] = {A5, A4};
+const byte ROT_F_PIN[2] = {A3, A2};
+const byte ROT_P_PIN[2] = {1 , 0 };
+#define noOfButtons 6                     // Nombre de bouton qui doivent être filtés via anti-rebond
+
+/**********************
+* Modes
+***********************/
+enum asfMode    { PLAYER,   BEAT,   PLAYLIST, ACTION    };// Entier déguisé en string :-)
+enum playMode   { ONEPLAY,  AUTO,   RANDOM,   REPEATONE };// Entier déguisé en string :-)
+enum pitchMode  { OFF,      TEMPO,  PITCH };// Entier déguisé en string :-)
+enum pitchStyle { STEP,     RATIO };// Entier déguisé en string :-)
+
+/**********************
+* Custom
+***********************/

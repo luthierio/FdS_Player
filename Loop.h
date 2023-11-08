@@ -8,78 +8,73 @@ void loop() {
   if (Serial.available()) {
     char c = Serial.read();
 
-    if (c == '0' ||c == '1' ) {
-      musicPlayer.pausePlaying(true);
+    if (c == '8' ) {
+      PITCHER.setValue(16384);
+    }
+    if (c == '9' ) {
+      PITCHER.setValue(-18432);
+    }
+    if (c == '0' || c == '1' ) {
+      AUDIO.pausePlaying(true);
     }
     if (c == '0') {      
       if(getFilePathByNum(SD, activeSoundPath, 0, 14)){
         Serial.println(activeSoundPath);
-        aSoundPath = Path(activeSoundPath);
       }
     }
     if (c == '1') {
       if(getFilePathByNum(SD, activeSoundPath, 1, 2)){
         Serial.println(activeSoundPath);
-        aSoundPath = Path(activeSoundPath);
       }
     }
     if (c == '0' ||c == '1' ) {
-      musicPlayer.pausePlaying(false);
+      AUDIO.pausePlaying(false);
     }
 
-    if (c == 'r') {
-       aSoundPath = Path("/00 Renée Lebas/14 L'accordéoniste.mp3");
-    }
-    if (c == 't') {
-      aSoundPath = Path("/01 Django/02 Saint Louis Blues [ I Got Rhythm (1941)].mp3");
-    }
-    if (c == 'y') {
-      aSoundPath = Path("track001.mp3");
-    }
-    if (c == 'u') {
-      aSoundPath = Path("/track002.mp3");
-    }
     // if we get an 's' on the serial console, play it!
     if (c == 'a') {
-      if(ASF_DEBUG_MODE) Serial.println(F(" ⋅ Playing UTF-8 File ⋅ "));
-      musicPlayer.startPlayingFile(activeSoundPath);
-      if(ASF_DEBUG_MODE) Serial.println(activeSoundPath);
+      Serial.println(F(""));
+      Serial.println(F(" ⋅⋅⋅ Playing ⋅⋅⋅ "));
+      AUDIO.startPlayingFile(activeSoundPath);
+      Serial.println(activeSoundPath);
     }
     if (c == 'i') {
-      if(ASF_DEBUG_MODE) Serial.println(F(""));
-      if(ASF_DEBUG_MODE) Serial.println(F(" ⋅⋅⋅ Infos ⋅⋅⋅ "));
-      if(ASF_DEBUG_MODE) Serial.println(aSoundPath.filename());
-      if(ASF_DEBUG_MODE) Serial.println(aSoundPath.suffix());
-      if(ASF_DEBUG_MODE) Serial.println(aSoundPath.dirNum());
-      if(ASF_DEBUG_MODE) Serial.println(aSoundPath.fileNum());
+      Path aSoundPath(activeSoundPath);
+      Serial.println(F(""));
+      Serial.println(F(" ⋅⋅⋅ Infos ⋅⋅⋅ "));
+      Serial.println(aSoundPath.filename()+3);
+      Serial.println(aSoundPath.suffix());
+      Serial.println(aSoundPath.dirNum());
+      Serial.println(aSoundPath.fileNum());
       char dirname[255];
       aSoundPath.getDirname(dirname,255);
-      if(ASF_DEBUG_MODE) Serial.println(dirname);
+      Serial.println(dirname+3);
     }
+
     // if we get an 's' on the serial console, stop!
     if (c == 's') {
-      musicPlayer.stopPlaying();
+      AUDIO.stopPlaying();
     }
 
     // if we get an 'p' on the serial console, pause/unpause!
     if (c == 'p') {
-      if (! musicPlayer.paused()) {
+      if (! AUDIO.paused()) {
         if(ASF_DEBUG_MODE) Serial.println("Paused");
-        musicPlayer.pausePlaying(true);
+        AUDIO.pausePlaying(true);
       } else {
         if(ASF_DEBUG_MODE) Serial.println("Resumed");
-        musicPlayer.pausePlaying(false);
+        AUDIO.pausePlaying(false);
       }
     }
     if (c == 'l') {
-      musicPlayer.stopPlaying();
+      AUDIO.stopPlaying();
       // list files
       if(ASF_DEBUG_MODE) printDirectory(SD.open("/"), 1);
     }
   }
-  if (!musicPlayer.stopped()) {
+  if (!AUDIO.stopped()) {
     delay(100);
-    if (! musicPlayer.paused()) {
+    if (! AUDIO.paused()) {
       if(ASF_DEBUG_MODE) Serial.print(".");
     }
   }

@@ -1,7 +1,8 @@
-
-#include "Arduino.h"
-#include <SdFat.h>
-
+/**********************
+* Class Path
+***********************/
+// Manipulation de chemin de référence vers des chemins de fichier
+// Extraction numéros et nom de fichiers...
 
 class Path {
 
@@ -64,57 +65,4 @@ class Path {
       return this->getNum(first);
     } 
 
-};
-
-class SoundFile : public File {
-  public:
-    void ID3() {
-    }
-    void ID3v2() {
-    }
-    void bitrate() {
-    }
-};
-
-class PathFile : public File {
-  private:
-    const char* path;
-  public:
-    PathFile() {}
-    /** Create an open SdFile.
-    * \param[in] path path for file.
-    * \param[in] oflag open flags.
-    */
-    PathFile(const char* path) {
-      this->path = path;  
-      File::open(path);  
-    }
-    PathFile(const char* path, oflag_t oflag) {
-      this->path = path;  
-      File::open(path,oflag);  
-    }
-
-    void open(const char* path) {
-      this->path = path;
-      File::open(path);
-    }
-    void open(const char* path, oflag_t oflag) {
-      this->path = path;
-      File::open(path,oflag);
-    }
-
-    void rename(const char* path) {
-      this->path = path;
-      File::rename(path);
-    }
-
-    const char* getPath() {
-      return this->path;
-    }
-    void ID3() {
-    }
-    void ID3v2() {
-    }
-    void bitrate() {
-    }
 };

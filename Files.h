@@ -3,7 +3,22 @@
 ***********************/
 /// File listing helper
 
-File getByNum(File root, int num) {  
+class FileManager {
+  public:
+    SdFat* SD;
+    FileManager(SdFat* SD){
+      this->SD = SD;
+    }
+    void ID3() {
+    }
+    void ID3v2() {
+    }
+    uint32_t bitrate() {
+      return 128000;
+    }
+};
+
+File getFileByNum(File root, int num) {  
 
   while(true) {
 
@@ -19,9 +34,8 @@ File getByNum(File root, int num) {
     char name[100]; 
     entry.getName(name,100);
 
-    if (name[0] == prefix[0]
-        && name[1] == prefix[1]) {
-        root.close();
+    if ( name[0] == prefix[0]
+      && name[1] == prefix[1] ) {        
         return entry;
     }
   }
@@ -32,9 +46,9 @@ File getByNum(File root, int num) {
 
 boolean getFilePathByNum(SdFat SD, char* path, const int dirnum, const int filenum) {    
     File root = SD.open("/", O_RDONLY);
-    File aDir = getByNum(root, dirnum);
+    File aDir = getFileByNum(root, dirnum);
     if(aDir.isDir()){
-      File aFile = getByNum(aDir, filenum);      
+      File aFile = getFileByNum(aDir, filenum);      
       if(aFile.isFile()){
         char filename[255];
         char dirname[255];
@@ -45,11 +59,9 @@ boolean getFilePathByNum(SdFat SD, char* path, const int dirnum, const int filen
           strcat (path,filename);
           return true;
         }
-
       }
     }
     return false;
-
 }
 /// File listing helper
 void printDirectory(File dir, int numTabs) {
