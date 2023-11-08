@@ -8,20 +8,23 @@ void loop() {
   if (Serial.available()) {
     char c = Serial.read();
 
-    if (c == '0') {
-      getFilePathByNum(SD, activeSoundPath, 0, 14);
-      Serial.println(activeSoundPath);
-      aSoundPath = Path(activeSoundPath);
-      /*
-      if(ASF_DEBUG_MODE) Serial.println(aSoundPath.dirNum());
-      if(ASF_DEBUG_MODE) Serial.println(aSoundPath.fileNum());
-      */
-
+    if (c == '0' ||c == '1' ) {
+      musicPlayer.pausePlaying(true);
+    }
+    if (c == '0') {      
+      if(getFilePathByNum(SD, activeSoundPath, 0, 14)){
+        Serial.println(activeSoundPath);
+        aSoundPath = Path(activeSoundPath);
+      }
     }
     if (c == '1') {
-      getFilePathByNum(SD, activeSoundPath, 1, 2);
-      Serial.println(activeSoundPath);
-      aSoundPath = Path(activeSoundPath);
+      if(getFilePathByNum(SD, activeSoundPath, 1, 2)){
+        Serial.println(activeSoundPath);
+        aSoundPath = Path(activeSoundPath);
+      }
+    }
+    if (c == '0' ||c == '1' ) {
+      musicPlayer.pausePlaying(false);
     }
 
     if (c == 'r') {
@@ -39,12 +42,8 @@ void loop() {
     // if we get an 's' on the serial console, play it!
     if (c == 'a') {
       if(ASF_DEBUG_MODE) Serial.println(F(" ⋅ Playing UTF-8 File ⋅ "));
-
-      char tmpPath[512];
-      strcpy (tmpPath,aSoundPath.get());
-      tmpPath[strlen(aSoundPath.get())] =  '\0';
-      musicPlayer.startPlayingFile(tmpPath);
-      if(ASF_DEBUG_MODE) Serial.println(tmpPath);
+      musicPlayer.startPlayingFile(activeSoundPath);
+      if(ASF_DEBUG_MODE) Serial.println(activeSoundPath);
     }
     if (c == 'i') {
       if(ASF_DEBUG_MODE) Serial.println(F(""));

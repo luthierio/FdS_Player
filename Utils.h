@@ -3,7 +3,7 @@
 ***********************/
 /// File listing helper
 
-void getByNum(File root, char* destination, int num) {  
+File getByNum(File root, int num) {  
 
   while(true) {
 
@@ -16,28 +16,39 @@ void getByNum(File root, char* destination, int num) {
     char prefix[2];
     sprintf(prefix, "%02d", num);  
 
-    char name[100];
+    char name[100]; 
     entry.getName(name,100);
 
     if (name[0] == prefix[0]
         && name[1] == prefix[1]) {
-        strncpy(destination, name , strlen(name));
-        destination[strlen(name)] = '\0';
+        root.close();
+        return entry;
     }
   }
+
+  return root;
+
 };
 
-void getFilePathByNum(SdFat SD, char* destination, int dirnum, int filenum) {
-    char tempDir[255];
-    char tempFile[255];
+boolean getFilePathByNum(SdFat SD, char* path, const int dirnum, const int filenum) {    
+    File root = SD.open("/", O_RDONLY);
+    File aDir = getByNum(root, dirnum);
+    if(aDir.isDir()){
+      File aFile = getByNum(aDir, filenum);      
+      if(aFile.isFile()){
+        char filename[255];
+        char dirname[255];
+        if(aDir.getName(dirname,255) && aFile.getName(filename,255)){
+          strcpy (path,"/");
+          strcat (path,dirname);
+          strcat (path,"/");
+          strcat (path,filename);
+          return true;
+        }
 
-    getByNum(SD.open("/", O_RDONLY), tempDir, dirnum);
-    getByNum(SD.open(tempDir, O_RDONLY), tempFile, filenum);
-
-    strcpy (destination,"/");
-    strcat (destination,tempDir);
-    strcat (destination,"/");
-    strcat (destination,tempFile);
+      }
+    }
+    return false;
 
 }
 /// File listing helper
