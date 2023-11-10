@@ -14,6 +14,7 @@
 /**********************
 * Local Classes & Functions
 ***********************/
+#include "Class.Range.h"
 #include "Class.Pitcher.h"
 #include "Class.Path.h"
 #include "Class.FilePicker.h"
