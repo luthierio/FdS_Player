@@ -17,10 +17,6 @@ class Path {
     }
 
     const char* get() {
-      return (char*)this->path;
-    }
-
-    const char* join(const char* path) {
       return this->path;
     }
 

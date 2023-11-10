@@ -17,18 +17,18 @@ class Pitcher {
     }
 
     void setValue(signed int aictrl0){
+      this->VS1053->pausePlaying(true); 
       delay(1);
       while (!this->VS1053->readyForData());
       uint16_t currentAICTRL0 = this->VS1053->sciRead(VS1053_SCI_AICTRL0);
 
       if(currentAICTRL0 != aictrl0){
-        this->VS1053->pausePlaying(true); 
         while (!this->VS1053->readyForData());
         this->VS1053->sciWrite(VS1053_SCI_AICTRL0,  aictrl0);
         while (!this->VS1053->readyForData());
         delay(1);
-        this->VS1053->pausePlaying(false); 
       }
+      this->VS1053->pausePlaying(false); 
     }
 
 };

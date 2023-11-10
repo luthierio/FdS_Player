@@ -12,43 +12,44 @@ void loop() {
       PITCHER.setValue(16384);
     }
     if (c == '9' ) {
-      PITCHER.setValue(-18432);
+      PITCHER.setValue(18432);
     }
-    if (c == '0' || c == '1' ) {
+
+    if (c == '0' || c == '1' || c == '2' ) {
       AUDIO.pausePlaying(true);
     }
-    if (c == '0') {      
-      if(getFilePathByNum(SD, activeSoundPath, 0, 14)){
-        Serial.println(activeSoundPath);
-      }
+    if (c == '0') {    
+        STATE.dirNum = 0;
+        STATE.fileNum = 0;
     }
     if (c == '1') {
-      if(getFilePathByNum(SD, activeSoundPath, 1, 2)){
-        Serial.println(activeSoundPath);
-      }
+        STATE.dirNum = 1;
+        STATE.fileNum = 2;
     }
-    if (c == '0' ||c == '1' ) {
+    if (c == '2') {
+        STATE.dirNum = 0;
+        STATE.fileNum = 14;
+    }
+    if (c == '0' ||c == '1'  ||c == '2' ) {
+        FILE_.update();
+      Serial.println(FILE_.path);
       AUDIO.pausePlaying(false);
     }
 
     // if we get an 's' on the serial console, play it!
     if (c == 'a') {
-      Serial.println(F(""));
-      Serial.println(F(" ⋅⋅⋅ Playing ⋅⋅⋅ "));
-      AUDIO.startPlayingFile(activeSoundPath);
-      Serial.println(activeSoundPath);
+      Serial.println("");
+      Serial.print(F(" ⋅⋅⋅ Playing ⋅⋅⋅ : "));
+      Serial.println(FILE_.path);
+      AUDIO.startPlayingFile(FILE_.path);
     }
     if (c == 'i') {
-      Path aSoundPath(activeSoundPath);
-      Serial.println(F(""));
-      Serial.println(F(" ⋅⋅⋅ Infos ⋅⋅⋅ "));
-      Serial.println(aSoundPath.filename()+3);
-      Serial.println(aSoundPath.suffix());
-      Serial.println(aSoundPath.dirNum());
-      Serial.println(aSoundPath.fileNum());
-      char dirname[255];
-      aSoundPath.getDirname(dirname,255);
-      Serial.println(dirname+3);
+      Path cPath = Path(FILE_.path);
+      Serial.println(cPath.dirNum());
+      Serial.println(cPath.fileNum());
+      Serial.println(cPath.filename());
+      Serial.println(cPath.suffix());
+
     }
 
     // if we get an 's' on the serial console, stop!
@@ -69,7 +70,7 @@ void loop() {
     if (c == 'l') {
       AUDIO.stopPlaying();
       // list files
-      if(ASF_DEBUG_MODE) FS.print(SD.open("/"), 1, &Serial);
+      FILE_.print(SD.open("/"), 0,&Serial);
     }
   }
   if (!AUDIO.stopped()) {

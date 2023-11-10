@@ -35,7 +35,7 @@ void setup() {
   }else{
     if(ASF_DEBUG_MODE) Serial.println(F("✓✓✓ ⋅ SD Card found: "));
   }
-
+  FILE_.begin(&STATE.dirNum,&STATE.fileNum);
   // Play a file in the background, REQUIRES interrupts!  
   AUDIO.playFullFile(STARTSOUND);
   

@@ -2,7 +2,7 @@
 * FAT Files
 ***********************/
 SdFat SD;
-FileSystem FS(&SD);
+FilePicker FILE_(&SD);
 
 /**********************
 * AUDIO CARD VS1053
