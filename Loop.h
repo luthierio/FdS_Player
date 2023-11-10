@@ -38,9 +38,6 @@ void loop() {
       Serial.println(FILE_.path);
     }
     if (c == '5') {      
-      if(getFilePathByNum(SD, activeSoundPath, 0, 14)){
-        Serial.println(activeSoundPath);
-      }
     }
 
     // if we get an 's' on the serial console, play it!
