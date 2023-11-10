@@ -1,6 +1,20 @@
 /**********************
 * PITCH FUNCTIONS
 ***********************/
+#define PITCH_STEPS 11
+static const int PITCH_TONE_TABLE[PITCH_STEPS]= {
+ 12274, //-5 Down five semitones
+ 13004, //-4 Down four semitones
+ 13777, //-3 Down three semitones
+ 14595, //-2 Down two semitones
+ 15466, //-1 Down one semitone
+ 16384, //+0 Neutral position, no extra CPU needed
+ 17359, //+1 Up one semitone
+ 18432, //+2 Up two semitones
+ 19481, //+3 Up three semitones
+ 20642, //+4 Up four semitones
+ 21869, //+5 Up five semitones
+};
 
 class Pitcher {
   
@@ -12,6 +26,11 @@ class Pitcher {
       this->VS1053 = VS1053;
     }
 
+    void setPitchStep(unsigned int pitch){
+      if(0 <= pitch < PITCH_STEPS){
+        setValue(PITCH_TONE_TABLE[pitch]);
+      }
+    }
     void setRatio(float pitchRatio){
       this->setValue(16384*pitchRatio);
     }
@@ -19,15 +38,8 @@ class Pitcher {
     void setValue(signed int aictrl0){
       this->VS1053->pausePlaying(true); 
       delay(1);
-      while (!this->VS1053->readyForData());
-      uint16_t currentAICTRL0 = this->VS1053->sciRead(VS1053_SCI_AICTRL0);
-
-      if(currentAICTRL0 != aictrl0){
-        while (!this->VS1053->readyForData());
         this->VS1053->sciWrite(VS1053_SCI_AICTRL0,  aictrl0);
-        while (!this->VS1053->readyForData());
         delay(1);
-      }
       this->VS1053->pausePlaying(false); 
     }
 

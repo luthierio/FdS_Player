@@ -6,8 +6,9 @@
 
 class FilePicker {
   public:
-
+ 
     SdFat* SD;
+    Adafruit_VS1053_FilePlayer* VS1053;
     File DIR;
     File FILE;
     uint8_t * dirNum;
@@ -16,8 +17,9 @@ class FilePicker {
     char filename[255];  
     char path[560];
 
-    FilePicker(SdFat* sd){
+    FilePicker(SdFat* sd,Adafruit_VS1053_FilePlayer* VS1053){
       this->SD = sd;
+      this->VS1053 = VS1053;
     }
     //Recois deux pointer vers les variables contenant les numéros de sélections
     void begin(uint8_t *dirNum, uint8_t *fileNum){
@@ -25,12 +27,13 @@ class FilePicker {
       this->fileNum = fileNum;
     }
     void update(){
-      delay(1);
+      this->VS1053->pausePlaying(true); 
       this->DIR = getByNum(this->SD->open("/"), *this->dirNum);
       delay(1);
       this->FILE = getByNum(this->DIR, *this->fileNum);
+      delay(1);
       updatePath();
-      delay(10);
+      this->VS1053->pausePlaying(false);
     }  
     
     void updatePath(){

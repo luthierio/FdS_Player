@@ -9,31 +9,36 @@ void loop() {
     char c = Serial.read();
 
     if (c == '8' ) {
-      PITCHER.setValue(16384);
+      STATE.pitchStep ++;
+      //PITCHER.setValue(13004);
+      //PITCHER.setPitchStep(STATE.pitchStep);
+      Serial.println(STATE.pitchStep);
     }
     if (c == '9' ) {
-      PITCHER.setValue(18432);
+      STATE.pitchStep --;
+      //PITCHER.setValue(20642);
+      PITCHER.setPitchStep(STATE.pitchStep);
     }
+    if (c == '9'  ||c == '8' ) {
+      Serial.println(STATE.pitchStep);
+      Serial.println(AUDIO.sciRead(VS1053_SCI_AICTRL0));
 
-    if (c == '0' || c == '1' || c == '2' ) {
-      AUDIO.pausePlaying(true);
     }
     if (c == '0') {    
-        STATE.dirNum = 0;
-        STATE.fileNum = 0;
+      STATE.dirNum = 0;
+      STATE.fileNum = 0;
     }
     if (c == '1') {
-        STATE.dirNum = 1;
-        STATE.fileNum = 2;
+      STATE.dirNum = 1;
+      STATE.fileNum = 2;
     }
     if (c == '2') {
-        STATE.dirNum = 0;
-        STATE.fileNum = 14;
+      STATE.dirNum = 0;
+      STATE.fileNum = 14;
     }
     if (c == '0' ||c == '1'  ||c == '2' ) {
-        FILE_.update();
+      FILE_.update();
       Serial.println(FILE_.path);
-      AUDIO.pausePlaying(false);
     }
 
     // if we get an 's' on the serial console, play it!
