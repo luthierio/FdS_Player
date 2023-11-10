@@ -7,9 +7,6 @@ void setup() {
     Serial.begin(115200);
     // Wait for serial port to be opened, remove this line for 'standalone' operation
     while (!Serial) { delay(1); }
-  }
-
-  if(ASF_DEBUG_MODE){
     Serial.print(F("FdS Player: "));
     Serial.print(" - DEBUG MODE - ");
     Serial.println(CREDITS);
