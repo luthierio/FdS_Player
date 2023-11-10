@@ -11,7 +11,9 @@ class FilePicker {
     File DIR;
     File FILE;
     uint8_t * dirNum;
-    uint8_t * fileNum;  
+    uint8_t * fileNum;    
+    char dirname[255]; 
+    char filename[255];  
     char path[560];
 
     FilePicker(SdFat* sd){
@@ -33,25 +35,12 @@ class FilePicker {
     
     void updatePath(){
       this->path[0] = '\0';
-      char dirname[255];
-      char filename[255];
-      this->DIR.getName(dirname,255);
-      this->FILE.getName(filename,255);
+      this->DIR.getName(this->dirname,255);
+      this->FILE.getName(this->filename,255);
       strcpy (this->path,"/");
-      strcat (this->path,dirname);
+      strcat (this->path,this->dirname);
       strcat (this->path,"/");
-      strcat (this->path,filename);
-    }
-
-    void setDir(int* num){
-
-    }
-    void setFile(int* num){
-
-    }
-
-    void getPrefix(uint8_t num, char *prefix) {        
-      sprintf(prefix , "%02d", num);  
+      strcat (this->path,this->filename);
     }
 
     File getByNum(File root, uint8_t num) {
@@ -76,32 +65,7 @@ class FilePicker {
         }
       }    
       return this->FILE;  
-    }
-    /*
-    Path getFilePathByNum(const int dirnum, const int filenum) {    
-      char path[560];
-      File root = this->SD->open("/", O_RDONLY);
-      File aDir = getByNum(root, dirnum);
-      if(aDir.isDir()){
-        File aFile = getByNum(aDir, filenum);
-
-        if(aFile.isFile()){
-          char filename[255];
-          char dirname[255];
-          if(aDir.getName(dirname,255) && aFile.getName(filename,255)){
-            strcpy (path,"/");
-            strcat (path,dirname);
-            strcat (path,"/");
-            strcat (path,filename);
-            return Path(path);
-          }
-        }
-
-      }
-      Path aPath;
-      return aPath;
-    }
-    */
+    } 
     void print(File dir, int numTabs, Serial_* Serial) {
       while(true) {
 

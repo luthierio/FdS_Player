@@ -44,11 +44,8 @@ void loop() {
       AUDIO.startPlayingFile(FILE_.path);
     }
     if (c == 'i') {
-      Path cPath = Path(FILE_.path);
-      Serial.println(cPath.dirNum());
-      Serial.println(cPath.fileNum());
-      Serial.println(cPath.filename());
-      Serial.println(cPath.suffix());
+      Serial.println(FILE_.dirname+3);
+      Serial.println(FILE_.filename+3);
 
     }
 
