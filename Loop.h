@@ -9,18 +9,15 @@ void loop() {
     char c = Serial.read();
 
     if (c == '8' ) {
-      STATE.pitchStep ++;
-      //PITCHER.setValue(13004);
-      //PITCHER.setPitchStep(STATE.pitchStep);
-      Serial.println(STATE.pitchStep);
+      STATE.pitchStep.decrease();
     }
     if (c == '9' ) {
-      STATE.pitchStep --;
-      //PITCHER.setValue(20642);
-      PITCHER.setPitchStep(STATE.pitchStep);
+      STATE.pitchStep.increase();
     }
     if (c == '9'  ||c == '8' ) {
-      Serial.println(STATE.pitchStep);
+
+      Serial.println(STATE.pitchStep.val);
+      PITCHER.setPitchStep(STATE.pitchStep.val);
       Serial.println(AUDIO.sciRead(VS1053_SCI_AICTRL0));
 
     }
@@ -39,6 +36,11 @@ void loop() {
     if (c == '0' ||c == '1'  ||c == '2' ) {
       FILE_.update();
       Serial.println(FILE_.path);
+    }
+    if (c == '5') {      
+      if(getFilePathByNum(SD, activeSoundPath, 0, 14)){
+        Serial.println(activeSoundPath);
+      }
     }
 
     // if we get an 's' on the serial console, play it!
@@ -62,10 +64,10 @@ void loop() {
     // if we get an 'p' on the serial console, pause/unpause!
     if (c == 'p') {
       if (! AUDIO.paused()) {
-        if(ASF_DEBUG_MODE) Serial.println("Paused");
+        Serial.println("Paused");
         AUDIO.pausePlaying(true);
       } else {
-        if(ASF_DEBUG_MODE) Serial.println("Resumed");
+        Serial.println("Resumed");
         AUDIO.pausePlaying(false);
       }
     }
@@ -78,7 +80,7 @@ void loop() {
   if (!AUDIO.stopped()) {
     delay(100);
     if (! AUDIO.paused()) {
-      if(ASF_DEBUG_MODE) Serial.print(".");
+      Serial.print(".");
     }
   }
 }

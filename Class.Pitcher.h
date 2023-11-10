@@ -26,9 +26,9 @@ class Pitcher {
       this->VS1053 = VS1053;
     }
 
-    void setPitchStep(unsigned int pitch){
-      if(0 <= pitch < PITCH_STEPS){
-        setValue(PITCH_TONE_TABLE[pitch]);
+    void setPitchStep(uint8_t pitchStep){
+      if(0 <= pitchStep < PITCH_STEPS){
+        setValue(PITCH_TONE_TABLE[pitchStep]);
       }
     }
     void setRatio(float pitchRatio){
@@ -36,11 +36,15 @@ class Pitcher {
     }
 
     void setValue(signed int aictrl0){
-      this->VS1053->pausePlaying(true); 
-      delay(1);
+      signed int currentAICTRL0 = this->VS1053->sciRead(VS1053_SCI_AICTRL0);
+
+      if(currentAICTRL0 != aictrl0){
+        this->VS1053->pausePlaying(true); 
+        delay(5); //Let few millis to avoid awful noise
         this->VS1053->sciWrite(VS1053_SCI_AICTRL0,  aictrl0);
-        delay(1);
-      this->VS1053->pausePlaying(false); 
+        delay(5); //Let few millis to avoid awful noise
+        this->VS1053->pausePlaying(false); 
+      }
     }
 
 };

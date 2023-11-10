@@ -1,11 +1,12 @@
 /**********************
 * DEBUG
 ***********************/
-#define ASF_DEBUG_MODE true
+#define ASF_DEBUG_MODE false
 #define ASF_SLEEP_MODE false // Indique qu'il faut s'endormir de force
 #define ASF_SPLASH_MODE false //Affiche le splash, sauvegarde en cours etc...
 #define SLEEPING false 
 #define LOADED false
+#define SERIAL_ON true
 
 /**********************
 * CONFIG CONST

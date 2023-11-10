@@ -42,10 +42,28 @@ char  activeSoundPath[512];
 * State
 ***********************/
 //Toutes les variables à sauvegarder sur la carte SD
+
+class Range {
+  public:
+    uint8_t val;
+    uint8_t min;
+    uint8_t max;
+    Range(uint8_t min, uint8_t max, uint8_t dft){
+      this->val = dft;
+      this->min = min;
+      this->max = max;
+    }
+    void increase() {
+      if(this->val < this->max) this->val++;
+    }
+    void decrease() {
+      if(this->val > this->min) this->val--;
+    }
+};
 struct t_state{
   uint8_t dirNum = 0;
   uint8_t fileNum = 0;
-  uint8_t pitchStep = 5;
+  Range pitchStep = Range(0,10,5);
   uint8_t pitchRatio = 100;// En pourcentage, le ratio de pitch/tempo souhaité
   boolean beatOn = false;
   uint8_t BPM = 100;
