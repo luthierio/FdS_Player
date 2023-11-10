@@ -27,6 +27,7 @@ void setup() {
     }
     AUDIO.applyPatch(pluginPitchShifter, PLUGIN_PITCHSHIFTER_SIZE);  
     AUDIO.sciWrite(VS1053_SCI_AIADDR, 0x50);
+    PITCHER.setPitchStep(STATE.pitchStep.val);
   }
 
   if (!SD.begin(CARDCS,SPI_SPEED)) {
