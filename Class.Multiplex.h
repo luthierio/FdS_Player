@@ -7,21 +7,21 @@
     const int threshold = 512; 
     // Constructeur
     Multiplex(const byte pinAddrA, const byte pinAddrB, const byte pinAddrC, const byte pinSig) 
-      : PIN_ADDR_A(pinAddrA), PIN_ADDR_B(pinAddrB), PIN_ADDR_C(pinAddrC), PIN_SIG(pinSig) {
+      : MUX_PIN_ADDR_A(pinAddrA), MUX_PIN_ADDR_B(pinAddrB), MUX_PIN_ADDR_C(pinAddrC), MUX_PIN_SIG(pinSig) {
       // Initialisation des broches
     }
     
     void begin(){
-      pinMode(PIN_ADDR_A, OUTPUT);
-      pinMode(PIN_ADDR_B, OUTPUT);
-      pinMode(PIN_ADDR_C, OUTPUT);
-      pinMode(PIN_SIG, INPUT);
+      pinMode(MUX_PIN_ADDR_A, OUTPUT);
+      pinMode(MUX_PIN_ADDR_B, OUTPUT);
+      pinMode(MUX_PIN_ADDR_C, OUTPUT);
+      pinMode(MUX_PIN_SIG, INPUT);
     }
     // Méthode pour lire les valeurs analogiques sur toutes les broches
     void readAnalogValues(int analogValues[8]) {
       for (byte i = 0; i < 8; ++i) {
         setAddress(i);
-        analogValues[i] = analogRead(PIN_SIG);
+        analogValues[i] = analogRead(MUX_PIN_SIG);
       }
     }
     // Méthode pour lire l'état du bouton à une adresse donnée
@@ -29,7 +29,7 @@
       // Sélectionner l'adresse
       setAddress(buttonAddress);
       // Lire l'état du bouton
-      return (analogRead(PIN_SIG) > threshold );
+      return (analogRead(MUX_PIN_SIG) > threshold );
     }
     // Méthode pour lire l'état du bouton à une adresse donnée
     int value(byte buttonAddress) {
@@ -37,20 +37,20 @@
       setAddress(buttonAddress);
 
       // Lire l'état du bouton
-      return analogRead(PIN_SIG);
+      return analogRead(MUX_PIN_SIG);
     }
 
   private:
-    const byte PIN_ADDR_A;
-    const byte PIN_ADDR_B;
-    const byte PIN_ADDR_C;
-    const byte PIN_SIG;
+    const byte MUX_PIN_ADDR_A;
+    const byte MUX_PIN_ADDR_B;
+    const byte MUX_PIN_ADDR_C;
+    const byte MUX_PIN_SIG;
 
     // Méthode pour configurer les broches d'adresse
     void setAddress(byte address) {
-      digitalWrite(PIN_ADDR_A, bitRead(address, 0));
-      digitalWrite(PIN_ADDR_B, bitRead(address, 1));
-      digitalWrite(PIN_ADDR_C, bitRead(address, 2));
+      digitalWrite(MUX_PIN_ADDR_A, bitRead(address, 0));
+      digitalWrite(MUX_PIN_ADDR_B, bitRead(address, 1));
+      digitalWrite(MUX_PIN_ADDR_C, bitRead(address, 2));
     }
   };
 

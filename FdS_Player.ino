@@ -18,6 +18,10 @@
 #include "Class.Pitcher.h"
 #include "Class.Path.h"
 #include "Class.FilePicker.h"
+#include "Class.Range.h"
+#include "Class.SleepWatch.h"
+#include "Class.Multiplex.h"
+#include "Class.ButtonHandler.h"
 
 /**********************
 * INIT
