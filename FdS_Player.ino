@@ -4,7 +4,6 @@
 #include <SPI.h>
 #include <SdFat.h>
 #include <Adafruit_VS1053.h>
-#include <Rotary.h> //Rotary Encoder
 
 /**********************
 * CONFIG
@@ -22,6 +21,7 @@
 #include "Class.SleepWatch.h"
 #include "Class.Multiplex.h"
 #include "Class.ButtonHandler.h"
+#include "Class.Rotary.h"
 
 /**********************
 * INIT

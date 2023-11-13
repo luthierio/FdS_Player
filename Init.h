@@ -21,9 +21,9 @@ uint8_t muxButtonIDs[noOfButtons]= {2,3,4,5,6,7};       // Les INDEX 0 et 1 du C
 * Rotary Encoders
 ***********************/
 Rotary rotaryEncoders[3] = {
-  Rotary( ROT_D_PIN[0], ROT_D_PIN[1] ),
-  Rotary( ROT_F_PIN[0], ROT_F_PIN[1] ),
-  Rotary( ROT_P_PIN[0], ROT_P_PIN[1] ),
+  Rotary( ROT_D_PIN[0], ROT_D_PIN[1] , 4, 0, 99, 1, true),
+  Rotary( ROT_F_PIN[0], ROT_F_PIN[1] , 4, 0, 99, 1, true),
+  Rotary( ROT_P_PIN[0], ROT_P_PIN[1] , 4, 0, 9 , 1, false),
 };
 
 /**********************
