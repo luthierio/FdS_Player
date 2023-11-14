@@ -9,49 +9,101 @@
   #include <SdFat.h>
 
   class FilePicker {
-    public:
-  
+    private:
       SdFat* SD;
-      Adafruit_VS1053_FilePlayer* VS1053;
       File DIR;
       File FILE;
-      uint8_t * dirNum;
-      uint8_t * fileNum;    
+      uint8_t dirNum;
+      uint8_t fileNum;   
+    public:
+ 
       char dirname[255]; 
       char filename[255];  
       char path[560];
 
-      FilePicker(SdFat* sd,Adafruit_VS1053_FilePlayer* VS1053){
+      // Définition du type de fonction de rappel
+      typedef void (*CallbackFunction)();
+
+      // Ajout de deux fonctions de rappel
+      CallbackFunction onBeforeSelectDir;
+      CallbackFunction onAfterSelectDir;
+      CallbackFunction onBeforeSelectFile;
+      CallbackFunction onAfterSelectFile;
+
+      FilePicker(SdFat *sd) : onBeforeSelectDir(nullptr), onAfterSelectDir(nullptr),
+                              onBeforeSelectFile(nullptr), onAfterSelectFile(nullptr) {
         this->SD = sd;
-        this->VS1053 = VS1053;
       }
-      //Recois deux pointer vers les variables contenant les numéros de sélections
-      void begin(uint8_t *dirNum, uint8_t *fileNum){
-        this->dirNum = dirNum;
-        this->fileNum = fileNum;
-        update();
+
+      // Méthodes pour configurer les fonctions de rappel
+      void setDirCallbacks(CallbackFunction beforeSelect, CallbackFunction afterSelect) {
+        onBeforeSelectDir = beforeSelect;
+        onAfterSelectDir = afterSelect;
+      }
+
+      void setFileCallbacks(CallbackFunction beforeSelect, CallbackFunction afterSelect) {
+        onBeforeSelectFile = beforeSelect;
+        onAfterSelectFile = afterSelect;
+      }
+
+      void begin(uint8_t dirNum, uint8_t fileNum){        
+        selectDir(dirNum);
+        selectFile(fileNum);
       }
       void update(){
-        this->VS1053->pausePlaying(true); 
-                
-        this->DIR = getByNum(this->SD->open("/"), *this->dirNum);
-        delay(1);
-        this->FILE = getByNum(this->DIR, *this->fileNum);
-        delay(1);
+        selectDir(this->dirNum);
+        selectFile(this->fileNum);
+      }
+      void selectDir(uint8_t num){   
 
-        updatePath();
+          if (onBeforeSelectDir) {
+            onBeforeSelectDir(); // Appel de la fonction de rappel avant la sélection
+          }
 
-        this->VS1053->pausePlaying(false);
+          this->dirNum = num;      
+          this->DIR = getByNum(this->SD->open("/"), num);
+          selectFile(this->fileNum);
+          updatePath();
+
+          if (onAfterSelectDir) {
+            onAfterSelectDir(); // Appel de la fonction de rappel après la sélection
+          }
+      }   
+      void selectFile(uint8_t num){ 
+
+          if (onBeforeSelectFile) {
+            onBeforeSelectFile(); // Appel de la fonction de rappel avant la sélection
+          }
+
+          this->fileNum = num;   
+          this->FILE = getByNum(this->DIR, num);
+          updatePath();
+
+          if (onAfterSelectFile) {
+            onAfterSelectFile(); // Appel de la fonction de rappel après la sélection
+          }
       }  
       
       void updatePath(){
         this->path[0] = '\0';
-        this->DIR.getName(this->dirname,255);
-        this->FILE.getName(this->filename,255);
-        strcpy (this->path,"/");
-        strcat (this->path,this->dirname);
-        strcat (this->path,"/");
-        strcat (this->path,this->filename);
+
+        if(this->DIR.isDir()){
+          
+          this->DIR.getName(this->dirname,255);
+          strcpy (this->path,"/");
+          strcat (this->path,this->dirname);
+          strcat (this->path,"/");
+
+          if(this->FILE.getName(this->filename,255) != 0){  
+            strcat (this->path,this->filename);
+          }else{   
+            this->filename[0] = '\0';  
+          }
+        }else{
+          this->dirname[0] = '\0';
+          this->filename[0] = '\0';
+        }
+
       }
 
       File getByNum(File root, uint8_t num) {
@@ -60,7 +112,7 @@
           File entry =  root.openNextFile(O_RDONLY);
 
           if (! entry) {
-            return this->FILE;
+            return File();
             break;
           }
 
@@ -75,7 +127,7 @@
               return entry;
           }
         }    
-        return this->FILE;  
+        return File();  
       } 
       void print(File dir, int numTabs, Serial_* Serial) {
         while(true) {

@@ -1,26 +1,32 @@
 /**********************
 * SETUP
 ***********************/
+void pausePlaying() {
+  AUDIO.pausePlaying(true);
+  delay(1);
+}
+
+void unpausePlaying() {
+  delay(1);
+  AUDIO.pausePlaying(false);
+}
 
 void onChange(Rotary &rotary) {
   int currentPosition = rotary.getPosition();
 
-    if(&rotary == R_FILES){
-      Serial.print("File changed: "); 
-      Serial.print(currentPosition);
-      Serial.print(" / "); 
-      STATE.fileNum = currentPosition;
-      FILE_.update();
-      Serial.println(FILE_.path);
-    }
     if(&rotary == R_DIR){
       Serial.print("Dir changed: ");
-      Serial.print(currentPosition);
-      Serial.print(" / "); 
-      STATE.dirNum = currentPosition;
-      FILE_.update();
-      Serial.println(FILE_.path);
+      FILE_.selectDir(currentPosition);
     }
+    if(&rotary == R_FILES){
+      Serial.print("File changed: "); 
+      FILE_.selectFile(currentPosition);
+    }
+    Serial.print(currentPosition);
+    Serial.print(" | "); 
+    Serial.print(FILE_.path);
+    Serial.println(" | "); 
+
     if(&rotary == R_PITCH){
       Serial.print("Pitch changed: ");
       Serial.print(currentPosition);
@@ -97,7 +103,9 @@ void setup() {
     if(SERIAL_ON) Serial.println(F("✓✓✓ ⋅ SD Card found: "));
   }
 
-  FILE_.begin(&STATE.dirNum,&STATE.fileNum);
+  FILE_.begin(0, 0); // Utilisation avec les fonctions de rappel
+  FILE_.setDirCallbacks(pausePlaying, unpausePlaying);
+  FILE_.setFileCallbacks(pausePlaying, unpausePlaying);
 
 
   for (byte i = 0; i < 3; ++i) {
@@ -110,7 +118,7 @@ void setup() {
   BUTTONS.setCallback(onPress);
 
   // Play a file in the background, REQUIRES interrupts!  
-  AUDIO.playFullFile(STARTSOUND);  
+  //AUDIO.playFullFile(STARTSOUND);  
 
 
 };
