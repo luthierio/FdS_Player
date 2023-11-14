@@ -75,11 +75,8 @@ void onPress(ButtonHandler* buttonHandler, int ID, bool LONG) {
           switch (LONG) 
             case true:
             case false:
-              Serial.println("Playing");
-              /*
               if(SERIAL_ON) Serial.println("Playing");
               AUDIO.startPlayingFile(FILE_.path);
-              */
             break;   
 
         case 1:   
@@ -87,23 +84,21 @@ void onPress(ButtonHandler* buttonHandler, int ID, bool LONG) {
           switch (LONG) 
             case true:
             case false:
-              Serial.println("Pausing");
-            break;   
-              /*
-              if (!AUDIO.playingMusic) {
+              if(SERIAL_ON) Serial.println("Pausing");
+              if (AUDIO.playingMusic) {
                 AUDIO.pausePlaying(true);
                 if(SERIAL_ON) Serial.println("Paused");
               } else {
                 AUDIO.pausePlaying(false);
                 if(SERIAL_ON) Serial.println("Resumed");
               } 
-              */
+            break;   
 
         case 2:  
           switch (LONG) 
             case true:
             case false:
-              Serial.println("Jumping");
+              if(SERIAL_ON) Serial.println("Jumping");
             break;   
 
       }
