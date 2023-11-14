@@ -2,6 +2,9 @@
 * Externes Libraries 
 ***********************/
 #include <SPI.h>
+#include <Wire.h>
+#include <Adafruit_GFX.h>
+#include <Adafruit_SSD1306.h>
 #include <SdFat.h>
 #include <Adafruit_VS1053.h>
 
@@ -9,13 +12,15 @@
 * CONFIG
 ***********************/
 #include "Config.h"
+#include "Icons.h"
 
 /**********************
 * Local Classes & Functions
 ***********************/
+#include "Class.DisplayManager.h"
 #include "libs/Class.Pitcher.h"
 #include "libs/Class.Path.h"
-#include "Class.FilePicker.h"
+#include "libs/Class.FilePicker.h"
 #include "libs/Class.SleepWatch.h"
 #include "libs/Class.Multiplex.h"
 #include "libs/Class.ButtonHandler.h"
@@ -25,12 +30,14 @@
 * INIT
 ***********************/
 #include "Init.h"
-
 /**********************
-* SETUP & LOOP
-***********************//**********************
-* SETUP
+* Display
 ***********************/
 
+/**********************
+* MAIN LOGIC
+***********************/
+
+#include "Events.h"
 #include "Setup.h"
 #include "Loop.h"

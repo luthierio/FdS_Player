@@ -20,6 +20,14 @@
 #define STATE_FILENAME      "State.bin"
 
 /**********************
+* SCREEN
+***********************/
+#define SCREEN_WIDTH 128 // OLED display width, in pixels
+#define SCREEN_HEIGHT 64 // OLED display height, in pixels
+#define OLED_RESET     -1 // Reset pin # (or -1 if sharing Arduino reset pin)
+#define SCREEN_ADDRESS 0x3C ///< See datasheet for Address; 0x3D for 128x64, 0x3C for 128x32
+
+/**********************
 * FEATHER WING MP3
 ***********************/
 // Specifically for use with the Adafruit Feather, the pins are pre-set here!
@@ -77,3 +85,7 @@ enum pitchStyle { STEP,     RATIO };// Entier déguisé en string :-)
 /**********************
 * Custom
 ***********************/
+#define SLEEP_INTERVAL      10000
+#define SMALL_LOOP_INTERVAL 100
+#define BIG_LOOP_INTERVAL   2000
+#define BLINK_INTERVAL      500

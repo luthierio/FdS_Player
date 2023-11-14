@@ -12,11 +12,11 @@
     private:
       SdFat* SD;
       File DIR;
-      File FILE;
-      uint8_t dirNum;
-      uint8_t fileNum;   
+      File FILE; 
     public:
  
+      uint8_t dirNum;
+      uint8_t fileNum;  
       char dirname[255]; 
       char filename[255];  
       char path[560];

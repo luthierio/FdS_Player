@@ -1,3 +1,9 @@
+
+/**********************
+* SCREEN
+***********************/
+Adafruit_SSD1306 DISPLAY_(SCREEN_WIDTH, SCREEN_HEIGHT, &Wire, OLED_RESET);
+DisplayManager SCREEN_(DISPLAY_);
 /**********************
 * FAT Files
 ***********************/
@@ -6,6 +12,7 @@ SdFat SD;
 /**********************
 * AUDIO CARD VS1053
 ***********************/
+
 Adafruit_VS1053_FilePlayer AUDIO =
   Adafruit_VS1053_FilePlayer(VS1053_RESET, VS1053_CS, VS1053_DCS, VS1053_DREQ, CARDCS);
 Pitcher PITCHER = Pitcher(&AUDIO);
@@ -16,7 +23,6 @@ FilePicker FILE_(&SD);
 ***********************/
 
 int BTN_CHANNEL[] = {2, 3, 4, 5, 6, 7};
-int BTN_STATE[6]; // Variable externe pour stocker les états des boutons
 Multiplex MUX(PIN_ADDR_A, PIN_ADDR_B, PIN_ADDR_C, PIN_SIG);
 ButtonHandler BUTTONS(6);
 
@@ -32,6 +38,13 @@ Rotary ROTARIES[3] = {
 Rotary* R_FILES = &ROTARIES[0];
 Rotary* R_DIR   = &ROTARIES[1];
 Rotary* R_PITCH = &ROTARIES[2];
+
+/**********************
+* WakeUp and Sleep
+***********************/
+
+SleepWatch SLEEP_WATCH(SLEEP_INTERVAL);
+
 
 /**********************
 * Energy
@@ -68,4 +81,3 @@ struct t_state{
   uint8_t playlistMode = ONEPLAY;
 };
 t_state STATE;
-t_state NEW_STATE;

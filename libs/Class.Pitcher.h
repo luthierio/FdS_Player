@@ -39,15 +39,15 @@
       }
 
       void setValue(signed int aictrl0){
+        this->VS1053->pausePlaying(true); 
+        delay(10); //Let few millis to avoid awful noise
         signed int currentAICTRL0 = this->VS1053->sciRead(VS1053_SCI_AICTRL0);
 
         if(currentAICTRL0 != aictrl0){
-          this->VS1053->pausePlaying(true); 
-          delay(5); //Let few millis to avoid awful noise
           this->VS1053->sciWrite(VS1053_SCI_AICTRL0,  aictrl0);
-          delay(5); //Let few millis to avoid awful noise
-          this->VS1053->pausePlaying(false); 
         }
+        delay(10); //Let few millis to avoid awful noise
+        this->VS1053->pausePlaying(false); 
       }
 
   };
