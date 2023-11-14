@@ -1,6 +1,7 @@
 /**********************
 * Events
 ***********************/
+
 bool MUST_RESUME = false;
 void onBeforeSelect() {
   if(AUDIO.playingMusic){
@@ -16,11 +17,16 @@ void onAfterSelect() {
     MUST_RESUME = false;
   }
 }
+
 void onSleep(){
-  SCREEN_.switchOff();
+  //SCREEN_.switchOff();
+  SCREEN_.ssd1306_command(SSD1306_DISPLAYOFF);
+  if(SERIAL_ON) Serial.println("Sleeping");
 }
 void onWakeUp(){
-  SCREEN_.switchOn();
+  //SCREEN_.switchOn();
+  SCREEN_.ssd1306_command(SSD1306_DISPLAYON);
+  if(SERIAL_ON) Serial.println("Wakeup");
 }
 void onRotChange(Rotary &rotary) {
 
@@ -28,51 +34,97 @@ void onRotChange(Rotary &rotary) {
 
   int currentPosition = rotary.getPosition();
 
-  if(&rotary == R_DIR){
-    STATE.dirNum = currentPosition;
-    FILE_.selectDir(STATE.dirNum);
-  }
-  if(&rotary == R_FILES){
-    STATE.fileNum = currentPosition;
-    FILE_.selectFile(STATE.fileNum);
-  }
-
-  if(&rotary == R_PITCH){
-    STATE.pitchStep = currentPosition;
-    PITCHER.setPitchStep(STATE.pitchStep);
-  }
-  if(SERIAL_ON){
-    Serial.print(FILE_.dirNum) ;
-    Serial.print(" + ") ;
-    Serial.print(FILE_.fileNum) ;
-    Serial.print(": ") ;
-    Serial.println(FILE_.path) ;
-  }
-}
-void onPress(ButtonHandler* buttonHandler, int buttonIndex, bool longPress, bool buttonState) {
-  // Implémentez le traitement personnalisé ici
-  // Exemple : 
-  
-  SLEEP_WATCH.wakeUp();
-
-  if(!longPress){
-    if(buttonIndex == 0 && !buttonState){
-      AUDIO.startPlayingFile(FILE_.path);
-    }
-    if(buttonIndex == 1 && !buttonState){
-      if (! AUDIO.paused()) {
-        Serial.println("Paused");
-        AUDIO.pausePlaying(true);
-      } else {
-        Serial.println("Resumed");
-        AUDIO.pausePlaying(false);
+  switch (ASF_MODE) {
+    case PLAYER: {                   
+      if(&rotary == R_DIR) {
+        STATE.dirNum = currentPosition;
+        FILE_.selectDir(STATE.dirNum);
+      }
+      if(&rotary == R_FILES) {
+        STATE.fileNum = currentPosition;
+        FILE_.selectFile(STATE.fileNum);
+      }
+      if(&rotary == R_PITCH) {
+        STATE.pitchStep = currentPosition;
+        PITCHER.setPitchStep(STATE.pitchStep);
+      }
+      if(SERIAL_ON){
+        Serial.print(STATE.pitchStep);
+        Serial.print(" ");
+        Serial.print(STATE.dirNum);
+        Serial.print(" ");
+        Serial.print(STATE.fileNum);
+        Serial.print(": ");
+        Serial.println(FILE_.path);
       }
     }
-    if(buttonIndex == 2 && !buttonState){
-      SCREEN_.switchMode(DisplayManager::MODE_MENU);
-    }
-    if(buttonIndex == 3 && !buttonState){
-      SCREEN_.switchMode(DisplayManager::MODE_SPLASH);
-    }
+  }  
+}
+
+void onPress(ButtonHandler* buttonHandler, int ID, bool LONG) {  
+  SLEEP_WATCH.wakeUp();
+
+  switch (ASF_MODE) {
+
+    case PLAYER: 
+
+      switch (ID){
+
+        case 0: 
+
+          switch (LONG) 
+            case true:
+            case false:
+              Serial.println("Playing");
+              /*
+              if(SERIAL_ON) Serial.println("Playing");
+              AUDIO.startPlayingFile(FILE_.path);
+              */
+            break;   
+
+        case 1:   
+
+          switch (LONG) 
+            case true:
+            case false:
+              Serial.println("Pausing");
+            break;   
+              /*
+              if (!AUDIO.playingMusic) {
+                AUDIO.pausePlaying(true);
+                if(SERIAL_ON) Serial.println("Paused");
+              } else {
+                AUDIO.pausePlaying(false);
+                if(SERIAL_ON) Serial.println("Resumed");
+              } 
+              */
+
+        case 2:  
+          switch (LONG) 
+            case true:
+            case false:
+              Serial.println("Jumping");
+            break;   
+
+      }
+
+    break;   
+
   }
+  if(SERIAL_ON){
+    Serial.print("PRESS ");
+    Serial.print(ID);
+    Serial.print(": ");
+    if(LONG) Serial.print(" LONG ");
+    Serial.println("!");
+  }
+}
+void onRelease(ButtonHandler* buttonHandler, int ID, bool longPress) {
+  /*
+  if(SERIAL_ON) Serial.print("RELEASE ");
+  if(SERIAL_ON) Serial.print(ID);
+  if(SERIAL_ON) Serial.print(": ");
+  if(longPress) Serial.print(" LONG ");
+  if(SERIAL_ON) Serial.println("!");
+    */
 }

@@ -1,9 +1,9 @@
 
+
 /**********************
 * SCREEN
 ***********************/
-Adafruit_SSD1306 DISPLAY_(SCREEN_WIDTH, SCREEN_HEIGHT, &Wire, OLED_RESET);
-DisplayManager SCREEN_(DISPLAY_);
+Adafruit_SSD1306 SCREEN_(SCREEN_WIDTH, SCREEN_HEIGHT, &Wire, OLED_RESET);
 /**********************
 * FAT Files
 ***********************/
@@ -62,6 +62,7 @@ char  activeSoundPath[512];
 * State
 ***********************/
 //Toutes les variables à sauvegarder sur la carte SD
+byte ASF_MODE = PLAYER;
 
 struct t_state{
   uint8_t dirNum = 0;

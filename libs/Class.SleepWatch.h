@@ -26,26 +26,32 @@
       }
 
       void wakeUp() {
-          SLEEPING = false;
-          lastActivityTime = millis();
-          if (onWakeUp != nullptr) {
-              onWakeUp();
+         lastActivityTime = millis();
+          if(SLEEPING){
+            SLEEPING = false;
+            if (onWakeUp != nullptr) {
+                onWakeUp();
+            }
+          }
+      }
+      void sleep() {
+          if(!SLEEPING){
+            SLEEPING = true;
+            if (onSleep != nullptr) {
+                onSleep();
+            }
           }
       }
 
       void listen() {
           unsigned long currentTime = millis();
-
-          if (currentTime - lastActivityTime >= THRESHOLD) {
-              SLEEPING = true;
-              if (onSleep != nullptr) {
-                  onSleep();
-              }
+          if (millis() - lastActivityTime >= THRESHOLD) {
+              sleep();
           }
       }
 
-      void activityDetected() {
-          wakeUp();
+      void keepAlive() {
+         lastActivityTime = millis();
       }
 
       bool isSleeping() {

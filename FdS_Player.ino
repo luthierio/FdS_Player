@@ -17,7 +17,6 @@
 /**********************
 * Local Classes & Functions
 ***********************/
-#include "Class.DisplayManager.h"
 #include "libs/Class.Pitcher.h"
 #include "libs/Class.Path.h"
 #include "libs/Class.FilePicker.h"
@@ -33,7 +32,7 @@
 /**********************
 * Display
 ***********************/
-
+#include "Display.h"
 /**********************
 * MAIN LOGIC
 ***********************/

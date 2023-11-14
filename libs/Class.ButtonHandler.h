@@ -4,87 +4,83 @@
 
   class ButtonHandler {
   public:
-    ButtonHandler(int buttonCount, int debounceDelay = 50, int longPressDelay = 1000) 
-      : buttonCount(buttonCount), debounceDelay(debounceDelay), longPressDelay(longPressDelay) {
+    ButtonHandler(int buttonCount, int debounceDelay = 200, int longPressDelay = 1000, int longReleaseDelay = 1000) 
+      : buttonCount(buttonCount), debounceDelay(debounceDelay), longPressDelay(longPressDelay), longReleaseDelay(longReleaseDelay) {
       buttonStates = new bool[buttonCount];
-      lastButtonStates = new bool[buttonCount];
       lastDebounceTimes = new unsigned long[buttonCount];
       buttonHoldStartTime = new unsigned long[buttonCount];
-      acceptLongPress = new bool[buttonCount];
+      listenLongPress = new bool[buttonCount];
+      listenLongRelease = new bool[buttonCount];
 
       for (int i = 0; i < buttonCount; ++i) {
-        buttonStates[i] = false;
-        lastButtonStates[i] = false;
+        buttonStates[i] = HIGH;
         lastDebounceTimes[i] = 0;
-        acceptLongPress[i] = false;
+        listenLongPress[i] = false;
+        listenLongRelease[i] = false;
       }
     }
 
     ~ButtonHandler() {
       delete[] buttonStates;
-      delete[] lastButtonStates;
       delete[] lastDebounceTimes;
       delete[] buttonHoldStartTime;
-      delete[] acceptLongPress;
+      delete[] listenLongPress;
+      delete[] listenLongRelease;
     }
 
-    void setCallback(void (*callback)(ButtonHandler*, int, bool, bool)) {
-      doStuff = callback;
+    void setCallbacks(void (*onPressCallBack)(ButtonHandler*, int, bool),void (*onReleaseCallBack)(ButtonHandler*, int, bool)) {
+      onPress = onPressCallBack;
+      onRelease = onReleaseCallBack;
     }
 
     void update(int* externalButtonStates) {
       for (int i = 0; i < buttonCount; ++i) {
         int reading = externalButtonStates[i];
 
-        if (reading != lastButtonStates[i]) {
-          lastDebounceTimes[i] = millis();
-          acceptLongPress[i] = false;
-        }
-
         if ((millis() - lastDebounceTimes[i]) > debounceDelay) {
           if (reading != buttonStates[i]) {
+            lastDebounceTimes[i] = millis();
             buttonStates[i] = reading;
+            buttonHoldStartTime[i] = millis();
 
             if (reading == LOW) {
               // Bouton enfoncé
-              doStuff(this, i, false, false);
-              buttonHoldStartTime[i] = millis();
-              acceptLongPress[i] = true;
+              onPress(this, i, false);
+              listenLongPress[i] = true;
             } else {
               // Bouton relâché
-              if (millis() - buttonHoldStartTime[i] < longPressDelay && acceptLongPress[i]) {
-                // Appui court
-                doStuff(this, i, false, true);
-              } else if (millis() - buttonHoldStartTime[i] >= longPressDelay && acceptLongPress[i]) {
-                // Appui long
-                doStuff(this, i, true, false);
-              }
-
-              // Réinitialiser l'état du bouton
-              doStuff(this, i, false, true);
+              onRelease(this, i, false);
+              listenLongRelease[i] = true;
             }
-          } else if (reading == HIGH && acceptLongPress[i] && (millis() - buttonHoldStartTime[i] >= longPressDelay)) {
-            // Bouton maintenu enfoncé pour un appui long
-            doStuff(this, i, true, false);
-            acceptLongPress[i] = false;
+          } else {
+            if (reading == LOW && listenLongPress[i] && (millis() - buttonHoldStartTime[i] >= longPressDelay)) {
+              // Appui long maintenu
+              onPress(this, i, true);
+              listenLongPress[i] = false;
+            } else if (reading == HIGH && listenLongRelease[i] && (millis() - buttonHoldStartTime[i] >= longReleaseDelay)) {
+              // Bouton relâché après un appui long
+              onRelease(this, i, true);
+              listenLongRelease[i] = false;
+            }
           }
         }
-
-        lastButtonStates[i] = reading;
       }
     }
+
 
   private:
     int buttonCount;
     int debounceDelay;
     int longPressDelay;
+    int longReleaseDelay;
     bool *buttonStates;
-    bool *lastButtonStates;
     unsigned long *lastDebounceTimes;
     unsigned long *buttonHoldStartTime;
-    bool *acceptLongPress;
+    bool *listenLongPress;
+    bool *listenLongRelease;
 
-    void (*doStuff)(ButtonHandler*, int, bool, bool);  // Fonction de rappel pour traiter les boutons
+    void (*onPress)(ButtonHandler*, int, bool);  // Fonction de rappel pour traiter les boutons
+    void (*onRelease)(ButtonHandler*, int, bool);  // Fonction de rappel pour traiter les boutons
   };
 
 #endif

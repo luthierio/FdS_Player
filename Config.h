@@ -87,5 +87,5 @@ enum pitchStyle { STEP,     RATIO };// Entier déguisé en string :-)
 ***********************/
 #define SLEEP_INTERVAL      10000
 #define SMALL_LOOP_INTERVAL 100
-#define BIG_LOOP_INTERVAL   2000
+#define BIG_LOOP_INTERVAL   1000
 #define BLINK_INTERVAL      500

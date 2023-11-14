@@ -9,32 +9,30 @@ void setup() {
     Serial.begin(115200);
     // Wait for serial port to be opened, remove this line for 'standalone' operation
     while (!Serial) { delay(1); }
-    Serial.print(F("FdS Player: "));
-    Serial.println(CREDITS);
   }
   /**********************
   * DISPLAY:
-  ***********************/
-  SCREEN_.begin();
-  SCREEN_.switchMode(DisplayManager::MODE_SPLASH);
+  ***********************/    
+  if(SCREEN_.begin(SSD1306_SWITCHCAPVCC, SCREEN_ADDRESS)){
+    displaySplash();
+    if(SERIAL_ON) Serial.println(F("✓✓✓ ⋅ Screen OK"));
+  }
   /**********************
   * AUDIO:
   ***********************/
   if (! AUDIO.begin()) { // initialise the music player
-    Serial.println(F("××× ⋅ Couldn't find VS1053, check PINS?"));
+    if(SERIAL_ON) Serial.println(F("××× ⋅ Couldn't find VS1053, check PINS?"));
     while (1);
   }else{
     AUDIO.useInterrupt(VS1053_FILEPLAYER_PIN_INT);
-    Serial.println(F("✓✓✓ ⋅ VS1053 found and started"));
+    if(SERIAL_ON) Serial.println(F("✓✓✓ ⋅ VS1053 found and started"));
     // Set volume for left, right channels. lower numbers == louder volume!
     AUDIO.setVolume(VOLUME,VOLUME);
     AUDIO.applyPatch(pluginPitchShifter, PLUGIN_PITCHSHIFTER_SIZE);  
     AUDIO.sciWrite(VS1053_SCI_AIADDR, 0x50);
+    AUDIO.sineTest(0x44, 500);    // Make a tone to indicate VS1053 is working
+    delay(500);
     PITCHER.setPitchStep(STATE.pitchStep);
-    if(ASF_DEBUG_MODE){
-      AUDIO.sineTest(0x44, 500);    // Make a tone to indicate VS1053 is working
-      delay(1000);
-    }
   }
 
   /**********************
@@ -44,14 +42,17 @@ void setup() {
     Serial.println(F("××× ⋅ SD failed, or not present"));
     while (1);  // don't do anything more
   }else{
-    Serial.println(F("✓✓✓ ⋅ SD Card found: "));
+    Serial.println(F("✓✓✓ ⋅ SD Card found "));
   }
 
   FILE_.begin(0, 0); // Utilisation avec les fonctions de rappel
   FILE_.setDirCallbacks( onBeforeSelect, onAfterSelect );
   FILE_.setFileCallbacks( onBeforeSelect, onAfterSelect );
+    Serial.println(F("✓✓✓ ⋅ FILES ok "));
 
   SLEEP_WATCH.setCallbacks(onSleep, onWakeUp);
+  SLEEP_WATCH.wakeUp();
+  Serial.println(F("✓✓✓ ⋅ Sleep Watch ok "));
 
   /**********************
   * INTERFACE: ROTARIES & BUTTONS
@@ -61,8 +62,10 @@ void setup() {
     ROTARIES[i].setChangedHandler(onRotChange);
   }
   MUX.begin();
-  BUTTONS.setCallback(onPress);
+  BUTTONS.setCallbacks(onPress,onRelease);
+  Serial.println(F("✓✓✓ ⋅ Interface ok "));
 
   // Play a file in the background, REQUIRES interrupts!  
   AUDIO.playFullFile(STARTSOUND);  
+  //SCREEN_.switchMode(DisplayManager::MODE_NAVIGATION);
 };
