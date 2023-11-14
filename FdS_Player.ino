@@ -13,15 +13,13 @@
 /**********************
 * Local Classes & Functions
 ***********************/
-#include "Class.Range.h"
-#include "Class.Pitcher.h"
-#include "Class.Path.h"
+#include "libs/Class.Pitcher.h"
+#include "libs/Class.Path.h"
 #include "Class.FilePicker.h"
-#include "Class.Range.h"
-#include "Class.SleepWatch.h"
-#include "Class.Multiplex.h"
-#include "Class.ButtonHandler.h"
-#include "Class.Rotary.h"
+#include "libs/Class.SleepWatch.h"
+#include "libs/Class.Multiplex.h"
+#include "libs/Class.ButtonHandler.h"
+#include "libs/Class.Rotary.h"
 
 /**********************
 * INIT
@@ -30,6 +28,9 @@
 
 /**********************
 * SETUP & LOOP
+***********************//**********************
+* SETUP
 ***********************/
+
 #include "Setup.h"
 #include "Loop.h"

@@ -45,7 +45,7 @@
           if (reading != buttonStates[i]) {
             buttonStates[i] = reading;
 
-            if (reading == HIGH) {
+            if (reading == LOW) {
               // Bouton enfoncé
               doStuff(this, i, false, false);
               buttonHoldStartTime[i] = millis();

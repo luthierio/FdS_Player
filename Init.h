@@ -14,17 +14,24 @@ FilePicker FILE_(&SD,&AUDIO);
 /**********************
 * Multiplex
 ***********************/
-int     muxIN[8]; 
-uint8_t muxButtonIDs[noOfButtons]= {2,3,4,5,6,7};       // Les INDEX 0 et 1 du CD4051BE sont pour la gestion de l'énergie
+
+int BTN_CHANNEL[] = {2, 3, 4, 5, 6, 7};
+int BTN_STATE[6]; // Variable externe pour stocker les états des boutons
+Multiplex MUX(PIN_ADDR_A, PIN_ADDR_B, PIN_ADDR_C, PIN_SIG);
+ButtonHandler BUTTONS(6);
+
 
 /**********************
 * Rotary Encoders
 ***********************/
-Rotary rotaryEncoders[3] = {
-  Rotary( ROT_D_PIN[0], ROT_D_PIN[1] , 4, 0, 99, 1, true),
-  Rotary( ROT_F_PIN[0], ROT_F_PIN[1] , 4, 0, 99, 1, true),
-  Rotary( ROT_P_PIN[0], ROT_P_PIN[1] , 4, 0, 9 , 1, false),
+Rotary ROTARIES[3] = {
+  Rotary( ROT_F_PIN[0], ROT_F_PIN[1], true , 0, 99),
+  Rotary( ROT_D_PIN[0], ROT_D_PIN[1], true , 0, 99),
+  Rotary( ROT_P_PIN[0], ROT_P_PIN[1], false ,0, 9, 5 ),
 };
+Rotary* R_FILES = &ROTARIES[0];
+Rotary* R_DIR   = &ROTARIES[1];
+Rotary* R_PITCH = &ROTARIES[2];
 
 /**********************
 * Energy
@@ -46,7 +53,7 @@ char  activeSoundPath[512];
 struct t_state{
   uint8_t dirNum = 0;
   uint8_t fileNum = 0;
-  Range pitchStep = Range(0,10,5);
+  uint8_t pitchStep = 5;
   uint8_t pitchRatio = 100;// En pourcentage, le ratio de pitch/tempo souhaité
   boolean beatOn = false;
   uint8_t BPM = 100;
@@ -61,3 +68,4 @@ struct t_state{
   uint8_t playlistMode = ONEPLAY;
 };
 t_state STATE;
+t_state NEW_STATE;

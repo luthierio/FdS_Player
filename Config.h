@@ -62,10 +62,9 @@
 /**********************
 * Interface
 ***********************/
-const byte ROT_D_PIN[2] = {A5, A4};
 const byte ROT_F_PIN[2] = {A3, A2};
+const byte ROT_D_PIN[2] = {A5, A4};
 const byte ROT_P_PIN[2] = {1 , 0 };
-#define noOfButtons 6                     // Nombre de bouton qui doivent être filtés via anti-rebond
 
 /**********************
 * Modes

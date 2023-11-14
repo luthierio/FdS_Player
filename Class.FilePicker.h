@@ -29,10 +29,11 @@
       void begin(uint8_t *dirNum, uint8_t *fileNum){
         this->dirNum = dirNum;
         this->fileNum = fileNum;
+        update();
       }
       void update(){
         this->VS1053->pausePlaying(true); 
-
+                
         this->DIR = getByNum(this->SD->open("/"), *this->dirNum);
         delay(1);
         this->FILE = getByNum(this->DIR, *this->fileNum);
