@@ -101,7 +101,7 @@ void onPress(ButtonHandler* buttonHandler, int ID, bool LONG) {
 
             case 4:  
               Debug::print("Load DATA");
-              if(SD_BACKUP.load(STATE_FILENAME,&STATE)){
+              if(SD_BACKUP.load(STATE_FILENAME,&STATE, sizeof(STATE))){
                 Debug::print("OK", SD_BACKUP.getLastMessage());
               }else{
                 Debug::print("ERREUR", SD_BACKUP.getLastMessage());
@@ -111,7 +111,7 @@ void onPress(ButtonHandler* buttonHandler, int ID, bool LONG) {
 
             case 5:  
               Debug::print("Save DATA");
-              if(SD_BACKUP.save(STATE_FILENAME,&STATE)){
+              if(SD_BACKUP.save(STATE_FILENAME,&STATE, sizeof(STATE))){
                 Debug::print("OK", SD_BACKUP.getLastMessage());
               }else{
                 Debug::print("ERREUR", SD_BACKUP.getLastMessage());
@@ -152,17 +152,24 @@ void onWakeUp(){
 * FILEPICKER:
 ***********************/
 bool MUST_RESUME = false;
-void onBeforeSelect() {
+void onBeforeSDWork() {
   if(AUDIO.playingMusic){
     MUST_RESUME = true;
     AUDIO.pausePlaying(true);
-    delay(1);
+    delay(5);
   }
 }
-void onAfterSelect() {
-  delay(1);
+void onAfterSDWork() {
+  delay(5);
   if(MUST_RESUME){
     AUDIO.pausePlaying(false);
     MUST_RESUME = false;
+  }
+}
+void onBeforeSDWrite() {
+  if(AUDIO.playingMusic){
+    MUST_RESUME = true;
+    AUDIO.pausePlaying(true);
+    delay(100);
   }
 }

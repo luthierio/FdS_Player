@@ -27,8 +27,7 @@ public:
     onAfterSave = afterSave;
   }
 
-  bool save(const char* nomFichier, const void* dataPointer) {
-    size_t dataSize = sizeof(dataPointer);
+  bool save(const char* nomFichier, const void* dataPointer, size_t dataSize) {
     if (fileExists(nomFichier) && !createBackup(nomFichier)) {
       setLastMessage(F("Le fichier existe, mais la création du backup a échoué"));
       return false;
@@ -51,9 +50,8 @@ public:
     return false;
   }
 
-  bool load(const char* nomFichier, void* dataPointer) {
-    size_t dataSize;
-    if (fileExists(nomFichier) && loadDataSize(nomFichier, dataSize)) {
+  bool load(const char* nomFichier, void* dataPointer, size_t dataSize) {
+    if (fileExists(nomFichier)) {
       File fichier = sd->open(nomFichier, O_RDONLY);
       if (fichier) {
         if (onBeforeLoad) onBeforeLoad();  // Appel de la fonction de rappel avant le chargement
@@ -67,7 +65,7 @@ public:
         }
       }
     } else {
-      setLastMessage(F("Fichier inexistant ou erreur de chargement de la taille des données"));
+      setLastMessage(F("Fichier inexistant"));
     }
 
     return false;
@@ -142,7 +140,7 @@ private:
 
   void setLastMessage(const __FlashStringHelper* message) {
     lastMessage = message;
-    Serial.println(message);
+    //Serial.println(message);
   }
 };
 

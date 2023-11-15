@@ -46,11 +46,11 @@ void setup() {
   }
 
   FILE_.begin(0, 0); // Utilisation avec les fonctions de rappel
-  FILE_.setDirCallbacks( onBeforeSelect, onAfterSelect );
-  FILE_.setFileCallbacks( onBeforeSelect, onAfterSelect );
+  FILE_.setDirCallbacks( onBeforeSDWork, onAfterSDWork );
+  FILE_.setFileCallbacks( onBeforeSDWork, onAfterSDWork );
 
   // Définir les callbacks
-  SD_BACKUP.setCallbacks(onBeforeSelect, onAfterSelect , onBeforeSelect, onAfterSelect );
+  SD_BACKUP.setCallbacks(onBeforeSDWrite, onAfterSDWork , onBeforeSDWrite, onAfterSDWork );
   Debug::print(F("✓✓✓ ⋅ FILES ok "));
 
   SLEEP_WATCH.setCallbacks(onSleep, onWakeUp);
