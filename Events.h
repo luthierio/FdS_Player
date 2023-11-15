@@ -21,12 +21,12 @@ void onAfterSelect() {
 void onSleep(){
   //SCREEN_.switchOff();
   SCREEN_.ssd1306_command(SSD1306_DISPLAYOFF);
-  if(SERIAL_ON) Serial.println("Sleeping");
+  Debug::print("Sleeping");
 }
 void onWakeUp(){
   //SCREEN_.switchOn();
   SCREEN_.ssd1306_command(SSD1306_DISPLAYON);
-  if(SERIAL_ON) Serial.println("Wakeup");
+  Debug::print("Wakeup");
 }
 void onRotChange(Rotary &rotary) {
 
@@ -48,15 +48,7 @@ void onRotChange(Rotary &rotary) {
         STATE.pitchStep = currentPosition;
         PITCHER.setPitchStep(STATE.pitchStep);
       }
-      if(SERIAL_ON){
-        Serial.print(STATE.pitchStep);
-        Serial.print(" ");
-        Serial.print(STATE.dirNum);
-        Serial.print(" ");
-        Serial.print(STATE.fileNum);
-        Serial.print(": ");
-        Serial.println(FILE_.path);
-      }
+      Debug::print("ROT",currentPosition, FILE_.path);
     }
   }  
 }
@@ -75,7 +67,7 @@ void onPress(ButtonHandler* buttonHandler, int ID, bool LONG) {
           switch (LONG) 
             case true:
             case false:
-              if(SERIAL_ON) Serial.println("Playing");
+              Debug::print("Playing");
               AUDIO.startPlayingFile(FILE_.path);
             break;   
 
@@ -84,13 +76,12 @@ void onPress(ButtonHandler* buttonHandler, int ID, bool LONG) {
           switch (LONG) 
             case true:
             case false:
-              if(SERIAL_ON) Serial.println("Pausing");
               if (AUDIO.playingMusic) {
                 AUDIO.pausePlaying(true);
-                if(SERIAL_ON) Serial.println("Paused");
+                Debug::print("Paused");
               } else {
                 AUDIO.pausePlaying(false);
-                if(SERIAL_ON) Serial.println("Resumed");
+                Debug::print("Resumed");
               } 
             break;   
 
@@ -98,7 +89,7 @@ void onPress(ButtonHandler* buttonHandler, int ID, bool LONG) {
           switch (LONG) 
             case true:
             case false:
-              if(SERIAL_ON) Serial.println("Jumping");
+              Debug::print("Jumping");
             break;   
 
       }
@@ -106,15 +97,10 @@ void onPress(ButtonHandler* buttonHandler, int ID, bool LONG) {
     break;   
 
   }
-  if(SERIAL_ON){
-    Serial.print("PRESS ");
-    Serial.print(ID);
-    Serial.print(": ");
-    if(LONG) Serial.print(" LONG ");
-    Serial.println("!");
-  }
+  Debug::print("Pressed", ID, LONG);
 }
-void onRelease(ButtonHandler* buttonHandler, int ID, bool longPress) {
+void onRelease(ButtonHandler* buttonHandler, int ID, bool LONG) {
+  Debug::print("Released", ID, LONG);
   /*
   if(SERIAL_ON) Serial.print("RELEASE ");
   if(SERIAL_ON) Serial.print(ID);

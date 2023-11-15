@@ -24,6 +24,8 @@
 #include "libs/Class.Multiplex.h"
 #include "libs/Class.ButtonHandler.h"
 #include "libs/Class.Rotary.h"
+#include "Class.Display.h"
+#include "Class.Debug.h"
 
 /**********************
 * INIT
@@ -32,7 +34,6 @@
 /**********************
 * Display
 ***********************/
-#include "Display.h"
 /**********************
 * MAIN LOGIC
 ***********************/

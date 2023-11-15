@@ -14,18 +14,18 @@ void setup() {
   * DISPLAY:
   ***********************/    
   if(SCREEN_.begin(SSD1306_SWITCHCAPVCC, SCREEN_ADDRESS)){
-    displaySplash();
-    if(SERIAL_ON) Serial.println(F("✓✓✓ ⋅ Screen OK"));
+    DISPLAY_.logo();
+    Debug::print(F("✓✓✓ ⋅ Screen OK"));
   }
   /**********************
   * AUDIO:
   ***********************/
   if (! AUDIO.begin()) { // initialise the music player
-    if(SERIAL_ON) Serial.println(F("××× ⋅ Couldn't find VS1053, check PINS?"));
+    Debug::print(F("××× ⋅ Couldn't find VS1053, check PINS?"));
     while (1);
   }else{
     AUDIO.useInterrupt(VS1053_FILEPLAYER_PIN_INT);
-    if(SERIAL_ON) Serial.println(F("✓✓✓ ⋅ VS1053 found and started"));
+    Debug::print(F("✓✓✓ ⋅ VS1053 found and started"));
     // Set volume for left, right channels. lower numbers == louder volume!
     AUDIO.setVolume(VOLUME,VOLUME);
     AUDIO.applyPatch(pluginPitchShifter, PLUGIN_PITCHSHIFTER_SIZE);  
@@ -39,20 +39,20 @@ void setup() {
   * FILES:
   ***********************/
   if (!SD.begin(CARDCS,SPI_SPEED)) {
-    Serial.println(F("××× ⋅ SD failed, or not present"));
+    Debug::print(F("××× ⋅ SD failed, or not present"));
     while (1);  // don't do anything more
   }else{
-    Serial.println(F("✓✓✓ ⋅ SD Card found "));
+    Debug::print(F("✓✓✓ ⋅ SD Card found "));
   }
 
   FILE_.begin(0, 0); // Utilisation avec les fonctions de rappel
   FILE_.setDirCallbacks( onBeforeSelect, onAfterSelect );
   FILE_.setFileCallbacks( onBeforeSelect, onAfterSelect );
-    Serial.println(F("✓✓✓ ⋅ FILES ok "));
+  Debug::print(F("✓✓✓ ⋅ FILES ok "));
 
   SLEEP_WATCH.setCallbacks(onSleep, onWakeUp);
   SLEEP_WATCH.wakeUp();
-  Serial.println(F("✓✓✓ ⋅ Sleep Watch ok "));
+  Debug::print(F("✓✓✓ ⋅ Sleep Watch ok "));
 
   /**********************
   * INTERFACE: ROTARIES & BUTTONS
@@ -63,7 +63,7 @@ void setup() {
   }
   MUX.begin();
   BUTTONS.setCallbacks(onPress,onRelease);
-  Serial.println(F("✓✓✓ ⋅ Interface ok "));
+  Debug::print(F("✓✓✓ ⋅ Interface ok "));
 
   // Play a file in the background, REQUIRES interrupts!  
   AUDIO.playFullFile(STARTSOUND);  
