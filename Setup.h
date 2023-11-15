@@ -67,5 +67,8 @@ void setup() {
 
   // Play a file in the background, REQUIRES interrupts!  
   AUDIO.playFullFile(STARTSOUND);  
+
+  setMode(PLAYER);
+  
   //SCREEN_.switchMode(DisplayManager::MODE_NAVIGATION);
 };

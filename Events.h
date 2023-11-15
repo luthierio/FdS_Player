@@ -7,8 +7,10 @@ void setMode(uint8_t mode){
   Debug::print("MODE", mode);
 
   if(mode != ASF_MODE){
-    switch (mode) {
 
+    DISPLAY_.clear();
+
+    switch (mode) {
       case PLAYER:
         DISPLAY_.printPath(&FILE_);
       break;   
@@ -17,7 +19,9 @@ void setMode(uint8_t mode){
         DISPLAY_.logo();
       break;   
     }  
+    
     ASF_MODE = mode;
+
   }
   
 }

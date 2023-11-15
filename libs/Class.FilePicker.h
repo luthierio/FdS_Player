@@ -15,8 +15,8 @@
       File FILE; 
     public:
  
-      uint8_t dirNum;
-      uint8_t fileNum;  
+      int dirNum;
+      int fileNum;  
       char dirname[255]; 
       char filename[255];  
       char path[560];
@@ -85,7 +85,7 @@
       }  
       
       void updatePath(){
-        this->path[0] = '\0';
+        memset(this->path, 0, 560);
 
         if(this->DIR.isDir()){
           
@@ -97,11 +97,11 @@
           if(this->FILE.getName(this->filename,255) != 0){  
             strcat (this->path,this->filename);
           }else{   
-            this->filename[0] = '\0';  
+            memset(this->filename, 0, 255);
           }
         }else{
-          this->dirname[0] = '\0';
-          this->filename[0] = '\0';
+          memset(this->dirname, 0, 255);
+          memset(this->filename, 0, 255);
         }
 
       }

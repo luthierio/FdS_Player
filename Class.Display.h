@@ -10,7 +10,9 @@ public:
   void init() {
     ecran_.clearDisplay();
     ecran_.setTextSize(1);
+    ecran_.setTextWrap(false);
     ecran_.setTextColor(SSD1306_WHITE);
+    ecran_.cp437(true);
     logo();
   }
 
@@ -21,22 +23,29 @@ public:
 
   // Afficher un texte
   void logo() {
-    ecran_.clearDisplay();
-    ecran_.clearDisplay();
     ecran_.drawBitmap (0,0, LOGO_128x64, 128,64, 1); 
     ecran_.display();
   }
 
   // Afficher un texte
   void printPath(FilePicker *selectedPath) {
-    ecran_.clearDisplay();
-    txt(selectedPath->path);
+    ecran_.fillRect(0, 0, 128, 64, BLACK);
+    printNum(selectedPath->dirNum, 1 ,0 );
+    printNum(selectedPath->fileNum, 2,0, 20 );
+    printTxt(selectedPath->dirname+3, 1 ,20 );
+    printTxt(selectedPath->filename+3, 2,20, 20 );
     ecran_.display();
   }
 
-
   // Afficher un texte
-  void txt(const char *texte, uint8_t tailleTexte = 1, uint8_t x = 0, uint8_t y = 0, bool color = WHITE) {
+  void printNum(const int num, uint8_t tailleTexte = 1, uint8_t x = 0, uint8_t y = 0, bool color = WHITE) {
+    ecran_.setFont();
+    ecran_.setTextColor(color);
+    ecran_.setTextSize(tailleTexte);
+    ecran_.setCursor(x, y);
+    ecran_.print(num);
+  }
+  void printTxt(const char *texte, uint8_t tailleTexte = 1, uint8_t x = 0, uint8_t y = 0, bool color = WHITE) {
     ecran_.setFont();
     ecran_.setTextColor(color);
     ecran_.setTextSize(tailleTexte);
