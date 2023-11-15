@@ -31,6 +31,7 @@
 #include "libs/Class.ButtonHandler.h"
 #include "libs/Class.Rotary.h"
 #include "libs/Class.Debug.h"
+#include "Class.FileManager.h"
 #include "Class.Display.h"
 
 /**********************

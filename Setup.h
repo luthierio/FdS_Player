@@ -48,6 +48,9 @@ void setup() {
   FILE_.begin(0, 0); // Utilisation avec les fonctions de rappel
   FILE_.setDirCallbacks( onBeforeSelect, onAfterSelect );
   FILE_.setFileCallbacks( onBeforeSelect, onAfterSelect );
+
+  // Définir les callbacks
+  SD_BACKUP.setCallbacks(onBeforeSelect, onAfterSelect , onBeforeSelect, onAfterSelect );
   Debug::print(F("✓✓✓ ⋅ FILES ok "));
 
   SLEEP_WATCH.setCallbacks(onSleep, onWakeUp);

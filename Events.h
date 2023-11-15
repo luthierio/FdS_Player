@@ -19,7 +19,7 @@ void setMode(uint8_t mode){
         DISPLAY_.logo();
       break;   
     }  
-    
+
     ASF_MODE = mode;
 
   }
@@ -42,10 +42,12 @@ void onRotChange(Rotary &rotary) {
     case ACTION:              
       if(&rotary == R_DIR) {
         FILE_.selectDir(currentPosition);
+        STATE.dirNum = currentPosition;
         DISPLAY_.printPath(&FILE_);
       }
       if(&rotary == R_FILES) {
         FILE_.selectFile(currentPosition);
+        STATE.fileNum = currentPosition;
         DISPLAY_.printPath(&FILE_);
       }
       if(&rotary == R_PITCH) {
@@ -88,7 +90,8 @@ void onPress(ButtonHandler* buttonHandler, int ID, bool LONG) {
             break;   
 
             case 2:  
-              Debug::print("Jumping");
+              Debug::print("Mode Splash");
+              setMode(ACTION);
             break;   
 
             case 3:  
@@ -97,9 +100,24 @@ void onPress(ButtonHandler* buttonHandler, int ID, bool LONG) {
             break;
 
             case 4:  
-              Debug::print("Mode Splash");
-              setMode(ACTION);
-            break;                   
+              Debug::print("Load DATA");
+              if(SD_BACKUP.load(STATE_FILENAME,&STATE)){
+                Debug::print("OK", SD_BACKUP.getLastMessage());
+              }else{
+                Debug::print("ERREUR", SD_BACKUP.getLastMessage());
+              }
+              Debug::print("DirNum", STATE.dirNum);
+            break;
+
+            case 5:  
+              Debug::print("Save DATA");
+              if(SD_BACKUP.save(STATE_FILENAME,&STATE)){
+                Debug::print("OK", SD_BACKUP.getLastMessage());
+              }else{
+                Debug::print("ERREUR", SD_BACKUP.getLastMessage());
+              }
+              Debug::print("DirNum", STATE.dirNum);
+            break;                  
 
           }
         break;

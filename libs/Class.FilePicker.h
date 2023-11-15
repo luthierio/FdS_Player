@@ -8,18 +8,21 @@
 
   #include <SdFat.h>
 
+  // Constantes pour la longueur des noms de fichier et du chemin
+  const int MAX_FILENAME_LENGTH = 255;
+  const int MAX_PATH_LENGTH = 560;
+
   class FilePicker {
     private:
       SdFat* SD;
       File DIR;
       File FILE; 
     public:
- 
       int dirNum;
       int fileNum;  
-      char dirname[255]; 
-      char filename[255];  
-      char path[560];
+      char dirname[MAX_FILENAME_LENGTH]; 
+      char filename[MAX_FILENAME_LENGTH];  
+      char path[MAX_PATH_LENGTH];
 
       // Définition du type de fonction de rappel
       typedef void (*CallbackFunction)();
@@ -85,23 +88,23 @@
       }  
       
       void updatePath(){
-        memset(this->path, 0, 560);
+        memset(this->path, 0, MAX_PATH_LENGTH);
 
         if(this->DIR.isDir()){
           
-          this->DIR.getName(this->dirname,255);
+          this->DIR.getName(this->dirname, MAX_FILENAME_LENGTH);
           strcpy (this->path,"/");
           strcat (this->path,this->dirname);
           strcat (this->path,"/");
 
-          if(this->FILE.getName(this->filename,255) != 0){  
+          if(this->FILE.getName(this->filename, MAX_FILENAME_LENGTH) != 0){  
             strcat (this->path,this->filename);
           }else{   
-            memset(this->filename, 0, 255);
+            memset(this->filename, 0, MAX_FILENAME_LENGTH);
           }
         }else{
-          memset(this->dirname, 0, 255);
-          memset(this->filename, 0, 255);
+          memset(this->dirname, 0, MAX_FILENAME_LENGTH);
+          memset(this->filename, 0, MAX_FILENAME_LENGTH);
         }
 
       }
@@ -120,7 +123,7 @@
           sprintf(prefix, "%02d", num );  
 
           char name[100]; 
-          entry.getName(name,100);
+          entry.getName(name, 100);
 
           if ( name[0] == prefix[0]
             && name[1] == prefix[1] ) {        
@@ -143,7 +146,7 @@
             Serial->print('\t');
           }
           char filename[100];
-          entry.getName(filename,100);
+          entry.getName(filename, 100);
 
           if (entry.isDirectory()) {
             Serial->print("📁 ");
@@ -161,3 +164,4 @@
       }
   };
 #endif
+

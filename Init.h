@@ -17,7 +17,9 @@ SdFat SD;
 Adafruit_VS1053_FilePlayer AUDIO =
   Adafruit_VS1053_FilePlayer(VS1053_RESET, VS1053_CS, VS1053_DCS, VS1053_DREQ, CARDCS);
 Pitcher PITCHER = Pitcher(&AUDIO);
+
 FilePicker FILE_(&SD);
+FileManager SD_BACKUP(&SD);
 
 /**********************
 * Multiplex

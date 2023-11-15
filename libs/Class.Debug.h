@@ -55,6 +55,13 @@ public:
       Serial.println(value);
     }
   }
+  static void print(const char* label, const __FlashStringHelper* value) {
+    if (SERIAL_ON) {
+      Serial.print(label);
+      Serial.print(": ");
+      Serial.println(value);
+    }
+  }
 
   static void print(const __FlashStringHelper* label, const __FlashStringHelper* value) {
     if (SERIAL_ON) {
