@@ -8,11 +8,12 @@
 #include <SdFat.h>
 #include <Adafruit_VS1053.h>
 
+#include "inc/Icons.h"
+
 /**********************
 * CONFIG
 ***********************/
 #include "Config.h"
-#include "Icons.h"
 
 /**********************
 * Local Classes & Functions
@@ -24,8 +25,8 @@
 #include "libs/Class.Multiplex.h"
 #include "libs/Class.ButtonHandler.h"
 #include "libs/Class.Rotary.h"
+#include "libs/Class.Debug.h"
 #include "Class.Display.h"
-#include "Class.Debug.h"
 
 /**********************
 * INIT

@@ -1,7 +1,134 @@
 /**********************
-* Events
+* MODE
 ***********************/
 
+void setMode(uint8_t mode){
+
+  Debug::print("MODE", mode);
+
+  if(mode != ASF_MODE){
+    switch (mode) {
+
+      case PLAYER:
+        DISPLAY_.printPath(&FILE_);
+      break;   
+
+      case ACTION:
+        DISPLAY_.logo();
+      break;   
+    }  
+    ASF_MODE = mode;
+  }
+  
+}
+
+/**********************
+* ROTARIES:
+***********************/
+void onRotChange(Rotary &rotary) {
+
+  SLEEP_WATCH.wakeUp();
+
+  int currentPosition = rotary.getPosition();
+
+  switch (ASF_MODE) {
+    case PLAYER: 
+    case PLAYLIST: 
+    case BEAT: 
+    case ACTION:              
+      if(&rotary == R_DIR) {
+        FILE_.selectDir(currentPosition);
+        DISPLAY_.printPath(&FILE_);
+      }
+      if(&rotary == R_FILES) {
+        FILE_.selectFile(currentPosition);
+        DISPLAY_.printPath(&FILE_);
+      }
+      if(&rotary == R_PITCH) {
+        PITCHER.setPitchStep(currentPosition);
+      }
+      Debug::print("ROT",currentPosition, FILE_.path);  
+    break;   
+  }  
+}
+
+/**********************
+* BUTTONS:
+***********************/
+void onPress(ButtonHandler* buttonHandler, int ID, bool LONG) {  
+  SLEEP_WATCH.wakeUp();
+
+  switch (ASF_MODE) {
+    case PLAYER: 
+    case PLAYLIST: 
+    case BEAT: 
+    case ACTION: 
+      switch (LONG){
+        //Short press
+        case false:
+          switch (ID){
+
+            case 0: 
+              Debug::print("Playing");
+              AUDIO.startPlayingFile(FILE_.path);
+            break;   
+
+            case 1:   
+              if (AUDIO.playingMusic) {
+                AUDIO.pausePlaying(true);
+                Debug::print("Paused");
+              } else {
+                AUDIO.pausePlaying(false);
+                Debug::print("Resumed");
+              } 
+            break;   
+
+            case 2:  
+              Debug::print("Jumping");
+            break;   
+
+            case 3:  
+              Debug::print("Mode PLAYER");
+              setMode(PLAYER);
+            break;
+
+            case 4:  
+              Debug::print("Mode Splash");
+              setMode(ACTION);
+            break;                   
+
+          }
+        break;
+
+        //Long press
+        case true:
+        break;
+      }
+
+    break;   
+
+  }
+  Debug::print("Pressed", ID, LONG);
+}
+void onRelease(ButtonHandler* buttonHandler, int ID, bool LONG) {
+  //Debug::print("Released", ID, LONG);
+}
+
+/**********************
+* SLEEP:
+***********************/
+void onSleep(){
+  SCREEN_.ssd1306_command(SSD1306_DISPLAYOFF);
+  Debug::print("Sleeping");
+}
+void onWakeUp(){
+  SCREEN_.ssd1306_command(SSD1306_DISPLAYON);
+  Debug::print("Wakeup");
+}
+
+/**********************
+* FILEPICKER:
+***********************/
 bool MUST_RESUME = false;
 void onBeforeSelect() {
   if(AUDIO.playingMusic){
@@ -16,96 +143,4 @@ void onAfterSelect() {
     AUDIO.pausePlaying(false);
     MUST_RESUME = false;
   }
-}
-
-void onSleep(){
-  //SCREEN_.switchOff();
-  SCREEN_.ssd1306_command(SSD1306_DISPLAYOFF);
-  Debug::print("Sleeping");
-}
-void onWakeUp(){
-  //SCREEN_.switchOn();
-  SCREEN_.ssd1306_command(SSD1306_DISPLAYON);
-  Debug::print("Wakeup");
-}
-void onRotChange(Rotary &rotary) {
-
-  SLEEP_WATCH.wakeUp();
-
-  int currentPosition = rotary.getPosition();
-
-  switch (ASF_MODE) {
-    case PLAYER: {                   
-      if(&rotary == R_DIR) {
-        STATE.dirNum = currentPosition;
-        FILE_.selectDir(STATE.dirNum);
-      }
-      if(&rotary == R_FILES) {
-        STATE.fileNum = currentPosition;
-        FILE_.selectFile(STATE.fileNum);
-      }
-      if(&rotary == R_PITCH) {
-        STATE.pitchStep = currentPosition;
-        PITCHER.setPitchStep(STATE.pitchStep);
-      }
-      Debug::print("ROT",currentPosition, FILE_.path);
-    }
-  }  
-}
-
-void onPress(ButtonHandler* buttonHandler, int ID, bool LONG) {  
-  SLEEP_WATCH.wakeUp();
-
-  switch (ASF_MODE) {
-
-    case PLAYER: 
-
-      switch (ID){
-
-        case 0: 
-
-          switch (LONG) 
-            case true:
-            case false:
-              Debug::print("Playing");
-              AUDIO.startPlayingFile(FILE_.path);
-            break;   
-
-        case 1:   
-
-          switch (LONG) 
-            case true:
-            case false:
-              if (AUDIO.playingMusic) {
-                AUDIO.pausePlaying(true);
-                Debug::print("Paused");
-              } else {
-                AUDIO.pausePlaying(false);
-                Debug::print("Resumed");
-              } 
-            break;   
-
-        case 2:  
-          switch (LONG) 
-            case true:
-            case false:
-              Debug::print("Jumping");
-            break;   
-
-      }
-
-    break;   
-
-  }
-  Debug::print("Pressed", ID, LONG);
-}
-void onRelease(ButtonHandler* buttonHandler, int ID, bool LONG) {
-  Debug::print("Released", ID, LONG);
-  /*
-  if(SERIAL_ON) Serial.print("RELEASE ");
-  if(SERIAL_ON) Serial.print(ID);
-  if(SERIAL_ON) Serial.print(": ");
-  if(longPress) Serial.print(" LONG ");
-  if(SERIAL_ON) Serial.println("!");
-    */
 }

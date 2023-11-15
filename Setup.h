@@ -14,7 +14,7 @@ void setup() {
   * DISPLAY:
   ***********************/    
   if(SCREEN_.begin(SSD1306_SWITCHCAPVCC, SCREEN_ADDRESS)){
-    DISPLAY_.logo();
+    DISPLAY_.init();
     Debug::print(F("✓✓✓ ⋅ Screen OK"));
   }
   /**********************

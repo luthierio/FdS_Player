@@ -77,10 +77,11 @@ const byte ROT_P_PIN[2] = {1 , 0 };
 /**********************
 * Modes
 ***********************/
-enum asfMode    { PLAYER,   BEAT,   PLAYLIST, ACTION    };// Entier déguisé en string :-)
+enum asfMode    { PLAYER,   BEAT,   PLAYLIST,   ACTION  };// Entier déguisé en string :-)
 enum playMode   { ONEPLAY,  AUTO,   RANDOM,   REPEATONE };// Entier déguisé en string :-)
 enum pitchMode  { OFF,      TEMPO,  PITCH };// Entier déguisé en string :-)
 enum pitchStyle { STEP,     RATIO };// Entier déguisé en string :-)
+uint8_t ASF_MODE = PLAYER;
 
 /**********************
 * Custom

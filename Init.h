@@ -63,7 +63,6 @@ char  activeSoundPath[512];
 * State
 ***********************/
 //Toutes les variables à sauvegarder sur la carte SD
-byte ASF_MODE = PLAYER;
 
 struct t_state{
   uint8_t dirNum = 0;

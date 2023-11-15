@@ -4,25 +4,21 @@
 ***********************/
 
 void smallLoop() {
-  if(!SLEEP_WATCH.isSleeping()){
-  }
+  if(!SLEEP_WATCH.isSleeping()){  }
 }
 
 void bigLoop() {
-
-  if(SLEEP_WATCH.isSleeping()){
-  }
-
+  if(SLEEP_WATCH.isSleeping()){  }
 }
 
 uint32_t smallLoopTime;
 uint32_t bigLoopTime;
 void loop() {
 
-
-  if(AUDIO.playingMusic && SLEEP_WATCH.isSleeping()){
+  if(AUDIO.playingMusic){
     SLEEP_WATCH.keepAlive();
   }
+  
   SLEEP_WATCH.listen();
   //Lancé à intervale réduit
 
