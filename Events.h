@@ -48,6 +48,8 @@ void onRotChange(Rotary &rotary) {
       }
       Debug::print("ROT",currentPosition, FILE_.path);  
     break;   
+    default:
+      break;
 
   }  
 }
@@ -65,9 +67,8 @@ void onPress(ButtonHandler* buttonHandler, int ID, bool LONG) {
     case PLAYLIST:
     case BEAT:
     case ACTION:
-      switch (LONG) {
+      if (!LONG) {
         // Short press
-        case false:
           switch (ID) {
             case 0:
               Debug::print("Playing", FILE_.path);
@@ -116,14 +117,16 @@ void onPress(ButtonHandler* buttonHandler, int ID, bool LONG) {
               }
               Debug::print("DirNum", STATE.dirNum);
               break;
+            default:
+              break;
           }
           break;
 
-        // Long press
-        case true:
-          break;
-      }
+      // Long press
+      }else{
 
+      }
+    default:
       break;
   }
   Debug::print("Pressed", ID, LONG);

@@ -57,7 +57,6 @@
 
 // TRAD INPTS
 #define VOLUME_PIN A1 
-#define VOLUME 5           // Defaut volume
 
 /**********************
 * Multiplex
@@ -94,6 +93,7 @@ uint8_t ASF_MODE = PLAYER;
 #define MIN_VOL               100    // Au dela de ce nombre 255 (Volume OFF) est envoyé.
 #define MIN_VBAT              3.2    //3.5; // Voltage avec lequel la batterie est considérée vide https://learn.adafruit.com/adafruit-feather-m0-adalogger/power-management  
 #define MAX_VBAT              4      // Voltage avec lequel la batterie est considérée pleine
+#define VOLUME 10           // Defaut volume
 
 /**********************
 * UX

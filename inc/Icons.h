@@ -388,24 +388,6 @@ const unsigned char volumeIcons[][32]  PROGMEM = {
 };
 
 
-const  unsigned char alimIconH[] PROGMEM = {      
-	  0b00000000, 0b00000000, //                 
-	  0b00000000, 0b11000000, //                 
-	  0b00000001, 0b11111000, //                 
-	  0b01111001, 0b10011110, //                 
-	  0b00011111, 0b10000000, //                 
-	  0b00000011, 0b00000000, //                 
-	  0b00000000, 0b00000000, //   
-};
-const  unsigned char alimIconContourH[] PROGMEM = {   
-	  0b00000011, 0b11100000, //                 
-	  0b00000011, 0b00111100, //                 
-	  0b11111110, 0b00000111, //                 
-	  0b10000110, 0b01100001, //                 
-	  0b11100000, 0b01111111, //                 
-	  0b00111100, 0b11000000, //                 
-	  0b00000111, 0b11000000, //  
-};
 
 const  unsigned char sectIconH[] PROGMEM = {      
 	  0b00000000, 0b00000000, //                 
@@ -486,6 +468,24 @@ const  unsigned char alimIconContour[] PROGMEM = {
 	  0b00010010, //                
 	  0b00010100, //                 
 	  0b00010100, //    
+};
+const  unsigned char alimIconH[] PROGMEM = {      
+	  0b00000000, 0b00000000, //                 
+	  0b00000000, 0b11000000, //                 
+	  0b00000001, 0b11111000, //                 
+	  0b01111001, 0b10011110, //                 
+	  0b00011111, 0b10000000, //                 
+	  0b00000011, 0b00000000, //                 
+	  0b00000000, 0b00000000, //   
+};
+const  unsigned char alimIconContourH[] PROGMEM = {   
+	  0b00000011, 0b11100000, //                 
+	  0b00000011, 0b00111100, //                 
+	  0b11111110, 0b00000111, //                 
+	  0b10000110, 0b01100001, //                 
+	  0b11100000, 0b01111111, //                 
+	  0b00111100, 0b11000000, //                 
+	  0b00000111, 0b11000000, //  
 };
 
 const  unsigned char sectIcon[] PROGMEM = {             

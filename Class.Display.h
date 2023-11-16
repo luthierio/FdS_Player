@@ -38,13 +38,12 @@
     void printPath(FilePicker *selectedPath) {
       
       //On efface la zone   
-      ecran_.fillRect(0, 0, 80, 12, BLACK); 
+      ecran_.fillRect(0, 0, 100, 12, BLACK); 
       printDirPath(selectedPath, 0, 3);
 
       ecran_.fillRect(0, 18, 128, 44, BLACK); 
       printFilePath(selectedPath, 0, 36, &FreeSerif9pt7b);
 
-      ecran_.display();
     }
 
     void printDirPath(FilePicker *selectedPath, int x, int y, const GFXfont *font = NULL, uint8_t textSize = 1){
@@ -53,20 +52,18 @@
       char dirNum[2];
       sprintf(dirNum, "%02d", selectedPath->dirNum );  
 
-      if(!selectedPath->dirname){
-        printTxt(dirNum, x, y, font, textSize)  ;
-        printTxt("Aucun dossier", x+20, y);
-      }else{
+      if(!selectedPath->dirname[0] == '\0'){
         ecran_.drawBitmap (x, y, folderIcon8, 8,8,WHITE);
         printTxt(selectedPath->dirname+3, x+12, y);
+      }else{
+        printTxt(dirNum, x, y, font, textSize)  ;
+        printTxt("Aucun dossier", x+20, y);
       }  
     }
-
+    
     void printFilePath(FilePicker *selectedPath, int x, int y, const GFXfont *font = NULL, uint8_t textSize = 1) {
-
-
-      char fileNum[2];
-      sprintf(fileNum, "%02d", selectedPath->fileNum );  
+      char fileNum[3];
+      sprintf(fileNum, "%02d", selectedPath->fileNum);
 
       if (!selectedPath->filename || selectedPath->filename[0] == '\0') {
         printTxt(fileNum, x, y, font, textSize);
@@ -76,45 +73,50 @@
           ecran_.drawPixel(px, y + 2, WHITE);
         }
       } else {
-        char displayedFile[20]; // Assurez-vous que la taille est suffisamment grande
-        char fileInfos[20]; // Assurez-vous que la taille est suffisamment grande
-
+        char displayedFile[255]; // Assurez-vous que la taille est suffisamment grande
+        char fileInfos[255]; // Assurez-vous que la taille est suffisamment grande
+        fileInfos[0] = '\0';
         strcpy(displayedFile, selectedPath->filename + 3); // Copie à partir du 4ème caractère
         displayedFile[strcspn(displayedFile, ".")] = '\0'; // Ajoute un caractère de fin de chaîne à la position du point
-
-        int bracketPosition = strcspn(displayedFile, "[");
-        if (bracketPosition != strlen(displayedFile)) {
-          int closingBracketPosition = strcspn(displayedFile + bracketPosition + 1, "]");
-          if (closingBracketPosition != strlen(displayedFile + bracketPosition + 1)) {
-            strncpy(fileInfos, displayedFile + bracketPosition + 1, closingBracketPosition);
-            fileInfos[closingBracketPosition] = '\0'; // Ajoute un caractère de fin de chaîne
-            displayedFile[bracketPosition] = '\0'; // Tronque la chaîne pour exclure la partie entre '[' et ']'
-          }
+        const char *startBracket = strchr(displayedFile, '[');
+        if (startBracket != NULL) {
+          displayedFile[strcspn(displayedFile, "[")] = '\0'; // Ajoute un caractère de fin de chaîne à la position du point
+          getBracketContent(selectedPath->filename, fileInfos, sizeof(fileInfos));
         }
 
+
         printTxt(displayedFile, x, y, font, textSize);
-        printTxt(fileInfos, x, y+10, NULL, textSize);
+        printTxt(fileInfos, x, y + 10, NULL, textSize);
+      }
+    }
+    // Fonction pour obtenir le contenu entre crochets
+    void getBracketContent(const char *input, char *output, size_t outputSize) {
+      const char *startBracket = strchr(input, '[');
+      if (startBracket != NULL) {
+        const char *endBracket = strchr(startBracket + 1, ']');
+        if (endBracket != NULL) {
+          size_t contentLength = endBracket - (startBracket + 1);
+          strncpy(output, startBracket + 1, min(contentLength, outputSize - 1));
+          output[min(contentLength, outputSize - 1)] = '\0'; // Ajoute un caractère de fin de chaîne
+        }
       }
     }
 
     /**********************
     * GLOBAL
     ***********************/
-    void analogGauges(float VUsb, float VBat, uint8_t x, uint8_t y, uint8_t w, uint8_t h){  
+    void analogGauges(float VUsb, float VBat, int Volume, int8_t x, int8_t y, uint8_t w, uint8_t h){  
     
       ecran_.fillRect(x,y, w, h,  BLACK);
       ecran_.drawRoundRect(x,y, w, h ,1, WHITE);
-
       if ( VUsb > 4.75) {
-        ecran_.drawBitmap (x+1, y+1, alimIconH, w-2,h/2 ,WHITE);
+        ecran_.drawBitmap (x+5, y+3, alimIconH, 16, 7 ,WHITE);
       }else{
         uint8_t batLevel = map((int)(VBat*10), (int)(MIN_VBAT*10) , (int)(MAX_VBAT*10), 0, w); 
-        HGauge(x+1, y+1,w-2,batLevel);    
-      }
-      
-      uint8_t volumeLevel = map(VOLUME, 0,MIN_VOL, w, 0);      // On echelonne le volume sur 20px
-      HGauge(x+1, y+h/2+1,w-2,volumeLevel);
-      ecran_.display();
+        HGauge(x+3, y+3, w-6,batLevel);    
+      }   
+      uint8_t volumeLevel = map(Volume, 0,MIN_VOL, w-6, 0);      // On echelonne le volume sur 20px
+      HGauge(x+3, y+h/2+2,w-6,volumeLevel);
     }
     void VGauge(uint8_t x, uint8_t y,uint8_t h,uint8_t value){  
       //Height = 3

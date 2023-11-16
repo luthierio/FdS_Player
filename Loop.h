@@ -4,17 +4,17 @@
 ***********************/
 
 void smallLoop() {
-  if(!SLEEP_WATCH.isSleeping()){  }
+  if(!SLEEP_WATCH.isSleeping()){
+    DISPLAY_.show();
+
+  }
 }
 
 void bigLoop() {
 
   switch (ASF_MODE) {
-    case PLAYER:
-      DISPLAY_.analogGauges(VOLUME, VBat, 104, -2, 28, 18);
-      break;
-
     default:
+      DISPLAY_.analogGauges(VUSB, VBat,30, 100, -2, 30, 18);
       break;
   }
 
@@ -49,6 +49,10 @@ void loop() {
   for (int i = 0; i < 6; i++) {
     BTN_STATE[i] = MUX.state(BTN_CHANNEL[i]);
   }
+
+  VUSB = (float)round(10*(MUX.value(BTN_CHANNEL[0])* 3.3 * 2 )/ 1024.0)/10.0;
+  VBat = (float)round(10*(MUX.value(BTN_CHANNEL[1])* 3.3 * 2 )/ 1024.0)/10.0; // VERIFIER NUMERO!!
+
   // Passez les états des boutons à la classe ButtonHandler pour la gestion
   BUTTONS.update(BTN_STATE);
 
