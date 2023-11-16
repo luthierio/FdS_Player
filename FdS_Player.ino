@@ -35,7 +35,7 @@
 #include "libs/Class.Debug.h"
 #include "libs/Class.FileManager.h"
 #include "Class.Markers.h"
-#include "Class.Display.h"
+#include "Class.PlayerDisplay.h"
 
 /**********************
 * INIT

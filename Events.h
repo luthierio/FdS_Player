@@ -3,15 +3,15 @@
 ***********************/
 void setMode(uint8_t mode) {
   Debug::print("MODE", mode);
-  DISPLAY_.clear();
+  Player_DISPLAY.clear();
 
   switch (mode) {
     case PLAYER:
-      DISPLAY_.printPath(&FILE_);
+      Player_DISPLAY.printPath(&FILE_);
       break;
 
     default:
-      DISPLAY_.logo();
+      Player_DISPLAY.logo();
       break;
   }
 
@@ -36,12 +36,12 @@ void onRotChange(Rotary &rotary) {
       if(&rotary == R_DIR) {
         FILE_.selectDir(currentPosition);
         MARKERS = &getFileDataRef(FILE_.dirNum,FILE_.fileNum);
-        DISPLAY_.printPath(&FILE_);
+        Player_DISPLAY.printPath(&FILE_);
       }
       if(&rotary == R_FILES) {
         FILE_.selectFile(currentPosition);
         MARKERS = &getFileDataRef(FILE_.dirNum,FILE_.fileNum);
-        DISPLAY_.printPath(&FILE_);
+        Player_DISPLAY.printPath(&FILE_);
       }
       if(&rotary == R_PITCH) {
         PITCHER.setPitchStep(currentPosition);

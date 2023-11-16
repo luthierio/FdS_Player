@@ -2,10 +2,9 @@
 /**********************
 * LOOP
 ***********************/
-
 void smallLoop() {
   if(!SLEEP_WATCH.isSleeping()){
-    DISPLAY_.show();
+    Player_DISPLAY.show();
 
   }
 }
@@ -14,7 +13,7 @@ void bigLoop() {
 
   switch (ASF_MODE) {
     default:
-      DISPLAY_.analogGauges(VUSB, VBat,30, 100, -2, 30, 18);
+      Player_DISPLAY.analogGauges(VUSB, VBat,30, 100, -2, 30, 18);
       break;
   }
 
