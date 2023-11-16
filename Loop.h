@@ -8,11 +8,24 @@ void smallLoop() {
 }
 
 void bigLoop() {
-  if(SLEEP_WATCH.isSleeping()){  }
+
+  switch (ASF_MODE) {
+    case PLAYER:
+      DISPLAY_.analogGauges(VOLUME, VBat, 104, -2, 28, 18);
+      break;
+
+    default:
+      break;
+  }
+
+  if(SLEEP_WATCH.isSleeping()){ 
+
+   }
 
   if(AUDIO.playingMusic){
     //Serial.println(AUDIO.getBitRate());
   }
+
 }
 
 uint32_t smallLoopTime;

@@ -1,30 +1,23 @@
 /**********************
 * MODE
 ***********************/
-
-void setMode(uint8_t mode){
-
+void setMode(uint8_t mode) {
   Debug::print("MODE", mode);
+  DISPLAY_.clear();
 
-  if(mode != ASF_MODE){
+  switch (mode) {
+    case PLAYER:
+      DISPLAY_.printPath(&FILE_);
+      break;
 
-    DISPLAY_.clear();
-
-    switch (mode) {
-      case PLAYER:
-        DISPLAY_.printPath(&FILE_);
-      break;   
-
-      case ACTION:
-        DISPLAY_.logo();
-      break;   
-    }  
-
-    ASF_MODE = mode;
-
+    default:
+      DISPLAY_.logo();
+      break;
   }
-  
+
+  ASF_MODE = mode;
 }
+
 
 /**********************
 * ROTARIES:
@@ -42,12 +35,12 @@ void onRotChange(Rotary &rotary) {
     case ACTION:              
       if(&rotary == R_DIR) {
         FILE_.selectDir(currentPosition);
-        STATE.dirNum = currentPosition;
+        MARKERS = &getFileDataRef(FILE_.dirNum,FILE_.fileNum);
         DISPLAY_.printPath(&FILE_);
       }
       if(&rotary == R_FILES) {
         FILE_.selectFile(currentPosition);
-        STATE.fileNum = currentPosition;
+        MARKERS = &getFileDataRef(FILE_.dirNum,FILE_.fileNum);
         DISPLAY_.printPath(&FILE_);
       }
       if(&rotary == R_PITCH) {
@@ -55,6 +48,7 @@ void onRotChange(Rotary &rotary) {
       }
       Debug::print("ROT",currentPosition, FILE_.path);  
     break;   
+
   }  
 }
 
@@ -92,7 +86,8 @@ void onPress(ButtonHandler* buttonHandler, int ID, bool LONG) {
 
             case 2:         
               JumpPosition = (AUDIO.getFilePosition() >= SECONDS_PER_JUMP * (BITRATE / 8)) ? (AUDIO.getFilePosition() - SECONDS_PER_JUMP * (BITRATE / 8)) : 0;    
-              AUDIO.startPlayingAtPosition(FILE_.path, JumpPosition);
+              AUDIO.jumpTo(JumpPosition);
+              //AUDIO.startPlayingAtPosition(FILE_.path, JumpPosition);
               Debug::print("Jump Position", JumpPosition);
 
               break;

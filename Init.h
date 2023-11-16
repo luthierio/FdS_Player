@@ -21,8 +21,6 @@ Pitcher PITCHER = Pitcher(&AUDIO);
 FilePicker FILE_(&SD);
 FileManager SD_BACKUP(&SD);
 
-uint32_t BITRATE = 128000;
-uint32_t TRACK_POSITION;
 
 /**********************
 * Multiplex
@@ -67,6 +65,20 @@ char  activeSoundPath[512];
 * State
 ***********************/
 //Toutes les variables à sauvegarder sur la carte SD
+
+struct t_fileData {
+    uint8_t dirNum;
+    uint8_t fileNum;
+    MarkerArray<uint32_t> markers;
+    void clear() {
+        // Remettez vos membres de structure à leurs valeurs par défaut ici
+        dirNum = 0;
+        fileNum = 0;
+        markers.clean(); // Assurez-vous que la classe MarkerArray a une méthode clean() ou équivalente
+    }
+};
+t_fileData DATAS[NBR_FILES_DATA];
+t_fileData *MARKERS = &DATAS[0];
 
 struct t_state{
   uint8_t dirNum = 0;

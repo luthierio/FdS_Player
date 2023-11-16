@@ -15,6 +15,7 @@ void setup() {
   ***********************/    
   if(SCREEN_.begin(SSD1306_SWITCHCAPVCC, SCREEN_ADDRESS)){
     DISPLAY_.init();
+    setMode(LOGO);
     Debug::print(F("✓✓✓ ⋅ Screen OK"));
   }
   /**********************
@@ -69,8 +70,8 @@ void setup() {
   Debug::print(F("✓✓✓ ⋅ Interface ok "));
 
   // Play a file in the background, REQUIRES interrupts!  
-  AUDIO.playFullFile(STARTSOUND);  
-
+  AUDIO.startPlayingFile(STARTSOUND);  
+  delay(1000);
   setMode(PLAYER);
   
   //SCREEN_.switchMode(DisplayManager::MODE_NAVIGATION);

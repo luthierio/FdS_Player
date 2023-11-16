@@ -77,16 +77,27 @@ const byte ROT_P_PIN[2] = {1 , 0 };
 /**********************
 * Modes
 ***********************/
-enum asfMode    { PLAYER,   BEAT,   PLAYLIST,   ACTION  };// Entier déguisé en string :-)
+enum asfMode    { PLAYER,   BEAT,   PLAYLIST,   ACTION, LOGO  };// Entier déguisé en string :-)
 enum playMode   { ONEPLAY,  AUTO,   RANDOM,   REPEATONE };// Entier déguisé en string :-)
 enum pitchMode  { OFF,      TEMPO,  PITCH };// Entier déguisé en string :-)
 enum pitchStyle { STEP,     RATIO };// Entier déguisé en string :-)
 uint8_t ASF_MODE = PLAYER;
 
 /**********************
-* Custom
+* Audio
 ***********************/
-#define SECONDS_PER_JUMP    4
+#define BITRATE               64000  //Ce serait mieux de le prendre du fichier mais pour le moment c'est le plus simple
+#define SECONDS_PER_JUMP      2
+#define NBR_FILES_DATA        100    //Nombre de tableaux de marqueurs pour le boitier
+//#define MAX_MARKERS_PER_FILE  10   //Nombre de marqueurs possibles par piste
+#define MAX_VOL               0      // Un petit nombre signifie un volume fort
+#define MIN_VOL               100    // Au dela de ce nombre 255 (Volume OFF) est envoyé.
+#define MIN_VBAT              3.2    //3.5; // Voltage avec lequel la batterie est considérée vide https://learn.adafruit.com/adafruit-feather-m0-adalogger/power-management  
+#define MAX_VBAT              4      // Voltage avec lequel la batterie est considérée pleine
+
+/**********************
+* UX
+***********************/
 #define SLEEP_INTERVAL      10000
 #define SMALL_LOOP_INTERVAL 100
 #define BIG_LOOP_INTERVAL   1000
