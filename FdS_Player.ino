@@ -23,6 +23,7 @@
 /**********************
 * Local Classes & Functions
 ***********************/
+#include "Class.FdS_Adafruit_VS1053.h"
 #include "libs/Class.Pitcher.h"
 #include "libs/Class.Path.h"
 #include "libs/Class.FilePicker.h"

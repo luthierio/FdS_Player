@@ -61,79 +61,94 @@ void onRotChange(Rotary &rotary) {
 /**********************
 * BUTTONS:
 ***********************/
-void onPress(ButtonHandler* buttonHandler, int ID, bool LONG) {  
+void onPress(ButtonHandler* buttonHandler, int ID, bool LONG) {
+
   SLEEP_WATCH.wakeUp();
+  int Jump;
 
   switch (ASF_MODE) {
-    case PLAYER: 
-    case PLAYLIST: 
-    case BEAT: 
-    case ACTION: 
-      switch (LONG){
-        //Short press
+    case PLAYER:
+    case PLAYLIST:
+    case BEAT:
+    case ACTION:
+      switch (LONG) {
+        // Short press
         case false:
-          switch (ID){
-
-            case 0: 
+          switch (ID) {
+            case 0:
               Debug::print("Playing");
+              BITRATE = 0;
               AUDIO.startPlayingFile(FILE_.path);
-            break;   
+              break;
 
-            case 1:   
+            case 1:
               if (AUDIO.playingMusic) {
                 AUDIO.pausePlaying(true);
                 Debug::print("Paused");
               } else {
                 AUDIO.pausePlaying(false);
                 Debug::print("Resumed");
-              } 
-            break;   
+              }
+              break;
 
-            case 2:  
-              Debug::print("Mode Splash");
-              setMode(ACTION);
-            break;   
+            case 2:         
+              Jump = SECONDS_PER_JUMP*(BITRATE / 8);
+              if(BITRATE && Jump > AUDIO.getFilePosition()){
+                AUDIO.startPlayingAtPosition(FILE_.path, AUDIO.getFilePosition()- Jump);
+                Debug::print("Jump", static_cast<int>(Jump));
+              }else{
+                AUDIO.startPlayingFile(FILE_.path);
+              }
+              delay(100);
 
-            case 3:  
+              break;
+
+            case 3:
               Debug::print("Mode PLAYER");
               setMode(PLAYER);
-            break;
+              break;
 
-            case 4:  
+            case 4:
               Debug::print("Load DATA");
-              if(SD_BACKUP.load(STATE_FILENAME,&STATE, sizeof(STATE))){
+              if (SD_BACKUP.load(STATE_FILENAME, &STATE, sizeof(STATE))) {
                 Debug::print("OK", SD_BACKUP.getLastMessage());
-              }else{
+              } else {
                 Debug::print("ERREUR", SD_BACKUP.getLastMessage());
               }
               Debug::print("DirNum", STATE.dirNum);
-            break;
+              break;
 
-            case 5:  
+            case 5:
               Debug::print("Save DATA");
-              if(SD_BACKUP.save(STATE_FILENAME,&STATE, sizeof(STATE))){
+              if (SD_BACKUP.save(STATE_FILENAME, &STATE, sizeof(STATE))) {
                 Debug::print("OK", SD_BACKUP.getLastMessage());
-              }else{
+              } else {
                 Debug::print("ERREUR", SD_BACKUP.getLastMessage());
               }
               Debug::print("DirNum", STATE.dirNum);
-            break;                  
-
+              break;
           }
-        break;
+          break;
 
-        //Long press
+        // Long press
         case true:
-        break;
+          break;
       }
 
-    break;   
-
+      break;
   }
   Debug::print("Pressed", ID, LONG);
 }
+
+
 void onRelease(ButtonHandler* buttonHandler, int ID, bool LONG) {
-  //Debug::print("Released", ID, LONG);
+
+  //On stocke le Bitrate pour les Jumps après quelques temps de release.
+  // Il faut laisser au player une seconde de jeu
+  if(ASF_MODE == PLAYER && ID == 0 && LONG){
+    BITRATE = AUDIO.getBitRate();
+    Debug::print("BitRate", static_cast<int>(BITRATE));
+  }
 }
 
 /**********************
@@ -161,7 +176,7 @@ void onBeforeSDWork() {
 }
 void onAfterSDWork() {
   delay(5);
-  if(MUST_RESUME){
+  if(MUST_RESUME){ 
     AUDIO.pausePlaying(false);
     MUST_RESUME = false;
   }

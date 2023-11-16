@@ -14,12 +14,14 @@ SdFat SD;
 * AUDIO CARD VS1053
 ***********************/
 
-Adafruit_VS1053_FilePlayer AUDIO =
-  Adafruit_VS1053_FilePlayer(VS1053_RESET, VS1053_CS, VS1053_DCS, VS1053_DREQ, CARDCS);
+FdS_Adafruit_VS1053_FilePlayer AUDIO =
+  FdS_Adafruit_VS1053_FilePlayer(VS1053_RESET, VS1053_CS, VS1053_DCS, VS1053_DREQ, CARDCS);
 Pitcher PITCHER = Pitcher(&AUDIO);
 
 FilePicker FILE_(&SD);
 FileManager SD_BACKUP(&SD);
+
+uint32_t BITRATE;
 
 /**********************
 * Multiplex
@@ -27,8 +29,7 @@ FileManager SD_BACKUP(&SD);
 
 int BTN_CHANNEL[] = {2, 3, 4, 5, 6, 7};
 Multiplex MUX(PIN_ADDR_A, PIN_ADDR_B, PIN_ADDR_C, PIN_SIG);
-ButtonHandler BUTTONS(6);
-
+ButtonHandler BUTTONS(6, DEBOUNCE_INTERVAL, LONG_PRESS_INTERVAL, LONG_RELEASE_INTERVAL);
 
 /**********************
 * Rotary Encoders

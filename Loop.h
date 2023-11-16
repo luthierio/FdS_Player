@@ -9,6 +9,10 @@ void smallLoop() {
 
 void bigLoop() {
   if(SLEEP_WATCH.isSleeping()){  }
+
+  if(AUDIO.playingMusic){
+    //Serial.println(AUDIO.getBitRate());
+  }
 }
 
 uint32_t smallLoopTime;
