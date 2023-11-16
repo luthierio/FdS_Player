@@ -38,11 +38,11 @@
     void printPath(FilePicker *selectedPath) {
       
       //On efface la zone   
-      ecran_.fillRect(0, 3, 80, 12, BLACK); 
+      ecran_.fillRect(0, 0, 80, 12, BLACK); 
       printDirPath(selectedPath, 0, 3);
 
-      ecran_.fillRect(0, 30, 128, 40, BLACK); 
-      printFilePath(selectedPath, 0, 30, &FreeSerif9pt7b);
+      ecran_.fillRect(0, 18, 128, 44, BLACK); 
+      printFilePath(selectedPath, 0, 36, &FreeSerif9pt7b);
 
       ecran_.display();
     }
@@ -54,7 +54,7 @@
       sprintf(dirNum, "%02d", selectedPath->dirNum );  
 
       if(!selectedPath->dirname){
-        printTxt(dirNum, x, y)  ;
+        printTxt(dirNum, x, y, font, textSize)  ;
         printTxt("Aucun dossier", x+20, y);
       }else{
         ecran_.drawBitmap (x, y, folderIcon8, 8,8,WHITE);
@@ -149,16 +149,16 @@
       ecran_.setFont(font);
       ecran_.setTextColor(color);
       ecran_.setTextSize(tailleTexte);
-
+      ecran_.setCursor(x, y);
+      /*
       ecran_.getTextBounds(texte, x, y, &x1, &y1, &w, &h);
       if(font){
-        ecran_.setCursor(x, y+h);
         ecran_.fillRect(x, y, w, h*2, BLACK); 
       }else{
         ecran_.setCursor(x, y);
         ecran_.fillRect(x, y, w, h, BLACK); 
       }
-
+      */
 
       ecran_.print(texte);
     }
