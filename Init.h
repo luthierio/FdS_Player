@@ -21,7 +21,8 @@ Pitcher PITCHER = Pitcher(&AUDIO);
 FilePicker FILE_(&SD);
 FileManager SD_BACKUP(&SD);
 
-uint32_t BITRATE;
+uint32_t BITRATE = 128000;
+uint32_t TRACK_POSITION;
 
 /**********************
 * Multiplex

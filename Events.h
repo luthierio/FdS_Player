@@ -64,7 +64,7 @@ void onRotChange(Rotary &rotary) {
 void onPress(ButtonHandler* buttonHandler, int ID, bool LONG) {
 
   SLEEP_WATCH.wakeUp();
-  int Jump;
+  int JumpPosition;
 
   switch (ASF_MODE) {
     case PLAYER:
@@ -76,8 +76,7 @@ void onPress(ButtonHandler* buttonHandler, int ID, bool LONG) {
         case false:
           switch (ID) {
             case 0:
-              Debug::print("Playing");
-              BITRATE = 0;
+              Debug::print("Playing", FILE_.path);
               AUDIO.startPlayingFile(FILE_.path);
               break;
 
@@ -92,14 +91,9 @@ void onPress(ButtonHandler* buttonHandler, int ID, bool LONG) {
               break;
 
             case 2:         
-              Jump = SECONDS_PER_JUMP*(BITRATE / 8);
-              if(BITRATE && Jump > AUDIO.getFilePosition()){
-                AUDIO.startPlayingAtPosition(FILE_.path, AUDIO.getFilePosition()- Jump);
-                Debug::print("Jump", static_cast<int>(Jump));
-              }else{
-                AUDIO.startPlayingFile(FILE_.path);
-              }
-              delay(100);
+              JumpPosition = (AUDIO.getFilePosition() >= SECONDS_PER_JUMP * (BITRATE / 8)) ? (AUDIO.getFilePosition() - SECONDS_PER_JUMP * (BITRATE / 8)) : 0;    
+              AUDIO.startPlayingAtPosition(FILE_.path, JumpPosition);
+              Debug::print("Jump Position", JumpPosition);
 
               break;
 
@@ -146,8 +140,8 @@ void onRelease(ButtonHandler* buttonHandler, int ID, bool LONG) {
   //On stocke le Bitrate pour les Jumps après quelques temps de release.
   // Il faut laisser au player une seconde de jeu
   if(ASF_MODE == PLAYER && ID == 0 && LONG){
-    BITRATE = AUDIO.getBitRate();
-    Debug::print("BitRate", static_cast<int>(BITRATE));
+    //BITRATE = AUDIO.getBitRate();
+    //Debug::print("BitRate", static_cast<int>(BITRATE));
   }
 }
 

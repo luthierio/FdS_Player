@@ -11,6 +11,7 @@
 #include <Fonts/FreeMonoBold9pt7b.h>
 
 #include <SdFat.h>
+#define PREFER_SDFAT_LIBRARY 1
 #include <Adafruit_VS1053.h>
 
 #include "inc/Icons.h"

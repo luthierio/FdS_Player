@@ -31,9 +31,17 @@ inline FdS_Adafruit_VS1053_FilePlayer::FdS_Adafruit_VS1053_FilePlayer(int8_t mos
     : Adafruit_VS1053_FilePlayer(mosi, miso, clk, rst, cs, dcs, dreq, cardcs) {
 }
 
+//Fonctionne mais après un certain temps, et le BITRATE ne semble pas propre au fichier....
 inline uint16_t FdS_Adafruit_VS1053_FilePlayer::getBitRate() {
   sciWrite(VS1053_REG_WRAMADDR, VS1053_PARAM_BITRATE);
-  return sciRead(VS1053_REG_WRAM) * 8;
+  uint16_t bitrate = sciRead(VS1053_REG_WRAM) * 8;
+
+  //Nécessaire??? à vérifier
+  // Resync
+  sciWrite(VS1053_REG_WRAMADDR, 0x1e29);
+  sciWrite(VS1053_REG_WRAM, 0);
+
+  return  bitrate;
 }
 
 inline void FdS_Adafruit_VS1053_FilePlayer::setPlaySpeed(uint16_t data) {
@@ -48,7 +56,8 @@ inline uint32_t FdS_Adafruit_VS1053_FilePlayer::getFilePosition() {
     return 0;
 }
 
-inline boolean FdS_Adafruit_VS1053_FilePlayer::startPlayingAtPosition(const char *trackname, uint32_t startPosition) {
+inline boolean FdS_Adafruit_VS1053_FilePlayer::startPlayingAtPosition(const char *trackname, uint32_t startPosition) {  
+
   // Reset playback
   sciWrite(VS1053_REG_MODE, VS1053_MODE_SM_LINE1 | VS1053_MODE_SM_SDINEW | VS1053_MODE_SM_LAYER12);
   // Resync
@@ -59,17 +68,16 @@ inline boolean FdS_Adafruit_VS1053_FilePlayer::startPlayingAtPosition(const char
   if (!currentTrack) {
     return false;
   }
-
-  if (isMP3File(trackname)) {
-    // Check for ID3 tag and jump it if present.
-    currentTrack.seek(mp3_ID3Jumper(currentTrack));
-  }
-  // We know we have a valid file. Check if .mp3
-  if (startPosition > currentTrack.position()) {
-    // Seek to the specified position
-    currentTrack.seek(startPosition);
-  } 
   
+  // We know we have a valid file. Check if .mp3
+  // If so, check for ID3 tag and jump it if present.
+  if (isMP3File(trackname)) {
+    //currentTrack.seek(mp3_ID3Jumper(currentTrack));
+    if (startPosition) {
+      // Seek to the specified position
+      currentTrack.seek(startPosition);
+    }  
+  }
   // Don't let the IRQ get triggered by accident here
   noInterrupts();
 

@@ -57,7 +57,7 @@
 
 // TRAD INPTS
 #define VOLUME_PIN A1 
-#define VOLUME 10           // Defaut volume
+#define VOLUME 5           // Defaut volume
 
 /**********************
 * Multiplex
@@ -86,12 +86,12 @@ uint8_t ASF_MODE = PLAYER;
 /**********************
 * Custom
 ***********************/
-#define SECONDS_PER_JUMP    5
+#define SECONDS_PER_JUMP    4
 #define SLEEP_INTERVAL      10000
 #define SMALL_LOOP_INTERVAL 100
 #define BIG_LOOP_INTERVAL   1000
 #define BLINK_INTERVAL      500
 
-#define DEBOUNCE_INTERVAL 200
+#define DEBOUNCE_INTERVAL 500
 #define LONG_PRESS_INTERVAL 1000
-#define LONG_RELEASE_INTERVAL 1500
+#define LONG_RELEASE_INTERVAL 2000
