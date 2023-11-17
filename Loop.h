@@ -7,7 +7,7 @@ void smallLoop() {
 
   switch (ASF_MODE) {
     default:
-      DISPLAY_.analogGauges(VUSB, VBat,VOLUME, 100, -2, 30, 18);
+      DISPLAY_.analogs.analogGauges(VUSB, VBat,VOLUME, 100, -2, 30, 18);
       break;
   }
 

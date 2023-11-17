@@ -7,11 +7,11 @@ void setMode(uint8_t mode) {
 
   switch (mode) {
     case PLAYER:
-      DISPLAY_.printPath(&FILE_);
+      DISPLAY_.files.printPath(&FILE_);
       break;
 
     default:
-      DISPLAY_.logo();
+      DISPLAY_.display.logo();
       break;
   }
 
@@ -36,13 +36,13 @@ void onRotChange(Rotary &rotary) {
       if(&rotary == R_DIR) {
         FILE_.selectDir(currentPosition);
         MARKERS = &getFileDataRef(FILE_.dirNum,FILE_.fileNum);
-        DISPLAY_.printPath(&FILE_);
+        DISPLAY_.files.printPath(&FILE_);
         Debug::print("ROT",currentPosition, FILE_.path);  
       }
       if(&rotary == R_FILES) {
         FILE_.selectFile(currentPosition);
         MARKERS = &getFileDataRef(FILE_.dirNum,FILE_.fileNum);
-        DISPLAY_.printPath(&FILE_);
+        DISPLAY_.files.printPath(&FILE_);
         Debug::print("ROT",currentPosition, FILE_.path);  
       }
       if(&rotary == R_PITCH) {
