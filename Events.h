@@ -126,12 +126,16 @@ void onPress(ButtonHandler* buttonHandler, int ID, bool LONG) {
 
       // Long press
       }else{
-
+        setMode(LOGO);
       }
     default:
+      if (!LONG) {
+        setMode(PLAYER);
+      }
       break;
   }
   Debug::print("Pressed", ID, LONG);
+  delay(10);
 }
 
 
