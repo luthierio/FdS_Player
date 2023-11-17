@@ -52,6 +52,7 @@
 
       void keepAlive() {
          lastActivityTime = millis();
+         SLEEPING = false;
       }
 
       bool isSleeping() {

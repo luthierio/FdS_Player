@@ -156,6 +156,26 @@ void onWakeUp(){
 }
 
 /**********************
+* VOLUME:
+***********************/
+void setVolume(uint8_t reqVolume) {
+  
+  if(reqVolume != VOLUME && reqVolume >= MIN_VOLUME-1){
+
+    VOLUME = MIN_VOLUME;
+    SLEEP_WATCH.wakeUp();
+    AUDIO.setVolume(254,254); // VOL MIN doit etre sur off = 255   
+
+  }else if(reqVolume != VOLUME && abs(reqVolume - VOLUME) > 2){  
+
+    VOLUME = reqVolume;
+    SLEEP_WATCH.wakeUp();
+    AUDIO.setVolume(VOLUME,VOLUME); 
+
+  }
+
+}
+/**********************
 * FILEPICKER:
 ***********************/
 bool MUST_RESUME = false;

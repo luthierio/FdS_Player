@@ -3,7 +3,8 @@
 * LOOP
 ***********************/
 void smallLoop() {
-  readVolume();
+
+
   switch (ASF_MODE) {
     default:
       Player_DISPLAY.analogGauges(VUSB, VBat,VOLUME, 100, -2, 30, 18);
@@ -52,6 +53,7 @@ void loop() {
 
   VUSB = (float)round(10*(MUX.value(BTN_CHANNEL[0])* 3.3 * 2 )/ 1024.0)/10.0;
   VBat = (float)round(10*(MUX.value(BTN_CHANNEL[1])* 3.3 * 2 )/ 1024.0)/10.0; // VERIFIER NUMERO!!
+  setVolume(map(analogRead(VOLUME_PIN), 5, 1023, MAX_VOLUME, MIN_VOLUME));
 
   // Passez les états des boutons à la classe ButtonHandler pour la gestion
   BUTTONS.update(BTN_STATE);
