@@ -3,19 +3,19 @@
 * LOOP
 ***********************/
 void smallLoop() {
+  readVolume();
+  switch (ASF_MODE) {
+    default:
+      Player_DISPLAY.analogGauges(VUSB, VBat,VOLUME, 100, -2, 30, 18);
+      break;
+  }
+
   if(!SLEEP_WATCH.isSleeping()){
     Player_DISPLAY.show();
-
   }
 }
 
 void bigLoop() {
-
-  switch (ASF_MODE) {
-    default:
-      Player_DISPLAY.analogGauges(VUSB, VBat,30, 100, -2, 30, 18);
-      break;
-  }
 
   if(SLEEP_WATCH.isSleeping()){ 
 
@@ -37,6 +37,7 @@ void loop() {
   
   SLEEP_WATCH.listen();
   //Lancé à intervale réduit
+
 
   // Mettre à jour en continu le rotary encoder
   for (byte i = 0; i < 3; ++i) {

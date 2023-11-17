@@ -89,11 +89,11 @@ uint8_t ASF_MODE = PLAYER;
 #define SECONDS_PER_JUMP      2
 #define NBR_FILES_DATA        100    //Nombre de tableaux de marqueurs pour le boitier
 //#define MAX_MARKERS_PER_FILE  10   //Nombre de marqueurs possibles par piste
-#define MAX_VOL               0      // Un petit nombre signifie un volume fort
-#define MIN_VOL               100    // Au dela de ce nombre 255 (Volume OFF) est envoyé.
+#define MAX_VOLUME               0      // Un petit nombre signifie un volume fort
+#define MIN_VOLUME               100    // Au dela de ce nombre 255 (Volume OFF) est envoyé.
 #define MIN_VBAT              3.2    //3.5; // Voltage avec lequel la batterie est considérée vide https://learn.adafruit.com/adafruit-feather-m0-adalogger/power-management  
 #define MAX_VBAT              4      // Voltage avec lequel la batterie est considérée pleine
-#define VOLUME 10           // Defaut volume
+
 
 /**********************
 * UX

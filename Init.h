@@ -21,6 +21,7 @@ Pitcher PITCHER = Pitcher(&AUDIO);
 FilePicker FILE_(&SD);
 FileManager SD_BACKUP(&SD);
 
+uint8_t VOLUME = 10;          // Defaut volume
 
 /**********************
 * Multiplex
