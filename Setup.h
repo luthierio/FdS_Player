@@ -27,13 +27,11 @@ void setup() {
   }else{
     AUDIO.useInterrupt(VS1053_FILEPLAYER_PIN_INT);
     Debug::print(F("✓✓✓ ⋅ VS1053 found and started"));
+    //AUDIO.sineTest(0x44, 500);    // Make a tone to indicate VS1053 is working
+    delay(500);
+    PITCHER.init();
     // Set volume for left, right channels. lower numbers == louder volume!
     AUDIO.setVolume(VOLUME,VOLUME);
-    AUDIO.applyPatch(pluginPitchShifter, PLUGIN_PITCHSHIFTER_SIZE);  
-    AUDIO.sciWrite(VS1053_SCI_AIADDR, 0x50);
-    AUDIO.sineTest(0x44, 500);    // Make a tone to indicate VS1053 is working
-    delay(500);
-    PITCHER.setPitchStep(STATE.pitchStep);
   }
 
   /**********************

@@ -16,6 +16,7 @@ public:
   void setPlaySpeed(uint16_t data);
   uint32_t getFilePosition();
   boolean jumpTo(uint32_t startPosition);
+  boolean verifyPatch(const uint16_t *patch, uint16_t patchsize);
 };
 
 // Implémentation en ligne
@@ -29,6 +30,44 @@ inline FdS_Adafruit_VS1053_FilePlayer::FdS_Adafruit_VS1053_FilePlayer(int8_t cs,
 
 inline FdS_Adafruit_VS1053_FilePlayer::FdS_Adafruit_VS1053_FilePlayer(int8_t mosi, int8_t miso, int8_t clk, int8_t rst, int8_t cs, int8_t dcs, int8_t dreq, int8_t cardcs)
     : Adafruit_VS1053_FilePlayer(mosi, miso, clk, rst, cs, dcs, dreq, cardcs) {
+}
+
+inline boolean FdS_Adafruit_VS1053_FilePlayer::verifyPatch(const uint16_t *patch, uint16_t patchsize) {
+  uint16_t i = 0;
+
+  Serial.println("Verifying patch...");
+
+  while (i < patchsize) {
+    uint16_t addr, n, val;
+
+    addr = pgm_read_word(patch++);
+    n = pgm_read_word(patch++);
+    i += 2;
+
+    if (n & 0x8000U) { // RLE run, replicate n samples
+      n &= 0x7FFF;
+      val = pgm_read_word(patch++);
+      i++;
+      while (n--) {
+        if (sciRead(addr) != val) {
+          Serial.println("Patch verification failed!");
+          return false;
+        }
+      }
+    } else { // Copy run, copy n samples
+      while (n--) {
+        val = pgm_read_word(patch++);
+        i++;
+        if (sciRead(addr) != val) {
+          Serial.println("Patch verification failed!");
+          return false;
+        }
+      }
+    }
+  }
+
+  Serial.println("Patch verification successful.");
+  return true;
 }
 
 //Fonctionne mais après un certain temps, et le BITRATE ne semble pas propre au fichier....

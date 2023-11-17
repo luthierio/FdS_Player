@@ -4,10 +4,10 @@
   class Multiplex {
   public:
     // Valeur pour considérer un bouton HIGH malgré une lecture analogique
-    const int threshold = 512; 
+    const int threshold; 
     // Constructeur
-    Multiplex(const byte pinAddrA, const byte pinAddrB, const byte pinAddrC, const byte pinSig) 
-      : MUX_PIN_ADDR_A(pinAddrA), MUX_PIN_ADDR_B(pinAddrB), MUX_PIN_ADDR_C(pinAddrC), MUX_PIN_SIG(pinSig) {
+    Multiplex(const byte pinAddrA, const byte pinAddrB, const byte pinAddrC, const byte pinSig, int threshold = 512) 
+      : MUX_PIN_ADDR_A(pinAddrA), MUX_PIN_ADDR_B(pinAddrB), MUX_PIN_ADDR_C(pinAddrC), MUX_PIN_SIG(pinSig), threshold(threshold) {
       // Initialisation des broches
     }
     

@@ -1,61 +1,84 @@
 /**********************
 * PITCH FUNCTIONS
 ***********************/
-#ifndef Pitcher_H   // Vérifie si MACLASSE_H n'a pas été défini
-#define Pitcher_H   // Définit MACLASSE_H pour éviter les inclusions multiples
+#ifndef Pitcher_H
+#define Pitcher_H
 
-  #define PITCH_STEPS 11
-  static const int PITCH_TONE_TABLE[PITCH_STEPS]= {
-  12274, //-5 Down five semitones
-  13004, //-4 Down four semitones
-  13777, //-3 Down three semitones
-  14595, //-2 Down two semitones
-  15466, //-1 Down one semitone
-  16384, //+0 Neutral position, no extra CPU needed
-  17359, //+1 Up one semitone
-  18432, //+2 Up two semitones
-  19481, //+3 Up three semitones
-  20642, //+4 Up four semitones
-  21869, //+5 Up five semitones
-  };
+#include <Adafruit_VS1053.h>
 
-  class Pitcher {
-    
-    public:
-    
-      Adafruit_VS1053_FilePlayer* VS1053;
+#define PITCH_STEPS 11
+#define PLUGIN_PITCHSHIFTER_SIZE 1373
 
-      Pitcher(Adafruit_VS1053_FilePlayer* VS1053){
-        this->VS1053 = VS1053;
-      }
+class Pitcher {
 
-      void setPitchStep(uint8_t pitchStep){
-        if(0 <= pitchStep < PITCH_STEPS){
-          setValue(PITCH_TONE_TABLE[pitchStep]);
+  public:   
+
+    static const int PITCH_TONE_TABLE[PITCH_STEPS];
+    static const unsigned short pluginPitchShifter[PLUGIN_PITCHSHIFTER_SIZE]; // Remplacez cette taille par la taille réelle du tableau.
+
+  
+    Pitcher(Adafruit_VS1053_FilePlayer *vs1053) : VS1053(vs1053) {}
+
+    void init() {
+      applyPatch();
+    }
+    void applyPatch() {    
+      this->VS1053->sciWrite(VS1053_SCI_AIADDR, 0x50);
+      this->VS1053->applyPatch(pluginPitchShifter, PLUGIN_PITCHSHIFTER_SIZE);
+      //resetting the value to normal
+      this->VS1053->sciWrite(VS1053_SCI_AICTRL0,  16384);
+    }
+
+    void setPitchStep(uint8_t pitchStep, bool preferSpeed = false) {
+      if (0 <= pitchStep && pitchStep < PITCH_STEPS) {
+        if (preferSpeed) {
+          setValue(PITCH_TONE_TABLE[pitchStep], preferSpeed);
+        } else {
+          setValue(-1 * PITCH_TONE_TABLE[pitchStep], preferSpeed);
         }
       }
-      void setRatio(float pitchRatio){
-        this->setValue(16384*pitchRatio);
+    }
+
+    void setRatio(float pitchRatio, bool preferSpeed = false) {
+      setValue(16384 * pitchRatio, preferSpeed);
+    }
+
+    signed int getValue() {
+      return this->VS1053->sciRead(VS1053_SCI_AICTRL0);
+    }
+
+    void setValue(signed int aictrl0, bool preferSpeed = false) {
+      signed int sign = preferSpeed ? -1 : 1;
+      this->VS1053->pausePlaying(true);
+      delay(10); // Laissez quelques millisecondes pour éviter le bruit.
+      signed int currentAICTRL0 = this->VS1053->sciRead(VS1053_SCI_AICTRL0);
+
+      if (currentAICTRL0 != aictrl0) {
+        this->VS1053->sciWrite(VS1053_SCI_AICTRL0, aictrl0);
       }
+      delay(10); // Laissez quelques millisecondes pour éviter le bruit.
+      this->VS1053->pausePlaying(false);
+    }
+  private:
+    Adafruit_VS1053_FilePlayer *VS1053;
+ 
+};
 
-      void setValue(signed int aictrl0){
-        this->VS1053->pausePlaying(true); 
-        delay(10); //Let few millis to avoid awful noise
-        signed int currentAICTRL0 = this->VS1053->sciRead(VS1053_SCI_AICTRL0);
-
-        if(currentAICTRL0 != aictrl0){
-          this->VS1053->sciWrite(VS1053_SCI_AICTRL0,  aictrl0);
-        }
-        delay(10); //Let few millis to avoid awful noise
-        this->VS1053->pausePlaying(false); 
-      }
-
-  };
-
-
-
-  #define PLUGIN_PITCHSHIFTER_SIZE 1373
-  const unsigned short pluginPitchShifter[1373] = { /* Compressed plugin */
+const int Pitcher::PITCH_TONE_TABLE[PITCH_STEPS] = {
+    12274, //-5 Down five semitones
+    13004, //-4 Down four semitones
+    13777, //-3 Down three semitones
+    14595, //-2 Down two semitones
+    15466, //-1 Down one semitone
+    16384, //+0 Neutral position, no extra CPU needed
+    17359, //+1 Up one semitone
+    18432, //+2 Up two semitones
+    19481, //+3 Up three semitones
+    20642, //+4 Up four semitones
+    21869, //+5 Up five semitones
+};
+#define PLUGIN_PITCHSHIFTER_SIZE 1373
+const unsigned short Pitcher::pluginPitchShifter[PLUGIN_PITCHSHIFTER_SIZE] = { /* Compressed plugin */
     0x0007, 0x0001, 0x8050, 0x0006, 0x0006, 0x2800, 0xaac0, 0x0000, /*    0 */
     0x0024, 0x2800, 0x70c0, 0x0007, 0x0001, 0x8010, 0x0006, 0x0006, /*    8 */
     0x2a08, 0x21ce, 0x2a00, 0x14ce, 0x2a00, 0x2f0e, 0x0007, 0x0001, /*   10 */
@@ -229,4 +252,6 @@
     0x511e, 0x511e, 0xe5ee, 0x0e89, 0xf6b8, 0x0633, 0xfbd5, 0x02c3, /*  550 */
     0xfe3a, 0x0116, 0xff62, 0x0052, 0xffd8,
   };
-#endif
+
+
+#endif // Pitcher_H

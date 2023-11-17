@@ -37,16 +37,18 @@ void onRotChange(Rotary &rotary) {
         FILE_.selectDir(currentPosition);
         MARKERS = &getFileDataRef(FILE_.dirNum,FILE_.fileNum);
         Player_DISPLAY.printPath(&FILE_);
+        Debug::print("ROT",currentPosition, FILE_.path);  
       }
       if(&rotary == R_FILES) {
         FILE_.selectFile(currentPosition);
         MARKERS = &getFileDataRef(FILE_.dirNum,FILE_.fileNum);
         Player_DISPLAY.printPath(&FILE_);
+        Debug::print("ROT",currentPosition, FILE_.path);  
       }
       if(&rotary == R_PITCH) {
-        PITCHER.setPitchStep(currentPosition);
+        PITCHER.setPitchStep(currentPosition, true);
+        Debug::print("ROT PITCHER",currentPosition, PITCHER.getValue());  
       }
-      Debug::print("ROT",currentPosition, FILE_.path);  
     break;   
     default:
       break;
