@@ -7,12 +7,12 @@ void smallLoop() {
 
   switch (ASF_MODE) {
     default:
-      Player_DISPLAY.analogGauges(VUSB, VBat,VOLUME, 100, -2, 30, 18);
+      DISPLAY_.analogGauges(VUSB, VBat,VOLUME, 100, -2, 30, 18);
       break;
   }
 
   if(!SLEEP_WATCH.isSleeping()){
-    Player_DISPLAY.show();
+    DISPLAY_.show();
   }
 }
 
