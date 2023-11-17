@@ -36,7 +36,7 @@
 #include "libs/Class.FileManager.h"
 #include "Class.Metronome.h"
 #include "Class.Markers.h"
-#include "Class.PlayerDisplay.h"
+#include "Class.Display.h"
 
 /**********************
 * INIT

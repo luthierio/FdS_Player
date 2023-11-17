@@ -5,10 +5,10 @@
   #include <Adafruit_GFX.h>
   #include <Adafruit_SSD1306.h>
 
-  class PlayerDisplay {
+  class Display {
   public:
     // Constructeur prenant un objet Adafruit_SSD1306 en paramètre
-    PlayerDisplay(Adafruit_SSD1306 &ecran) : ecran_(ecran) {}
+    Display(Adafruit_SSD1306 &ecran) : ecran_(ecran) {}
 
     // Initialisation de l'affichage
     void init() {

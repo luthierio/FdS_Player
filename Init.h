@@ -4,7 +4,7 @@
 * SCREEN
 ***********************/
 Adafruit_SSD1306 SCREEN_(SCREEN_WIDTH, SCREEN_HEIGHT, &Wire, OLED_RESET);
-PlayerDisplay Player_DISPLAY(SCREEN_);
+Display Player_DISPLAY(SCREEN_);
 /**********************
 * FAT Files
 ***********************/
