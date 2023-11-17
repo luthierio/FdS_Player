@@ -61,10 +61,11 @@
 /**********************
 * Multiplex
 ***********************/
-#define PIN_ADDR_A 13
-#define PIN_ADDR_B 12
-#define PIN_ADDR_C 11
-#define PIN_SIG    A0                           // Broche de signal
+#define PIN_ADDR_A        13
+#define PIN_ADDR_B        12
+#define PIN_ADDR_C        11
+#define PIN_SIG           A0                           // Broche de signal
+#define SEUIL_ANALOGIQUE  512          //Valeur sous laquelle on considère que c'est LOW en lecture analogique (requis avec des résistances de 100k)
 
 /**********************
 * Interface

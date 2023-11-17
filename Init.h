@@ -21,6 +21,8 @@ Pitcher PITCHER = Pitcher(&AUDIO);
 FilePicker FILE_(&SD);
 FileManager SD_BACKUP(&SD);
 
+Metronome METRONOME_(&AUDIO, BEATSOUND, BEATSOUND2); // BPM = 120, 4 beats per bar, with specific beat files
+
 uint8_t VOLUME = 10;          // Defaut volume
 
 /**********************
@@ -28,7 +30,7 @@ uint8_t VOLUME = 10;          // Defaut volume
 ***********************/
 
 int BTN_CHANNEL[] = {2, 3, 4, 5, 6, 7};
-Multiplex MUX(PIN_ADDR_A, PIN_ADDR_B, PIN_ADDR_C, PIN_SIG);
+Multiplex MUX(PIN_ADDR_A, PIN_ADDR_B, PIN_ADDR_C, PIN_SIG, SEUIL_ANALOGIQUE);
 ButtonHandler BUTTONS(6, DEBOUNCE_INTERVAL, LONG_PRESS_INTERVAL, LONG_RELEASE_INTERVAL);
 
 /**********************
