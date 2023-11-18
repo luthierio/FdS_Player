@@ -155,7 +155,7 @@
       
         ecran_->fillRect(x,y, w, h,  BLACK);
         ecran_->drawRoundRect(x,y, w, h ,1, WHITE);
-        if ( VUsb > 4.75) {
+        if ( VUsb > 4.5) {
           ecran_->drawBitmap (x+5, y+3, alimIconH, 16, 7 ,WHITE);
         }else{
           uint8_t batLevel = map((int)(VBat*10), (int)(MIN_VBAT*10) , (int)(MAX_VBAT*10), 0, w); 
@@ -193,6 +193,7 @@
 
       void progressBar(uint8_t x1, uint8_t y1, uint8_t x2, uint8_t y2, boolean markersOn){  
 
+        ecran_->fillRect(x1-2,y1-2, x2-x1+4, 5,  BLACK);
         
         ecran_->drawLine(x1,y1,x2,y2, WHITE);
         ecran_->fillCircle(x1,y1, 2, WHITE);

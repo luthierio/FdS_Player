@@ -5,11 +5,14 @@
 void smallLoop() {
 
 
+  uint8_t space4Pitch = 0; // = 22;avec affichage Pitch
   switch (ASF_MODE) {
-    default:
+    case PLAYER:
       DISPLAY_.analogs.gauges(VUSB, VBat,VOLUME, 100, -2, 30, 18);
-      uint8_t space4Pitch = 0; // = 22;avec affichage Pitch
       DISPLAY_.playing.progressBar(3, 57, 125-space4Pitch, 57, true);
+      break;
+
+    default:
       break;
   }
 
