@@ -68,8 +68,7 @@ void setup() {
   Debug::print(F("✓✓✓ ⋅ Interface ok "));
 
   // Play a file in the background, REQUIRES interrupts!  
-  AUDIO.startPlayingFile(STARTSOUND);  
-  delay(1000);
+  AUDIO.playFullFile(STARTSOUND);  
   setMode(PLAYER);
   
   //SCREEN_.switchMode(DisplayManager::MODE_NAVIGATION);

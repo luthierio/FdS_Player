@@ -7,7 +7,9 @@ void smallLoop() {
 
   switch (ASF_MODE) {
     default:
-      DISPLAY_.analogs.analogGauges(VUSB, VBat,VOLUME, 100, -2, 30, 18);
+      DISPLAY_.analogs.gauges(VUSB, VBat,VOLUME, 100, -2, 30, 18);
+      uint8_t space4Pitch = 0; // = 22;avec affichage Pitch
+      DISPLAY_.playing.progressBar(3, 57, 125-space4Pitch, 57, true);
       break;
   }
 

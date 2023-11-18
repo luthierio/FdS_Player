@@ -1,11 +1,6 @@
 
 
 /**********************
-* SCREEN
-***********************/
-Adafruit_SSD1306 SCREEN_(SCREEN_WIDTH, SCREEN_HEIGHT, &Wire, OLED_RESET);
-DisplayController DISPLAY_(SCREEN_);
-/**********************
 * FAT Files
 ***********************/
 SdFat SD;
@@ -24,6 +19,12 @@ FileManager SD_BACKUP(&SD);
 Metronome METRONOME_(&AUDIO, BEATSOUND, BEATSOUND2); // BPM = 120, 4 beats per bar, with specific beat files
 
 uint8_t VOLUME = 10;          // Defaut volume
+
+/**********************
+* SCREEN
+***********************/
+Adafruit_SSD1306 SCREEN_(SCREEN_WIDTH, SCREEN_HEIGHT, &Wire, OLED_RESET);
+DisplayController DISPLAY_(&SCREEN_,&AUDIO);
 
 /**********************
 * Multiplex
