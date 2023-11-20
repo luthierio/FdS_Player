@@ -134,25 +134,24 @@ void onPress(ButtonHandler* buttonHandler, int ID) {
       // Short press
       switch (ID) {
         case 0:
-          break;
-        case 4:
           Debug::print("Load DATA");
-          if (SD_BACKUP.load(STATE_FILENAME, &STATE, sizeof(STATE))) {
+          if (SD_BACKUP.load(MARKERS_FILENAME, &DATAS, sizeof(DATAS))) {
             Debug::print("OK", SD_BACKUP.getLastMessage());
           } else {
             Debug::print("ERREUR", SD_BACKUP.getLastMessage());
           }
-          Debug::print("DirNum", STATE.dirNum);
           break;
 
-        case 5:
+        case 1:
           Debug::print("Save DATA");
-          if (SD_BACKUP.save(STATE_FILENAME, &STATE, sizeof(STATE))) {
+          if (SD_BACKUP.save(MARKERS_FILENAME, &DATAS, sizeof(DATAS))) {
             Debug::print("OK", SD_BACKUP.getLastMessage());
           } else {
             Debug::print("ERREUR", SD_BACKUP.getLastMessage());
           }
-          Debug::print("DirNum", STATE.dirNum);
+          break;
+        case 4:
+          setMode(PLAYER);
           break;
         default:
           break;
@@ -175,6 +174,10 @@ void onLongPress(ButtonHandler* buttonHandler, int ID) {
             AUDIO.pausePlaying(false);
             Debug::print("New marker", static_cast<int>(AUDIO.getFilePosition()));
           }
+          break;
+        case 4:
+          setMode(ACTION);
+          break;
         default:
           break;
       }
