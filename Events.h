@@ -32,28 +32,15 @@ void onRotChange(Rotary &rotary) {
     case PLAYER:            
       if(&rotary == R_DIR) {
         FILE_.selectDir(currentPosition);
-        DATA = &getFileDataRef(FILE_.dirNum,FILE_.fileNum);
-
-        DISPLAY_.files.printPath(&FILE_);
-        Debug::print("ROT",currentPosition, FILE_.path);  
       }
       if(&rotary == R_FILES) {
         FILE_.selectFile(currentPosition);
-        DATA = &getFileDataRef(FILE_.dirNum,FILE_.fileNum);
-
-        DISPLAY_.files.printPath(&FILE_);
-        Debug::print("ROT",currentPosition, FILE_.path);  
       }
       if(&rotary == R_PITCH) {
         PITCHER.setPitchStep(currentPosition);
         Debug::print("ROT",currentPosition);  
         Debug::print("PITCHER Step",PITCHER.getStep());  
         Debug::print("PITCHER Value",PITCHER.getValue());  
-        /*
-        if(PITCHER.getStep() != NORMAL_PITCH_STEP){
-          DISPLAY_.pitcher.printSymbol(128-SPACE_FOR_PITCH + 2  , 52 , 10 , 10 );            
-          DISPLAY_.pitcher.printValue (128-SPACE_FOR_PITCH + 12+4 , 52+2 );          
-        }*/
       }
       break;   
     case PLAYLIST: 
@@ -218,36 +205,31 @@ void onLongRelease(ButtonHandler* buttonHandler, int ID) {
 /**********************
 * AUTOPLAY:
 ***********************/
-bool SHOULD_PLAY_NEXT = false;
+bool SHOULD_PLAY_NEXT = false;  
 void autoPlay(){
-  if(
-    ((ASF_MODE == PLAYER && STATE.playMode != ONEPLAY) || (ASF_MODE == PLAYLIST && STATE.playlistMode != ONEPLAY) )
-    && AUDIO.playingMusic
-    && ((AUDIO.currentTrack.size()-AUDIO.getFilePosition()) < 5000)
-    ){    
-      SHOULD_PLAY_NEXT = true;
-      //La fin d'un fichier forcera l'autoplay à se lancer dès que la musique est finie!
 
-  }
-  if(SHOULD_PLAY_NEXT){
-    switch (ASF_MODE) {
-      case PLAYER:
-        if(STATE.playMode == AUTO && FILE_.fileNum == 99){    
-          STATE.playMode = ONEPLAY;
-          FILE_.selectFile(0);
-          Debug::print("FIN AutoPlay", FILE_.path);
-        }else if(STATE.playMode == AUTO && !AUDIO.playingMusic){  
-          Debug::print("Num", FILE_.fileNum);
-          Debug::print("Next", FILE_.fileNum +1 );
+  if(STATE.playMode != ONEPLAY){
 
-          FILE_.selectFile(FILE_.fileNum + 1);
-          Debug::print("AutoPlay", FILE_.path);
-          AUDIO.startPlayingFile(FILE_.path); 
-          DATA = &getFileDataRef(FILE_.dirNum,FILE_.fileNum);
-        }
-        break;
+    //La fin d'un fichier forcera l'autoplay à se lancer dès que la musique est finie!    
+    if(AUDIO.playingMusic && ((AUDIO.currentTrack.size()-AUDIO.getFilePosition()) < 5000)){    
+        SHOULD_PLAY_NEXT = true;
     }
 
+    if(SHOULD_PLAY_NEXT && ASF_MODE == PLAYER) {
+
+      //Fin du répertoire
+      if(FILE_.fileNum == 99){    
+        FILE_.selectFile(0);
+        SHOULD_PLAY_NEXT = false;
+        Debug::print("FIN AutoPlay");
+
+      //Il faudrait essayer d'en jouer une autre
+      }else if(!AUDIO.playingMusic && !AUDIO.currentTrack){  
+        FILE_.selectFile(FILE_.fileNum + 1);
+        AUDIO.startPlayingFile(FILE_.path); 
+      }
+          
+    }
   }
 
 }
@@ -287,16 +269,16 @@ void setVolume(uint8_t reqVolume) {
 /**********************
 * FILEPICKER:
 ***********************/
+
+
 bool MUST_RESUME = false;
 void onBeforeSDWork() {
   if(AUDIO.playingMusic){
     MUST_RESUME = true;
     AUDIO.pausePlaying(true);
-    delay(5);
   }
 }
 void onAfterSDWork() {
-  delay(5);
   if(MUST_RESUME){ 
     AUDIO.pausePlaying(false);
     MUST_RESUME = false;
@@ -310,3 +292,33 @@ void onBeforeSDWrite() {
     delay(100);
   }
 }
+void onBeforeSelectDir(){
+  onBeforeSDWork();
+}
+void onBeforeSelectFile(){
+  onBeforeSDWork();
+}
+void onAfterSelectDir(){
+
+  onAfterSDWork();
+  DATA = &getFileDataRef(FILE_.dirNum,FILE_.fileNum);
+
+  if(ASF_MODE == PLAYER){
+    DISPLAY_.files.printPath(&FILE_);
+  }
+
+  Debug::print("SelectDir",FILE_.dirNum,FILE_.path);  
+
+}
+void onAfterSelectFile(){
+
+  onAfterSDWork();
+  DATA = &getFileDataRef(FILE_.dirNum,FILE_.fileNum);
+
+  if(ASF_MODE == PLAYER){
+    DISPLAY_.files.printPath(&FILE_);
+  }
+  
+  Debug::print("SelectFile",FILE_.fileNum,FILE_.path);  
+
+}     

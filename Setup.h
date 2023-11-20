@@ -47,8 +47,8 @@ void setup() {
   }
 
   FILE_.begin(0, 0); // Utilisation avec les fonctions de rappel
-  FILE_.setDirCallbacks( onBeforeSDWork, onAfterSDWork );
-  FILE_.setFileCallbacks( onBeforeSDWork, onAfterSDWork );
+  FILE_.setDirCallbacks( onBeforeSelectDir, onAfterSelectDir );
+  FILE_.setFileCallbacks( onBeforeSelectFile, onAfterSelectFile );
 
   // Définir les callbacks
   SD_BACKUP.setCallbacks(onBeforeSDWrite, onAfterSDWork , onBeforeSDWrite, onAfterSDWork );

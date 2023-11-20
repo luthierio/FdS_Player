@@ -28,7 +28,6 @@ void smallLoop() {
 }
 
 void bigLoop() {
-  autoPlay();
   if(SLEEP_WATCH.isSleeping()){ 
   }
 
@@ -41,6 +40,7 @@ void bigLoop() {
 uint32_t smallLoopTime;
 uint32_t bigLoopTime;
 void loop() {
+  autoPlay();
 
   if(AUDIO.playingMusic){
     SLEEP_WATCH.keepAlive();
