@@ -193,7 +193,7 @@
         Display(ecran),
         Player (player){}
 
-      void progressBar(uint8_t x1, uint8_t y1, uint8_t x2, uint8_t y2, boolean markersOn){  
+      void progressBar(uint8_t x1, uint8_t y1, uint8_t x2, uint8_t y2){  
 
         ecran_->fillRect( x1-2, y1-2, x2-x1 + 4, y2-y1 + 4,  BLACK);
         

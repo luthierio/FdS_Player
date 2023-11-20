@@ -73,16 +73,24 @@ char  activeSoundPath[512];
 struct t_fileData {
     uint8_t dirNum;
     uint8_t fileNum;
-    MarkerArray<uint32_t> markers;
+    Array<uint32_t> markers;
+    void addMarker(uint32_t marker) {
+      markers.push(marker);
+    }
+    void addMarker(uint32_t marker, uint8_t dirNum, uint8_t fileNum) {
+      this->dirNum = dirNum;
+      this->fileNum = fileNum;
+      markers.push(marker);
+    }
     void clear() {
         // Remettez vos membres de structure à leurs valeurs par défaut ici
         dirNum = 0;
         fileNum = 0;
-        markers.clean(); // Assurez-vous que la classe MarkerArray a une méthode clean() ou équivalente
+        markers.clean(); // Assurez-vous que la classe Array a une méthode clean() ou équivalente
     }
 };
 t_fileData DATAS[NBR_FILES_DATA];
-t_fileData *MARKERS = &DATAS[0];
+t_fileData *DATA = &DATAS[0];
 
 struct t_state{
   uint8_t dirNum = 0;

@@ -64,7 +64,7 @@ void setup() {
     ROTARIES[i].setChangedHandler(onRotChange);
   }
   MUX.begin();
-  BUTTONS.setCallbacks(onPress,onRelease);
+  BUTTONS.setCallbacks(onPress,onRelease,onLongPress,onLongRelease);
   Debug::print(F("✓✓✓ ⋅ Interface ok "));
 
   // Play a file in the background, REQUIRES interrupts!  

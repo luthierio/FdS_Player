@@ -8,7 +8,7 @@ t_fileData &getFileDataRef(int dirNum, int fileNum) {
 
     // Sinon on prend le prochain espace vide comme référence
     for (byte i = 0; i < NBR_FILES_DATA; i = i + 1) {
-        if (DATAS[i].markers.isEmpty()) {
+        if (DATAS[i].markers.isEmpty()) {            
             return DATAS[i];
         }
     }

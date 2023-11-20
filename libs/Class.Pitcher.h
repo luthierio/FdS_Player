@@ -78,10 +78,9 @@ class Pitcher {
         delay(10); // Laissez quelques millisecondes pour éviter le bruit.  
       }      
       
-      if (AICTRL0 != aictrl0) {
-        AICTRL0 = aictrl0;
-        this->VS1053->sciWrite(VS1053_SCI_AICTRL0, aictrl0);
-      }
+      AICTRL0 = aictrl0;
+      this->VS1053->sciWrite(VS1053_SCI_AICTRL0, aictrl0);
+      
       
       if(MUST_RESUME){
         delay(10); // Laissez quelques millisecondes pour éviter le bruit.

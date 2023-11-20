@@ -28,9 +28,16 @@
       delete[] listenLongRelease;
     }
 
-    void setCallbacks(void (*onPressCallBack)(ButtonHandler*, int, bool),void (*onReleaseCallBack)(ButtonHandler*, int, bool)) {
+    void setCallbacks(
+      void (*onPressCallBack)(ButtonHandler*, int),
+      void (*onReleaseCallBack)(ButtonHandler*, int),
+      void (*onLongPressCallBack)(ButtonHandler*, int),
+      void (*onLongReleaseCallBack)(ButtonHandler*, int)
+      ) {
       onPress = onPressCallBack;
       onRelease = onReleaseCallBack;
+      onLongPress = onLongPressCallBack;
+      onLongRelease = onLongReleaseCallBack;
     }
 
     void update(int* externalButtonStates) {
@@ -45,21 +52,21 @@
 
             if (reading == LOW) {
               // Bouton enfoncé
-              onPress(this, i, false);
+              onPress(this, i);
               listenLongPress[i] = true;
             } else {
               // Bouton relâché
-              onRelease(this, i, false);
+              onRelease(this, i);
               listenLongRelease[i] = true;
             }
           } else {
             if (reading == LOW && listenLongPress[i] && (millis() - buttonHoldStartTime[i] >= longPressDelay)) {
               // Appui long maintenu
-              onPress(this, i, true);
+              onLongPress(this, i);
               listenLongPress[i] = false;
             } else if (reading == HIGH && listenLongRelease[i] && (millis() - buttonHoldStartTime[i] >= longReleaseDelay)) {
               // Bouton relâché après un appui long
-              onRelease(this, i, true);
+              onLongRelease(this, i);
               listenLongRelease[i] = false;
             }
           }
@@ -79,8 +86,10 @@
     bool *listenLongPress;
     bool *listenLongRelease;
 
-    void (*onPress)(ButtonHandler*, int, bool);  // Fonction de rappel pour traiter les boutons
-    void (*onRelease)(ButtonHandler*, int, bool);  // Fonction de rappel pour traiter les boutons
+    void (*onPress)(ButtonHandler*, int);  // Fonction de rappel pour traiter les boutons
+    void (*onRelease)(ButtonHandler*, int);  // Fonction de rappel pour traiter les boutons
+    void (*onLongPress)(ButtonHandler*, int);  // Fonction de rappel pour traiter les boutons
+    void (*onLongRelease)(ButtonHandler*, int);  // Fonction de rappel pour traiter les boutons
   };
 
 #endif
