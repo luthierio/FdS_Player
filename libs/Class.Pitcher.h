@@ -26,10 +26,10 @@ class Pitcher {
       setValue(16384);
     }
     void applyPatch() {    
-      this->VS1053->sciWrite(VS1053_SCI_AIADDR, 0x50);
       this->VS1053->applyPatch(pluginPitchShifter, PLUGIN_PITCHSHIFTER_SIZE);
+      this->VS1053->sciWrite(VS1053_SCI_AIADDR, 0x50);
       //resetting the value to normal
-      this->VS1053->sciWrite(VS1053_SCI_AICTRL0,  16384);
+      //this->VS1053->sciWrite(VS1053_SCI_AICTRL0,  16384);
     }
 
     void setPitchStep(int8_t pitchStep) {

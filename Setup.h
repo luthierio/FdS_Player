@@ -27,10 +27,11 @@ void setup() {
   }else{
     AUDIO.useInterrupt(VS1053_FILEPLAYER_PIN_INT);
     Debug::print(F("✓✓✓ ⋅ VS1053 found and started"));
-    AUDIO.sineTest(0x44, 500);    // Make a tone to indicate VS1053 is working
+    //Attention il faut désactiver Pitcher.init() pour faire le test... sinon ca buggue
+    //AUDIO.sineTest(0x44, 500);    // Make a tone to indicate VS1053 is working
     //while (1);
     delay(500);
-    //PITCHER.init();
+    PITCHER.init();
     // Set volume for left, right channels. lower numbers == louder volume!
     AUDIO.setVolume(VOLUME,VOLUME);
   }
@@ -70,7 +71,7 @@ void setup() {
   Debug::print(F("✓✓✓ ⋅ Interface ok "));
   
   // Play a file in the background, REQUIRES interrupts!  
-  AUDIO.playFullFile(STARTSOUND);    
+  AUDIO.startPlayingFile(STARTSOUND);    
   setMode(PLAYER);
   
 };

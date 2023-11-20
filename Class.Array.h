@@ -10,9 +10,7 @@ public:
     unsigned char count;
     Array() : count(0) {}
 
-    DATATYPE get() { return values; }
-
-    DATATYPE* getValues() {
+    DATATYPE* get() {
         return values;
     }
 

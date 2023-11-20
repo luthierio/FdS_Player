@@ -223,8 +223,7 @@
         //marqueurs
         if(markers && pickedSize){
           for (byte i = 0; i < markers->count; i = ++i) {  
-            uint32_t marker = markers->getValues()[i];
-            float relativeMarkerPosition = (float)marker/(float)pickedSize;       
+            float relativeMarkerPosition = (float)markers->get()[i]/(float)pickedSize;       
             float markerPosition[] = {x1+delta_X*relativeMarkerPosition,y1+delta_Y*relativeMarkerPosition};
                     
             ecran_->drawLine( markerPosition[0]+l*delta_x, markerPosition[1]-l*delta_y, markerPosition[0]-l*delta_x, markerPosition[1]+l*delta_y, WHITE);
