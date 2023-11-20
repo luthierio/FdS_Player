@@ -44,6 +44,7 @@
 ***********************/
 // AICTRL0 from table below. Voir https://www.vlsi.fi/fileadmin/software/VS10XX/pitchshifter.pdf
 // AICTRL0 = +16384 × ratio/100. Voir https://www.vlsi.fi/fileadmin/software/VS10XX/pitchshifter.pdf
+
 #define MIN_PITCH_STEP      0   
 #define MAX_PITCH_STEP      10  
 #define MIN_PITCH_RATIO        70  
@@ -95,7 +96,6 @@ uint8_t ASF_MODE = PLAYER;
 #define MIN_VBAT              3.2    //3.5; // Voltage avec lequel la batterie est considérée vide https://learn.adafruit.com/adafruit-feather-m0-adalogger/power-management  
 #define MAX_VBAT              4      // Voltage avec lequel la batterie est considérée pleine
 
-
 /**********************
 * UX
 ***********************/
@@ -107,3 +107,9 @@ uint8_t ASF_MODE = PLAYER;
 #define DEBOUNCE_INTERVAL 500
 #define LONG_PRESS_INTERVAL 1000
 #define LONG_RELEASE_INTERVAL 2000
+
+/**********************
+* DISPLAY
+***********************/
+#define SPACE_FOR_PITCH 22
+

@@ -9,9 +9,16 @@ void smallLoop() {
   switch (ASF_MODE) {
     case PLAYER:
       DISPLAY_.analogs.gauges(VUSB, VBat,VOLUME, 100, -2, 30, 18);
-      DISPLAY_.playing.progressBar(3, 57, 125-space4Pitch, 57, true);
+      if(PITCHER.getStep() != 0){
+        DISPLAY_.playing.progressBar(3, 57, 125-SPACE_FOR_PITCH, 57, true);
+        DISPLAY_.display.cleanZone(128-SPACE_FOR_PITCH, 52, SPACE_FOR_PITCH , 12 );        
+        DISPLAY_.pitcher.printSymbol(128-SPACE_FOR_PITCH + 2  , 52 , 10 , 10 );            
+        DISPLAY_.pitcher.printValue (128-SPACE_FOR_PITCH + 12+4 , 52+2 );     
+      }else{
+        DISPLAY_.display.cleanZone(0, 52, 128 , 12 );   
+        DISPLAY_.playing.progressBar(3, 57, 125, 57, true);
+      }
       break;
-
     default:
       break;
   }

@@ -31,7 +31,9 @@
         ecran_->drawBitmap (0,0, LOGO_128x64, 128,64, 1); 
         ecran_->display();
       }
-
+      void cleanZone(uint8_t x, uint8_t y, uint8_t w, uint8_t h){  
+        ecran_->fillRect(x ,y , w, h,  BLACK);
+      }
 
       // Afficher un texte
       void printNum(const int num, uint8_t x = 0, uint8_t y = 0, const GFXfont *font = NULL, uint8_t tailleTexte = 1, bool color = WHITE) {
@@ -155,7 +157,7 @@
       
         ecran_->fillRect(x,y, w, h,  BLACK);
         ecran_->drawRoundRect(x,y, w, h ,1, WHITE);
-        if ( VUsb > 4.5) {
+        if ( VUsb > 3.2) {
           ecran_->drawBitmap (x+5, y+3, alimIconH, 16, 7 ,WHITE);
         }else{
           uint8_t batLevel = map((int)(VBat*10), (int)(MIN_VBAT*10) , (int)(MAX_VBAT*10), 0, w); 
@@ -193,7 +195,7 @@
 
       void progressBar(uint8_t x1, uint8_t y1, uint8_t x2, uint8_t y2, boolean markersOn){  
 
-        ecran_->fillRect(x1-2,y1-2, x2-x1+4, 5,  BLACK);
+        ecran_->fillRect( x1-2, y1-2, x2-x1 + 4, y2-y1 + 4,  BLACK);
         
         ecran_->drawLine(x1,y1,x2,y2, WHITE);
         ecran_->fillCircle(x1,y1, 2, WHITE);
@@ -245,6 +247,66 @@
     FdS_Adafruit_VS1053_FilePlayer *Player;
   };
   /**********************
+  * PITCH:
+  ***********************/
+
+  class PitcherDisplay : public Display {
+  public:
+      PitcherDisplay(Adafruit_SSD1306 *ecran, Pitcher *pitcher) : 
+        Display(ecran),
+        pitcher (pitcher){}
+
+      void printSymbol(uint8_t x, uint8_t y, uint8_t w, uint8_t h){  
+        
+        if(pitcher->getSign() < 0){   
+          
+            ecran_->drawLine    ( x     , y+2   , x     , y+h-2 , WHITE );   // Ligne V 1
+            ecran_->drawLine    ( x     , y+h/2 , x+w   , y+h/2 , WHITE );   // Ligne H
+            ecran_->drawLine    ( x+w   , y+2   , x+w   , y+h-2 , WHITE );   // Ligne V 2 
+          
+          if(pitcher->getStep() > 0){   //TODO pitcher.getRatio() > 100
+            
+            ecran_->fillTriangle( x     , y+2   , x     , y+h-2 , x+w   , y+h/2 , WHITE);
+            
+          }else if(pitcher->getStep() < 0){
+            
+            ecran_->fillTriangle(x+w   , y+2   , x+w    , y+h-2 , x     , y+h/2 , WHITE);
+            
+          }
+          
+        }else{
+          ecran_->drawLine      ( x+2   , y     , x+w-2 , y     , WHITE );   // Ligne H 1
+          ecran_->drawLine      ( x+w/2 , y     , x+w/2 , y+h   , WHITE );   // Ligne V
+          ecran_->drawLine      ( x+2   , y+h   , x+w-2 , y+h   , WHITE );   // Ligne H 2     
+          
+          if(pitcher->getStep() > 0){  
+            
+            ecran_->fillTriangle( x+2   , y+h   , x+w-2 , y+h , x+w/2 , y , WHITE);
+            
+          }else if(pitcher->getStep() < 0){
+            
+            ecran_->fillTriangle( x+2   , y     , x+w-2 , y   , x+w/2 , y+h-2 , WHITE);
+            
+          }
+          
+        }
+
+      }
+
+      void printValue(uint8_t x, uint8_t y){  
+
+        ecran_->setCursor(x, y); 
+        
+        ecran_->setFont();
+        ecran_->setTextSize(1);
+        
+        ecran_->print(abs(pitcher->getStep()));
+        
+      }
+  private:
+    Pitcher *pitcher;
+  };
+  /**********************
   * PLAYLISTS:
   ***********************/
 
@@ -279,10 +341,12 @@
       FileDisplay files;
       AnalogDisplay analogs;
       PlayingDisplay playing;
-      DisplayController(Adafruit_SSD1306 *ecran, FdS_Adafruit_VS1053_FilePlayer *player) :
+      PitcherDisplay pitcher;
+      DisplayController(Adafruit_SSD1306 *ecran, FdS_Adafruit_VS1053_FilePlayer *player, Pitcher *pitcher) :
           display(ecran),
           files(ecran),
           playing(ecran,player),
+          pitcher(ecran,pitcher),
           analogs(ecran) {
           // Initialisez d'autres instances de classes ici si nécessaire
       }

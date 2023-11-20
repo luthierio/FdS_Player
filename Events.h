@@ -29,10 +29,7 @@ void onRotChange(Rotary &rotary) {
   int currentPosition = rotary.getPosition();
 
   switch (ASF_MODE) {
-    case PLAYER: 
-    case PLAYLIST: 
-    case BEAT: 
-    case ACTION:              
+    case PLAYER:            
       if(&rotary == R_DIR) {
         FILE_.selectDir(currentPosition);
         MARKERS = &getFileDataRef(FILE_.dirNum,FILE_.fileNum);
@@ -46,10 +43,21 @@ void onRotChange(Rotary &rotary) {
         Debug::print("ROT",currentPosition, FILE_.path);  
       }
       if(&rotary == R_PITCH) {
-        PITCHER.setPitchStep(currentPosition, true);
-        Debug::print("ROT PITCHER",currentPosition, PITCHER.getValue());  
+        PITCHER.setPitchStep(currentPosition);
+        Debug::print("ROT",currentPosition);  
+        Debug::print("PITCHER Step",PITCHER.getStep());  
+        Debug::print("PITCHER Value",PITCHER.getValue());  
+        /*
+        if(PITCHER.getStep() != NORMAL_PITCH_STEP){
+          DISPLAY_.pitcher.printSymbol(128-SPACE_FOR_PITCH + 2  , 52 , 10 , 10 );            
+          DISPLAY_.pitcher.printValue (128-SPACE_FOR_PITCH + 12+4 , 52+2 );          
+        }*/
       }
-    break;   
+      break;   
+    case PLAYLIST: 
+    case BEAT: 
+    case ACTION:   
+      break;   
     default:
       break;
 
@@ -66,67 +74,85 @@ void onPress(ButtonHandler* buttonHandler, int ID, bool LONG) {
 
   switch (ASF_MODE) {
     case PLAYER:
+      if (!LONG) {
+        // Short press
+        switch (ID) {
+          case 0:
+            Debug::print("Playing", FILE_.path);
+            AUDIO.startPlayingFile(FILE_.path);
+            break;
+
+          case 1:
+            if (AUDIO.playingMusic) {
+              AUDIO.pausePlaying(true);
+              Debug::print("Paused");
+            } else {
+              AUDIO.pausePlaying(false);
+              Debug::print("Resumed");
+            }
+            break;
+
+          case 2:         
+            JumpPosition = (AUDIO.getFilePosition() >= SECONDS_PER_JUMP * (BITRATE / 8)) ? (AUDIO.getFilePosition() - SECONDS_PER_JUMP * (BITRATE / 8)) : 0;    
+            AUDIO.jumpTo(JumpPosition);
+            //AUDIO.startPlayingAtPosition(FILE_.path, JumpPosition);
+            Debug::print("Jump Position", JumpPosition);
+
+            break;
+
+          case 3:
+            Debug::print("Mode PLAYER");
+            setMode(PLAYER);
+            break;
+
+          case 4:
+            break;
+
+          case 5:
+            PITCHER.switchSign();
+            PITCHER.reset();
+            Debug::print("PITCHER", PITCHER.getSign());
+
+            break;
+          default:
+            break;
+        }
+        break;
+
+      // Long press
+      }else{
+        setMode(LOGO);
+      }
     case PLAYLIST:
     case BEAT:
     case ACTION:
       if (!LONG) {
         // Short press
-          switch (ID) {
-            case 0:
-              Debug::print("Playing", FILE_.path);
-              AUDIO.startPlayingFile(FILE_.path);
-              break;
+        switch (ID) {
+          case 0:
+            break;
+          case 4:
+            Debug::print("Load DATA");
+            if (SD_BACKUP.load(STATE_FILENAME, &STATE, sizeof(STATE))) {
+              Debug::print("OK", SD_BACKUP.getLastMessage());
+            } else {
+              Debug::print("ERREUR", SD_BACKUP.getLastMessage());
+            }
+            Debug::print("DirNum", STATE.dirNum);
+            break;
 
-            case 1:
-              if (AUDIO.playingMusic) {
-                AUDIO.pausePlaying(true);
-                Debug::print("Paused");
-              } else {
-                AUDIO.pausePlaying(false);
-                Debug::print("Resumed");
-              }
-              break;
-
-            case 2:         
-              JumpPosition = (AUDIO.getFilePosition() >= SECONDS_PER_JUMP * (BITRATE / 8)) ? (AUDIO.getFilePosition() - SECONDS_PER_JUMP * (BITRATE / 8)) : 0;    
-              AUDIO.jumpTo(JumpPosition);
-              //AUDIO.startPlayingAtPosition(FILE_.path, JumpPosition);
-              Debug::print("Jump Position", JumpPosition);
-
-              break;
-
-            case 3:
-              Debug::print("Mode PLAYER");
-              setMode(PLAYER);
-              break;
-
-            case 4:
-              Debug::print("Load DATA");
-              if (SD_BACKUP.load(STATE_FILENAME, &STATE, sizeof(STATE))) {
-                Debug::print("OK", SD_BACKUP.getLastMessage());
-              } else {
-                Debug::print("ERREUR", SD_BACKUP.getLastMessage());
-              }
-              Debug::print("DirNum", STATE.dirNum);
-              break;
-
-            case 5:
-              Debug::print("Save DATA");
-              if (SD_BACKUP.save(STATE_FILENAME, &STATE, sizeof(STATE))) {
-                Debug::print("OK", SD_BACKUP.getLastMessage());
-              } else {
-                Debug::print("ERREUR", SD_BACKUP.getLastMessage());
-              }
-              Debug::print("DirNum", STATE.dirNum);
-              break;
-            default:
-              break;
-          }
-          break;
-
-      // Long press
-      }else{
-        setMode(LOGO);
+          case 5:
+            Debug::print("Save DATA");
+            if (SD_BACKUP.save(STATE_FILENAME, &STATE, sizeof(STATE))) {
+              Debug::print("OK", SD_BACKUP.getLastMessage());
+            } else {
+              Debug::print("ERREUR", SD_BACKUP.getLastMessage());
+            }
+            Debug::print("DirNum", STATE.dirNum);
+            break;
+          default:
+            break;
+        }
       }
     default:
       if (!LONG) {

@@ -24,7 +24,7 @@ uint8_t VOLUME = 10;          // Defaut volume
 * SCREEN
 ***********************/
 Adafruit_SSD1306 SCREEN_(SCREEN_WIDTH, SCREEN_HEIGHT, &Wire, OLED_RESET);
-DisplayController DISPLAY_(&SCREEN_,&AUDIO);
+DisplayController DISPLAY_(&SCREEN_,&AUDIO, &PITCHER);
 
 /**********************
 * Multiplex
@@ -40,7 +40,7 @@ ButtonHandler BUTTONS(6, DEBOUNCE_INTERVAL, LONG_PRESS_INTERVAL, LONG_RELEASE_IN
 Rotary ROTARIES[3] = {
   Rotary( ROT_F_PIN[0], ROT_F_PIN[1], true , 0, 99),
   Rotary( ROT_D_PIN[0], ROT_D_PIN[1], true , 0, 99),
-  Rotary( ROT_P_PIN[0], ROT_P_PIN[1], false ,0, 9, 5 ),
+  Rotary( ROT_P_PIN[0], ROT_P_PIN[1], false ,-5, 5, 5 ),
 };
 Rotary* R_FILES = &ROTARIES[0];
 Rotary* R_DIR   = &ROTARIES[1];

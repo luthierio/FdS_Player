@@ -13,7 +13,7 @@ class Pitcher {
 
   public:   
 
-    static const int PITCH_TONE_TABLE[PITCH_STEPS];
+    static const signed int PITCH_TONE_TABLE[PITCH_STEPS];
     static const unsigned short pluginPitchShifter[PLUGIN_PITCHSHIFTER_SIZE]; // Remplacez cette taille par la taille réelle du tableau.
 
   
@@ -22,6 +22,9 @@ class Pitcher {
     void init() {
       applyPatch();
     }
+    void reset() {
+      setValue(16384);
+    }
     void applyPatch() {    
       this->VS1053->sciWrite(VS1053_SCI_AIADDR, 0x50);
       this->VS1053->applyPatch(pluginPitchShifter, PLUGIN_PITCHSHIFTER_SIZE);
@@ -29,42 +32,70 @@ class Pitcher {
       this->VS1053->sciWrite(VS1053_SCI_AICTRL0,  16384);
     }
 
-    void setPitchStep(uint8_t pitchStep, bool preferSpeed = false) {
+    void setPitchStep(int8_t pitchStep) {
+      pitchStep = Sign*pitchStep+5; //PitchStep goes from 
       if (0 <= pitchStep && pitchStep < PITCH_STEPS) {
-        if (preferSpeed) {
-          setValue(PITCH_TONE_TABLE[pitchStep], preferSpeed);
-        } else {
-          setValue(-1 * PITCH_TONE_TABLE[pitchStep], preferSpeed);
-        }
+          setValue(Sign * PITCH_TONE_TABLE[pitchStep]);
       }
     }
-
-    void setRatio(float pitchRatio, bool preferSpeed = false) {
-      setValue(16384 * pitchRatio, preferSpeed);
+    /*
+    void setRatio(float pitchRatio) {
+      setValue(16384 * pitchRatio);
     }
-
-    signed int getValue() {
+    */
+    signed int readValue() {
       return this->VS1053->sciRead(VS1053_SCI_AICTRL0);
     }
+    signed int getValue() {
+      return AICTRL0;
+    }
+    signed int getSign() {
+      return Sign;
+    }
+    void setSign(int8_t sign) {
+      Sign = sign;
+    }
+    void switchSign() {
+      Sign = -1*Sign;
+      
+    }
+    signed int getStep() {      
+      for (int i = 0; i < PITCH_STEPS; ++i) {
+          if (PITCH_TONE_TABLE[i] == Sign * AICTRL0) {
+              return Sign*(i-5); // Retourne l'indice lorsque la valeur est trouvée
+          }
+      }
+      return 0; // Retourne -1 si la valeur n'est pas trouvée
+    }
 
-    void setValue(signed int aictrl0, bool preferSpeed = false) {
-      signed int sign = preferSpeed ? -1 : 1;
-      this->VS1053->pausePlaying(true);
-      delay(10); // Laissez quelques millisecondes pour éviter le bruit.
-      signed int currentAICTRL0 = this->VS1053->sciRead(VS1053_SCI_AICTRL0);
-
-      if (currentAICTRL0 != aictrl0) {
+    void setValue(signed int aictrl0) {
+    
+      bool MUST_RESUME = false;
+      
+      if(this->VS1053->playingMusic){
+        MUST_RESUME = true;
+        this->VS1053->pausePlaying(true);
+        delay(10); // Laissez quelques millisecondes pour éviter le bruit.  
+      }      
+      
+      if (AICTRL0 != aictrl0) {
+        AICTRL0 = aictrl0;
         this->VS1053->sciWrite(VS1053_SCI_AICTRL0, aictrl0);
       }
-      delay(10); // Laissez quelques millisecondes pour éviter le bruit.
-      this->VS1053->pausePlaying(false);
+      
+      if(MUST_RESUME){
+        delay(10); // Laissez quelques millisecondes pour éviter le bruit.
+        this->VS1053->pausePlaying(false);
+      }
     }
+    
   private:
     Adafruit_VS1053_FilePlayer *VS1053;
- 
+    signed int AICTRL0 = 16384;
+    int8_t Sign = -1; //-1 = speed, 1 = pitch
 };
 
-const int Pitcher::PITCH_TONE_TABLE[PITCH_STEPS] = {
+const signed int Pitcher::PITCH_TONE_TABLE[PITCH_STEPS] = {
     12274, //-5 Down five semitones
     13004, //-4 Down four semitones
     13777, //-3 Down three semitones
