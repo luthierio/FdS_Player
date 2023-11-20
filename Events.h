@@ -225,7 +225,20 @@ void autoPlay(){
 
       //Il faudrait essayer d'en jouer une autre
       }else if(!AUDIO.playingMusic && !AUDIO.currentTrack){  
-        FILE_.selectFile(FILE_.fileNum + 1);
+        switch (STATE.playMode) {
+          case REPEATONE:
+            break;
+          case AUTO:
+            FILE_.selectFile(FILE_.fileNum + 1);
+            break;
+          case RANDOM:
+            FILE_.selectFile(random(0, 99));
+            break;
+          default:
+            //Not necessary but secure
+            SHOULD_PLAY_NEXT = false;
+            break;
+        }
         AUDIO.startPlayingFile(FILE_.path); 
       }
           

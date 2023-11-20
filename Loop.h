@@ -14,8 +14,7 @@ void smallLoop() {
       if(PITCHER.getStep() != 0){
         space4Pitch = SPACE_FOR_PITCH;
         DISPLAY_.display.cleanZone(128-space4Pitch, 52, space4Pitch , 12 );        
-        DISPLAY_.pitcher.printSymbol(128-space4Pitch + 2  , 52 , 10 , 10 );            
-        DISPLAY_.pitcher.printValue (128-space4Pitch + 12+4 , 52+2 );  
+        DISPLAY_.pitcher.print(128-space4Pitch + 2  , 52 , 10 , 10 );     
       }
       
       DISPLAY_.display.cleanZone(0, 52, 128-space4Pitch, 12 );   
