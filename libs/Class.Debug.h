@@ -23,6 +23,13 @@ public:
       Serial.println(value);
     }
   }
+  static void print(const char* label, uint32_t value) {
+    if (SERIAL_ON) {
+      Serial.print(label);
+      Serial.print(": ");
+      Serial.println(value);
+    }
+  }
 
   static void print(const __FlashStringHelper* label, int value) {
     if (SERIAL_ON) {

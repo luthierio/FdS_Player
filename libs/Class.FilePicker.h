@@ -87,6 +87,9 @@
           }
       }  
       
+      uint32_t getSize(){   
+        return FILE.size();
+      }   
       void updatePath(){
         memset(this->path, 0, MAX_PATH_LENGTH);
 

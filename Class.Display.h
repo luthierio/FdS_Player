@@ -77,7 +77,9 @@
   ***********************/
   class FileDisplay : public Display {
   public:
-      FileDisplay(Adafruit_SSD1306 *ecran) : Display(ecran) {}
+      FileDisplay(Adafruit_SSD1306 *ecran, FilePicker *filePicker) :
+        Display(ecran),
+        filePicker (filePicker){}
 
       void printPath(FilePicker *selectedPath) {
         
@@ -144,6 +146,9 @@
               }
           }
       }
+
+  protected:
+      FilePicker *filePicker;
   };
 
   /**********************
@@ -189,11 +194,15 @@
 
   class PlayingDisplay : public Display {
   public:
-      PlayingDisplay(Adafruit_SSD1306 *ecran, FdS_Adafruit_VS1053_FilePlayer *player) : 
+      PlayingDisplay(Adafruit_SSD1306 *ecran, FdS_Adafruit_VS1053_FilePlayer *player, FilePicker *filePicker) : 
         Display(ecran),
-        Player (player){}
+        Player (player),
+        filePicker (filePicker){}
 
       void progressBar(uint8_t x1, uint8_t y1, uint8_t x2, uint8_t y2, Array<uint32_t> *markers = nullptr){  
+
+        int playingSize = Player->currentTrack.size();
+        int pickedSize = filePicker->getSize();
 
         ecran_->fillRect( x1-2, y1-2, x2-x1 + 4, y2-y1 + 4,  BLACK);
         
@@ -212,34 +221,38 @@
         int l = 5; //Longeur segment perpendiculaire souhaité  
 
         //marqueurs
-        if(markers && Player->currentTrack.size()){
+        if(markers && pickedSize){
           for (const auto& marker : markers->getValues()) {
-              float relativeMarkerPosition = (float)marker/(float)Player->currentTrack.size();       
+              float relativeMarkerPosition = (float)marker/(float)pickedSize;       
               float markerPosition[] = {x1+delta_X*relativeMarkerPosition,y1+delta_Y*relativeMarkerPosition};
                       
               ecran_->drawLine( markerPosition[0]+l*delta_x, markerPosition[1]-l*delta_y, markerPosition[0]-l*delta_x, markerPosition[1]+l*delta_y, WHITE);
           }
         }
-        float relativePosition = (float)Player->getFilePosition()/(float)Player->currentTrack.size();
-        float filePosition[] = {x1+delta_X*relativePosition,y1+delta_Y*relativePosition};
         
-        if (!Player->playingMusic && Player->currentTrack) {   
-          
-          ecran_->drawCircle(filePosition[0],filePosition[1], 4, BLACK);
-          ecran_->drawCircle(filePosition[0],filePosition[1], 3, BLACK);
-          ecran_->fillCircle(filePosition[0],filePosition[1], 2, WHITE);
-          
-        }else if(Player->playingMusic){
-          
+        //Test pour voir si l'on est actuellement en train de jouer la poste dont la barre s'affiche
+        if(playingSize == pickedSize){
           //Petit cercle qui indique la direction de jeu
-          ecran_->drawCircle(filePosition[0],filePosition[1], 3, WHITE);
-          ecran_->fillCircle(filePosition[0],filePosition[1], 2, BLACK);
-          ecran_->drawCircle(filePosition[0],filePosition[1], 4, BLACK);
+          float relativePosition = (float)Player->getFilePosition()/(float)pickedSize;
+          float filePosition[] = {x1+delta_X*relativePosition,y1+delta_Y*relativePosition};
+          if (!Player->playingMusic && Player->currentTrack) {  
+            ecran_->drawCircle(filePosition[0],filePosition[1], 4, BLACK);
+            ecran_->drawCircle(filePosition[0],filePosition[1], 3, BLACK);
+            ecran_->fillCircle(filePosition[0],filePosition[1], 2, WHITE);
+            
+          }else if(Player->playingMusic){
+            
+            ecran_->drawCircle(filePosition[0],filePosition[1], 3, WHITE);
+            ecran_->fillCircle(filePosition[0],filePosition[1], 2, BLACK);
+            ecran_->drawCircle(filePosition[0],filePosition[1], 4, BLACK);
+          }
+
         }
         
       }
   private:
     FdS_Adafruit_VS1053_FilePlayer *Player;
+    FilePicker *filePicker;
   };
   /**********************
   * PITCH:
@@ -337,10 +350,10 @@
       AnalogDisplay analogs;
       PlayingDisplay playing;
       PitcherDisplay pitcher;
-      DisplayController(Adafruit_SSD1306 *ecran, FdS_Adafruit_VS1053_FilePlayer *player, Pitcher *pitcher) :
+      DisplayController(Adafruit_SSD1306 *ecran, FdS_Adafruit_VS1053_FilePlayer *player, FilePicker *filePicker, Pitcher *pitcher) :
           display(ecran),
-          files(ecran),
-          playing(ecran,player),
+          files(ecran,filePicker),
+          playing(ecran,player,filePicker),
           pitcher(ecran,pitcher),
           analogs(ecran) {
           // Initialisez d'autres instances de classes ici si nécessaire

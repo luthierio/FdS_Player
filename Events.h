@@ -94,7 +94,16 @@ void onPress(ButtonHandler* buttonHandler, int ID) {
           break;
 
         case 2:         
-          JumpPosition = (AUDIO.getFilePosition() >= SECONDS_PER_JUMP * (BITRATE / 8)) ? (AUDIO.getFilePosition() - SECONDS_PER_JUMP * (BITRATE / 8)) : 0;    
+
+          Debug::print("Bitrate", AUDIO.getBitRate()); 
+          Debug::print("Position", AUDIO.getFilePosition());
+          if(DATA->markers.isEmpty()){
+            JumpPosition = (AUDIO.getFilePosition() >= SECONDS_PER_JUMP * (BITRATE / 8)) ? (AUDIO.getFilePosition() - SECONDS_PER_JUMP * (BITRATE / 8)) : 0;   
+          }else{
+            //on cherche BITRATE / 8 pour sauter au rpécédent si on est très proche du marker
+            JumpPosition =DATA->markers.getPreviousFrom(AUDIO.getFilePosition()-BITRATE ); 
+            Debug::print("Jump", DATA->markers.getPreviousFrom(AUDIO.getFilePosition()-BITRATE));
+          } 
           AUDIO.jumpTo(JumpPosition);
           //AUDIO.startPlayingAtPosition(FILE_.path, JumpPosition);
           Debug::print("Jump Position", JumpPosition);
@@ -162,7 +171,8 @@ void onLongPress(ButtonHandler* buttonHandler, int ID) {
       switch (ID) {
         case 1:
           if(AUDIO.getFilePosition()){
-            DATA->addMarker(AUDIO.getFilePosition());
+            DATA->addMarker(&FILE_,&AUDIO);
+            AUDIO.pausePlaying(false);
             Debug::print("New marker", static_cast<int>(AUDIO.getFilePosition()));
           }
         default:

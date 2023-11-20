@@ -24,7 +24,6 @@ uint8_t VOLUME = 10;          // Defaut volume
 * SCREEN
 ***********************/
 Adafruit_SSD1306 SCREEN_(SCREEN_WIDTH, SCREEN_HEIGHT, &Wire, OLED_RESET);
-DisplayController DISPLAY_(&SCREEN_,&AUDIO, &PITCHER);
 
 /**********************
 * Multiplex
@@ -66,7 +65,7 @@ float VBat;
 char  activeSoundPath[512];
 
 /**********************
-* State
+* Markers
 ***********************/
 //Toutes les variables à sauvegarder sur la carte SD
 
@@ -74,13 +73,10 @@ struct t_fileData {
     uint8_t dirNum;
     uint8_t fileNum;
     Array<uint32_t> markers;
-    void addMarker(uint32_t marker) {
-      markers.push(marker);
-    }
-    void addMarker(uint32_t marker, uint8_t dirNum, uint8_t fileNum) {
-      this->dirNum = dirNum;
-      this->fileNum = fileNum;
-      markers.push(marker);
+    void addMarker(FilePicker *FILE_, FdS_Adafruit_VS1053_FilePlayer *AUDIO) {
+      this->dirNum = FILE_->dirNum;
+      this->fileNum = FILE_->fileNum;
+      markers.push(AUDIO->getFilePosition());
     }
     void clear() {
         // Remettez vos membres de structure à leurs valeurs par défaut ici
@@ -91,6 +87,14 @@ struct t_fileData {
 };
 t_fileData DATAS[NBR_FILES_DATA];
 t_fileData *DATA = &DATAS[0];
+
+/**********************
+* DISPLAY:
+***********************/
+
+DisplayController DISPLAY_(&SCREEN_,&AUDIO, &FILE_, &PITCHER);
+
+
 
 struct t_state{
   uint8_t dirNum = 0;
