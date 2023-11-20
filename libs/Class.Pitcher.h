@@ -21,6 +21,8 @@ class Pitcher {
 
     void init() {
       applyPatch();
+      delay(10);
+      reset();
     }
     void reset() {
       setValue(16384);

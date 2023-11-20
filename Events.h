@@ -116,6 +116,9 @@ void onPress(ButtonHandler* buttonHandler, int ID) {
           break;
 
         case 4:
+          if(STATE.playMode < REPEATONE){STATE.playMode++;}        
+          else{STATE.playMode = ONEPLAY;}
+          Debug::print("playMode", STATE.playMode);
           break;
 
         case 5:
@@ -213,6 +216,43 @@ void onLongRelease(ButtonHandler* buttonHandler, int ID) {
 }
 
 /**********************
+* AUTOPLAY:
+***********************/
+bool SHOULD_PLAY_NEXT = false;
+void autoPlay(){
+  if(
+    ((ASF_MODE == PLAYER && STATE.playMode != ONEPLAY) || (ASF_MODE == PLAYLIST && STATE.playlistMode != ONEPLAY) )
+    && AUDIO.playingMusic
+    && ((AUDIO.currentTrack.size()-AUDIO.getFilePosition()) < 5000)
+    ){    
+      SHOULD_PLAY_NEXT = true;
+      //La fin d'un fichier forcera l'autoplay à se lancer dès que la musique est finie!
+
+  }
+  if(SHOULD_PLAY_NEXT){
+    switch (ASF_MODE) {
+      case PLAYER:
+        if(STATE.playMode == AUTO && FILE_.fileNum == 99){    
+          STATE.playMode = ONEPLAY;
+          FILE_.selectFile(0);
+          Debug::print("FIN AutoPlay", FILE_.path);
+        }else if(STATE.playMode == AUTO && !AUDIO.playingMusic){  
+          Debug::print("Num", FILE_.fileNum);
+          Debug::print("Next", FILE_.fileNum +1 );
+
+          FILE_.selectFile(FILE_.fileNum + 1);
+          Debug::print("AutoPlay", FILE_.path);
+          AUDIO.startPlayingFile(FILE_.path); 
+          DATA = &getFileDataRef(FILE_.dirNum,FILE_.fileNum);
+        }
+        break;
+    }
+
+  }
+
+}
+
+/**********************
 * SLEEP:
 ***********************/
 void onSleep(){
@@ -261,6 +301,7 @@ void onAfterSDWork() {
     AUDIO.pausePlaying(false);
     MUST_RESUME = false;
   }
+  Debug::print("Selected", FILE_.path); 
 }
 void onBeforeSDWrite() {
   if(AUDIO.playingMusic){

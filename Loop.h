@@ -3,7 +3,6 @@
 * LOOP
 ***********************/
 void smallLoop() {
-
   uint8_t space4Pitch = 0; // = 22;avec affichage Pitch
 
   switch (ASF_MODE) {
@@ -29,10 +28,9 @@ void smallLoop() {
 }
 
 void bigLoop() {
-
+  autoPlay();
   if(SLEEP_WATCH.isSleeping()){ 
-
-   }
+  }
 
   if(AUDIO.playingMusic){
     //Serial.println(AUDIO.getBitRate());

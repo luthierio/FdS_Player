@@ -106,7 +106,7 @@ struct t_state{
   uint8_t BPM = 100;
   uint8_t Beats = 2;
   uint8_t BeatsUp = 0;
-  uint8_t playMode = ONEPLAY;
+  uint8_t playMode = AUTO;
   uint8_t pitchMode = OFF;
   uint8_t pitchStyle = STEP;
   uint8_t playlistID = 0;
