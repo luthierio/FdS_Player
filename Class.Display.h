@@ -199,7 +199,7 @@
         Player (player),
         filePicker (filePicker){}
 
-      void progressBar(uint8_t x1, uint8_t y1, uint8_t x2, uint8_t y2, Array<uint32_t,NBR_MARKERS> *markers = nullptr){  
+      void progressBar(uint8_t x1, uint8_t y1, uint8_t x2, uint8_t y2, Array<uint32_t,MAX_MARKERS> *markers = nullptr){  
 
         int playingSize = Player->currentTrack.size();
         int pickedSize = filePicker->getSize();
@@ -222,11 +222,12 @@
 
         //marqueurs
         if(markers && pickedSize){
-          for (const auto& marker : markers->getValues()) {
-              float relativeMarkerPosition = (float)marker/(float)pickedSize;       
-              float markerPosition[] = {x1+delta_X*relativeMarkerPosition,y1+delta_Y*relativeMarkerPosition};
-                      
-              ecran_->drawLine( markerPosition[0]+l*delta_x, markerPosition[1]-l*delta_y, markerPosition[0]-l*delta_x, markerPosition[1]+l*delta_y, WHITE);
+          for (byte i = 0; i < markers->count; i = ++i) {  
+            uint32_t marker = markers->getValues()[i];
+            float relativeMarkerPosition = (float)marker/(float)pickedSize;       
+            float markerPosition[] = {x1+delta_X*relativeMarkerPosition,y1+delta_Y*relativeMarkerPosition};
+                    
+            ecran_->drawLine( markerPosition[0]+l*delta_x, markerPosition[1]-l*delta_y, markerPosition[0]-l*delta_x, markerPosition[1]+l*delta_y, WHITE);
           }
         }
         

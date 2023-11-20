@@ -100,9 +100,9 @@ void onPress(ButtonHandler* buttonHandler, int ID) {
           if(DATA->markers.isEmpty()){
             JumpPosition = (AUDIO.getFilePosition() >= SECONDS_PER_JUMP * (BITRATE / 8)) ? (AUDIO.getFilePosition() - SECONDS_PER_JUMP * (BITRATE / 8)) : 0;   
           }else{
-            //on cherche BITRATE / 8 pour sauter au rpécédent si on est très proche du marker
-            JumpPosition =DATA->markers.getPreviousFrom(AUDIO.getFilePosition()-BITRATE ); 
-            Debug::print("Jump", DATA->markers.getPreviousFrom(AUDIO.getFilePosition()-BITRATE));
+            //on cherche BITRATE / 4 = 2 seconde pour sauter au rpécédent si on est très proche du marker
+            JumpPosition =DATA->markers.getPreviousFrom(AUDIO.getFilePosition()- BITRATE / 4); 
+            Debug::print("Jump", DATA->markers.getPreviousFrom(AUDIO.getFilePosition()-BITRATE / 4 ));
           } 
           AUDIO.jumpTo(JumpPosition);
           //AUDIO.startPlayingAtPosition(FILE_.path, JumpPosition);
@@ -169,12 +169,21 @@ void onLongPress(ButtonHandler* buttonHandler, int ID) {
       // Short press
       switch (ID) {
         case 1:
-          if(AUDIO.getFilePosition()){
+          //On vérifie que le fichier Sélectionné est bien celui qui joue pour ajouter un marqueur
+          if(AUDIO.getFilePosition() && AUDIO.currentTrack.size() == FILE_.getSize()){
             DATA->addMarker(&FILE_,&AUDIO);
             AUDIO.pausePlaying(false);
             Debug::print("New marker", static_cast<int>(AUDIO.getFilePosition()));
           }
           break;
+
+        case 2:
+          if(AUDIO.getFilePosition() && AUDIO.currentTrack.size() == FILE_.getSize()){
+            DATA->markers.popPrevious(AUDIO.getFilePosition());
+          }
+          break;
+
+
         case 4:
           setMode(ACTION);
           break;

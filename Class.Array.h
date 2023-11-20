@@ -1,71 +1,64 @@
 #include <algorithm>
-#include <vector>
-#include <functional>
+#include <functional>  // Include this line
 
 template <class DATATYPE, unsigned char SIZE>
 class Array {
-  private:
-    std::vector<DATATYPE> values;
+private:
+    DATATYPE values[SIZE];
 
-  public:
-    DATATYPE Array[SIZE];
+public:
+    unsigned char count;
+    Array() : count(0) {}
 
-    std::vector<DATATYPE> getValues() const {
+    DATATYPE get() { return values; }
+
+    DATATYPE* getValues() {
         return values;
     }
 
     void clean() {
-        values.clear();
+        count = 0;
     }
 
     bool canPush() const {
-        return true; // Vous pouvez ajuster cette logique si nécessaire
+        return count < SIZE;
     }
 
     bool isEmpty() const {
-        return values.empty();
+        return count == 0;
     }
 
     bool exist(const DATATYPE& value) const {
-        return std::find(values.begin(), values.end(), value) != values.end();
+        return std::find(values, values + count, value) != values + count;
     }
 
     void push(const DATATYPE& value) {
         if (!exist(value) && canPush()) {
-            values.push_back(value);                
-            std::sort(values.begin(), values.end());
+            values[count++] = value;
+            std::sort(values, values + count);
         }
     }
 
     DATATYPE getPreviousFrom(const DATATYPE& value) const {
-        auto it = std::upper_bound(values.begin(), values.end(), value, std::less<DATATYPE>());
-        if (it != values.begin()) {
+        auto it = std::upper_bound(values, values + count, value, std::less<DATATYPE>());
+        if (it != values) {
             return *(--it);
         } else {
-            // Aucune valeur strictement inférieure à 'value' n'a été trouvée,
-            // dans ce cas, vous pouvez choisir comment traiter cette situation.
-            // Ici, je retourne la dernière valeur du vecteur.
-            return values.back();
+            return values[count - 1];
         }
     }
 
-    void printAll() const {
-      for (const auto& marker : values) {
-          Serial.print(marker);
-          Serial.print(":");
-      }
-    }
-
     void pop() {
-      if (!values.empty()) {
-        values.pop_back();
-        std::sort(values.begin(), values.end());
-      }
+        if (count > 0) {
+            --count;
+            std::sort(values, values + count);
+        }
     }
 
     void popPrevious(const DATATYPE& value) {
         const DATATYPE previous = getPreviousFrom(value);
-        values.erase(std::remove(values.begin(), values.end(), previous), values.end());
-        std::sort(values.begin(), values.end());
+        auto newEnd = std::remove(values, values + count, previous);
+        count = static_cast<unsigned char>(newEnd - values);
+        std::sort(values, values + count);
     }
 };
