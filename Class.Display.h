@@ -199,8 +199,21 @@
         Player (player),
         filePicker (filePicker){}
 
+      void playMode(uint8_t x, uint8_t y, uint8_t playMode){ 
+        
+            if(playMode == AUTO){
+              ecran_->fillTriangle(x-8,y-4, x-8,y+4, x-4,y, WHITE);
+            }else if(playMode == RANDOM){
+              
+              ecran_->fillTriangle(x-12,y-4, x-12,y+4, x-8,y, WHITE);
+              ecran_->fillTriangle(x-4,y-4, x-4,y+4, x-8,y, WHITE);
+              
+            }else if(playMode == REPEATONE){
+              ecran_->fillTriangle(x-4,y-4, x-4,y+4, x-8,y, WHITE);
+            }
+      }
       void progressBar(uint8_t x1, uint8_t y1, uint8_t x2, uint8_t y2, Array<uint32_t,MAX_MARKERS> *markers = nullptr){  
-
+        
         int playingSize = Player->currentTrack.size();
         int pickedSize = filePicker->getSize();
 

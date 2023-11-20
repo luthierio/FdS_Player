@@ -96,6 +96,7 @@ t_fileData *DATA = &DATAS[0];
 DisplayController DISPLAY_(&SCREEN_,&AUDIO, &FILE_, &PITCHER);
 
 
+bool SHOULD_PLAY_NEXT = false;  
 
 struct t_state{
   uint8_t dirNum = 0;
@@ -106,7 +107,7 @@ struct t_state{
   uint8_t BPM = 100;
   uint8_t Beats = 2;
   uint8_t BeatsUp = 0;
-  uint8_t playMode = AUTO;
+  uint8_t playMode = ONEPLAY;
   uint8_t pitchMode = OFF;
   uint8_t pitchStyle = STEP;
   uint8_t playlistID = 0;

@@ -58,6 +58,7 @@ void onRotChange(Rotary &rotary) {
 ***********************/
 void onPress(ButtonHandler* buttonHandler, int ID) {
 
+  SHOULD_PLAY_NEXT = false;
   SLEEP_WATCH.wakeUp();
   int JumpPosition;
 
@@ -205,7 +206,6 @@ void onLongRelease(ButtonHandler* buttonHandler, int ID) {
 /**********************
 * AUTOPLAY:
 ***********************/
-bool SHOULD_PLAY_NEXT = false;  
 void autoPlay(){
 
   if(STATE.playMode != ONEPLAY){
@@ -277,6 +277,7 @@ void onBeforeSDWork() {
     MUST_RESUME = true;
     AUDIO.pausePlaying(true);
   }
+  
 }
 void onAfterSDWork() {
   if(MUST_RESUME){ 
@@ -302,6 +303,8 @@ void onAfterSelectDir(){
 
   onAfterSDWork();
   DATA = &getFileDataRef(FILE_.dirNum,FILE_.fileNum);
+  //TODO ?
+  //R_DIR->resetPosition(FILE_.dirNum*R_DIR->getStepsPerClick(), false);
 
   if(ASF_MODE == PLAYER){
     DISPLAY_.files.printPath(&FILE_);
@@ -314,6 +317,8 @@ void onAfterSelectFile(){
 
   onAfterSDWork();
   DATA = &getFileDataRef(FILE_.dirNum,FILE_.fileNum);
+  //TODO ?
+  //R_DIR->resetPosition(FILE_.fileNum*R_DIR->getStepsPerClick(), false);
 
   if(ASF_MODE == PLAYER){
     DISPLAY_.files.printPath(&FILE_);
