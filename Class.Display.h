@@ -193,7 +193,7 @@
         Display(ecran),
         Player (player){}
 
-      void progressBar(uint8_t x1, uint8_t y1, uint8_t x2, uint8_t y2){  
+      void progressBar(uint8_t x1, uint8_t y1, uint8_t x2, uint8_t y2, Array<uint32_t> *markers = nullptr){  
 
         ecran_->fillRect( x1-2, y1-2, x2-x1 + 4, y2-y1 + 4,  BLACK);
         
@@ -210,21 +210,16 @@
         float delta_y = delta_X/L;        
             
         int l = 5; //Longeur segment perpendiculaire souhaité  
+
         //marqueurs
-        /*
-        if(markersOn && activeFile.fat.size()){
-          for (byte i = 0; i < nbrMarkers; i = i + 1) {    
-            if(activeFile.markerPointer->markers.Array[i]){
-              
-              float relativeMarkerPosition = (float)activeFile.markerPointer->markers.Array[i]/(float)activeFile.fat.size();       
+        if(markers && Player->currentTrack.size()){
+          for (const auto& marker : markers->getValues()) {
+              float relativeMarkerPosition = (float)marker/(float)Player->currentTrack.size();       
               float markerPosition[] = {x1+delta_X*relativeMarkerPosition,y1+delta_Y*relativeMarkerPosition};
                       
-              display.drawLine( markerPosition[0]+l*delta_x, markerPosition[1]-l*delta_y, markerPosition[0]-l*delta_x, markerPosition[1]+l*delta_y, WHITE);
-              
-            }
-          }    
+              ecran_->drawLine( markerPosition[0]+l*delta_x, markerPosition[1]-l*delta_y, markerPosition[0]-l*delta_x, markerPosition[1]+l*delta_y, WHITE);
+          }
         }
-        */
         float relativePosition = (float)Player->getFilePosition()/(float)Player->currentTrack.size();
         float filePosition[] = {x1+delta_X*relativePosition,y1+delta_Y*relativePosition};
         

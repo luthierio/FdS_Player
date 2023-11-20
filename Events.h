@@ -155,8 +155,24 @@ void onPress(ButtonHandler* buttonHandler, int ID) {
   delay(10);
 }
 void onLongPress(ButtonHandler* buttonHandler, int ID) {
+
+  switch (ASF_MODE) {
+    case PLAYER:
+      // Short press
+      switch (ID) {
+        case 1:
+          if(AUDIO.getFilePosition()){
+            DATA->addMarker(AUDIO.getFilePosition());
+            Debug::print("New marker", static_cast<int>(AUDIO.getFilePosition()));
+          }
+        default:
+          break;
+      }
+    default:
+      break;
+  }
   Debug::print("LongPress", ID);
-  setMode(LOGO);
+  
 }
 
 
@@ -172,7 +188,6 @@ void onRelease(ButtonHandler* buttonHandler, int ID) {
 }
 void onLongRelease(ButtonHandler* buttonHandler, int ID) {
   Debug::print("LongRelease", ID);
-      setMode(PLAYER);
 }
 
 /**********************
