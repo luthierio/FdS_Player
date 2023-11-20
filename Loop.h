@@ -4,8 +4,8 @@
 ***********************/
 void smallLoop() {
 
-
   uint8_t space4Pitch = 0; // = 22;avec affichage Pitch
+
   switch (ASF_MODE) {
     case PLAYER:
       DISPLAY_.analogs.gauges(VUSB, VBat,VOLUME, 100, -2, 30, 18);
@@ -77,8 +77,7 @@ void loop() {
   if (millis() - bigLoopTime >= BIG_LOOP_INTERVAL){
     bigLoopTime = millis();
     bigLoop();
-  }  
-  
+  }
 }
 
 

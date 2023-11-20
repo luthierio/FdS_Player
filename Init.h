@@ -72,7 +72,7 @@ char  activeSoundPath[512];
 struct t_fileData {
     uint8_t dirNum;
     uint8_t fileNum;
-    Array<uint32_t> markers;
+    Array<uint32_t, NBR_MARKERS> markers;
     void addMarker(FilePicker *FILE_, FdS_Adafruit_VS1053_FilePlayer *AUDIO) {
       this->dirNum = FILE_->dirNum;
       this->fileNum = FILE_->fileNum;

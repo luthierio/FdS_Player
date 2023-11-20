@@ -90,6 +90,7 @@ uint8_t ASF_MODE = PLAYER;
 #define BITRATE               64000  //Ce serait mieux de le prendre du fichier mais pour le moment c'est le plus simple
 #define SECONDS_PER_JUMP      2
 #define NBR_FILES_DATA        100    //Nombre de tableaux de marqueurs pour le boitier
+#define NBR_MARKERS           10    //Nombre de marqueurs par fichier
 //#define MAX_MARKERS_PER_FILE  10   //Nombre de marqueurs possibles par piste
 #define MAX_VOLUME               0      // Un petit nombre signifie un volume fort
 #define MIN_VOLUME               100    // Au dela de ce nombre 255 (Volume OFF) est envoyé.

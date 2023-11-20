@@ -199,7 +199,7 @@
         Player (player),
         filePicker (filePicker){}
 
-      void progressBar(uint8_t x1, uint8_t y1, uint8_t x2, uint8_t y2, Array<uint32_t> *markers = nullptr){  
+      void progressBar(uint8_t x1, uint8_t y1, uint8_t x2, uint8_t y2, Array<uint32_t,NBR_MARKERS> *markers = nullptr){  
 
         int playingSize = Player->currentTrack.size();
         int pickedSize = filePicker->getSize();

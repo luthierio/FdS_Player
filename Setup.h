@@ -27,9 +27,10 @@ void setup() {
   }else{
     AUDIO.useInterrupt(VS1053_FILEPLAYER_PIN_INT);
     Debug::print(F("✓✓✓ ⋅ VS1053 found and started"));
-    //AUDIO.sineTest(0x44, 500);    // Make a tone to indicate VS1053 is working
+    AUDIO.sineTest(0x44, 500);    // Make a tone to indicate VS1053 is working
+    //while (1);
     delay(500);
-    PITCHER.init();
+    //PITCHER.init();
     // Set volume for left, right channels. lower numbers == louder volume!
     AUDIO.setVolume(VOLUME,VOLUME);
   }
@@ -57,8 +58,9 @@ void setup() {
   Debug::print(F("✓✓✓ ⋅ Sleep Watch ok "));
 
   /**********************
-  * INTERFACE: ROTARIES & BUTTONS
+  * INTERFACE: ROTARIES & BUTTONS  
   ***********************/
+
   for (byte i = 0; i < 3; ++i) {
     ROTARIES[i].begin(); // Remplacez 2 et 3 par les broches réelles de votre rotary encoder
     ROTARIES[i].setChangedHandler(onRotChange);
@@ -66,10 +68,9 @@ void setup() {
   MUX.begin();
   BUTTONS.setCallbacks(onPress,onRelease,onLongPress,onLongRelease);
   Debug::print(F("✓✓✓ ⋅ Interface ok "));
-
+  
   // Play a file in the background, REQUIRES interrupts!  
-  AUDIO.playFullFile(STARTSOUND);  
+  AUDIO.playFullFile(STARTSOUND);    
   setMode(PLAYER);
   
-  //SCREEN_.switchMode(DisplayManager::MODE_NAVIGATION);
 };

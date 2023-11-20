@@ -2,13 +2,13 @@
 #include <vector>
 #include <functional>
 
-template <class DATATYPE>
+template <class DATATYPE, unsigned char SIZE>
 class Array {
   private:
     std::vector<DATATYPE> values;
 
   public:
-    Array() {}
+    DATATYPE Array[SIZE];
 
     std::vector<DATATYPE> getValues() const {
         return values;
