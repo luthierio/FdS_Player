@@ -63,6 +63,25 @@
         ecran_->setCursor(x, y);
         ecran_->print(texte);
       }
+
+      void drawCentreString(const char *texte, int x, int y, const GFXfont *font = NULL)
+      {
+          int16_t x1, y1;
+          uint16_t w, h;
+          ecran_->setFont(font);
+          ecran_->getTextBounds(texte, x, y, &x1, &y1, &w, &h); //calc width of new string
+          ecran_->setCursor(x - w / 2, y);
+          ecran_->print(texte);
+      }
+      void drawCentreString(const __FlashStringHelper *texte, int x, int y, const GFXfont *font = NULL)
+      {
+          int16_t x1, y1;
+          uint16_t w, h;
+          ecran_->setFont(font);
+          ecran_->getTextBounds(texte, x, y, &x1, &y1, &w, &h); //calc width of new string
+          ecran_->setCursor(x - w / 2, y);
+          ecran_->print(texte);
+      }
       
 
   protected:
@@ -347,6 +366,39 @@
 
   class MenuDisplay : public Display {
   public:
+      MenuDisplay(Adafruit_SSD1306 *ecran) : Display(ecran){}
+
+      void print(const __FlashStringHelper* title, const __FlashStringHelper* action){  
+
+        ecran_->clearDisplay();
+        ecran_->drawFastHLine(0, 24, 128, WHITE);
+        drawCentreString(title, 64, 12, &FreeSans9pt7b);
+
+        if(reinterpret_cast<const char*>(action) == "Sauver"){    
+          ecran_->drawBitmap (128/2-40-8, 34, folderIcon16, 16,16, 1); 
+          ecran_->drawBitmap (128/2-8,    34, arrowRight16, 16,16, 1);
+          ecran_->drawBitmap (128/2+40-8, 34, sdIcon16, 16,16, 1); 
+        }else if(reinterpret_cast<const char*>(action) == "Charger"){
+          ecran_->drawBitmap (128/2-40-8, 34, sdIcon16, 16,16, 1); 
+          ecran_->drawBitmap (128/2-8,    34, arrowRight16, 16,16, 1);
+          ecran_->drawBitmap (128/2+40-8, 34, folderIcon16, 16,16, 1); 
+        /*} else if(id == DEBUG){
+          
+          ecran_->setCursor(128/2-10,34+12);  // positionne oui/non   
+          if(ASF_DEBUG_MODE){
+            ecran_->drawBitmap (128/2-20-8,    34+2, isOn, 16,12, 1); 
+            ecran_->print("Oui");   
+          }else{
+            ecran_->drawBitmap (128/2-20-8,    34+2, isOff, 16,12, 1);
+            ecran_->print("Non");   
+          }
+        */
+        }else{
+          ecran_->drawBitmap (128/2-8,    34+2, heart, 16,12, 1);
+        }          
+        //ecran_->setFont();
+        //drawCentreString(message, 64, 56);   
+      }
   private:
   };
 
@@ -368,11 +420,13 @@
       AnalogDisplay analogs;
       PlayingDisplay playing;
       PitcherDisplay pitcher;
+      MenuDisplay menu;
       DisplayController(Adafruit_SSD1306 *ecran, FdS_Adafruit_VS1053_FilePlayer *player, FilePicker *filePicker, Pitcher *pitcher) :
           display(ecran),
           files(ecran,filePicker),
           playing(ecran,player,filePicker),
           pitcher(ecran,pitcher),
+          menu(ecran) ,
           analogs(ecran) {
           // Initialisez d'autres instances de classes ici si nécessaire
       }

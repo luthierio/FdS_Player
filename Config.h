@@ -20,6 +20,14 @@
 #define STATE_FILENAME      "State.bin"
 
 /**********************
+* FILES
+***********************/
+#define MIN_DIR_NUM 0 // OLED display width, in pixels
+#define MAX_DIR_NUM 99 // OLED display width, in pixels
+#define MIN_FILES_NUM 0 // OLED display width, in pixels
+#define MAX_FILES_NUM 99 // OLED display width, in pixels
+
+/**********************
 * SCREEN
 ***********************/
 #define SCREEN_WIDTH 128 // OLED display width, in pixels
@@ -78,7 +86,7 @@ const byte ROT_P_PIN[2] = {1 , 0 };
 /**********************
 * Modes
 ***********************/
-enum asfMode    { PLAYER,   BEAT,   PLAYLIST,   ACTION, LOGO  };// Entier déguisé en string :-)
+enum asfMode    { PLAYER,   BEAT,   PLAYLIST,   MENU, LOGO  };// Entier déguisé en string :-)
 enum playMode   { ONEPLAY,  AUTO,   RANDOM,   REPEATONE };// Entier déguisé en string :-)
 enum pitchMode  { OFF,      TEMPO,  PITCH };// Entier déguisé en string :-)
 enum pitchStyle { STEP,     RATIO };// Entier déguisé en string :-)

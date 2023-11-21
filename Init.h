@@ -37,8 +37,8 @@ ButtonHandler BUTTONS(6, DEBOUNCE_INTERVAL, LONG_PRESS_INTERVAL, LONG_RELEASE_IN
 * Rotary Encoders
 ***********************/
 Rotary ROTARIES[3] = {
-  Rotary( ROT_F_PIN[0], ROT_F_PIN[1], true , 0, 99),
-  Rotary( ROT_D_PIN[0], ROT_D_PIN[1], true , 0, 99),
+  Rotary( ROT_F_PIN[0], ROT_F_PIN[1], true , MIN_FILES_NUM, MAX_FILES_NUM),
+  Rotary( ROT_D_PIN[0], ROT_D_PIN[1], true , MIN_DIR_NUM, MAX_DIR_NUM),
   Rotary( ROT_P_PIN[0], ROT_P_PIN[1], false ,-5, 5, 5 ),
 };
 Rotary* R_FILES = &ROTARIES[0];
@@ -89,12 +89,10 @@ t_fileData DATAS[MAX_FILES_DATA];
 t_fileData emptyData;
 t_fileData *DATA = &DATAS[0];
 
+
 /**********************
-* DISPLAY:
+* STATE:
 ***********************/
-
-DisplayController DISPLAY_(&SCREEN_,&AUDIO, &FILE_, &PITCHER);
-
 
 bool SHOULD_PLAY_NEXT = false;  
 
@@ -116,3 +114,40 @@ struct t_state{
   uint8_t playlistMode = ONEPLAY;
 };
 t_state STATE;
+
+/**********************
+* ACTIONS:
+***********************/
+
+enum CommandIDs { UNSET, ACCORD, SAVE_ALL, LOAD_ALL, ST_SAVE, ST_LOAD, PL_SAVE, PL_LOAD, PL_EXPOR, MAR_SAVE, MAR_LOAD, A_PROPOS, DEBUG };
+
+struct Command {
+  CommandIDs id;
+  const __FlashStringHelper* title;
+  const __FlashStringHelper* action;
+};
+
+Command MENUS[] = {
+  { ACCORD,   F("Accordage"),  F("Ecouter") },
+  { SAVE_ALL, F("ASF"),        F("Sauver")  },
+  { LOAD_ALL, F("ASF"),        F("Charger") },
+  { ST_SAVE,  F("Statut"),     F("Sauver")  },
+  { ST_LOAD,  F("Statut"),     F("Charger") },
+  { PL_SAVE,  F("Playlists"),  F("Sauver")  },
+  { PL_LOAD,  F("Playlists"),  F("Charger") },
+  { PL_EXPOR, F("Playlists"),  F("Export M3U")},
+  { MAR_SAVE, F("Marqueurs"),  F("Sauver")  },
+  { MAR_LOAD, F("Marqueurs"),  F("Charger") },
+  { A_PROPOS, F("A propos"),   F("Credits") },
+  { DEBUG,    F("Debug"),      F("Commuter")}
+};
+uint8_t MENU_ID = 0;
+const size_t MENU_SIZE = sizeof(MENUS) / sizeof(MENUS[0]);
+
+/**********************
+* DISPLAY:
+***********************/
+
+DisplayController DISPLAY_(&SCREEN_,&AUDIO, &FILE_, &PITCHER);
+
+

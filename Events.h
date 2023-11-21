@@ -7,8 +7,18 @@ void setMode(uint8_t mode) {
 
   switch (mode) {
     case PLAYER:
+      R_DIR->resetPosition(FILE_.dirNum);
+      R_DIR->setLowerBound(MIN_DIR_NUM);
+      R_DIR->setUpperBound(MAX_DIR_NUM);
       DISPLAY_.files.printPath(&FILE_);
       break;
+
+    case MENU:
+      R_DIR->resetPosition(MENU_ID);
+      R_DIR->setLowerBound(0);
+      R_DIR->setUpperBound(MENU_SIZE);
+      DISPLAY_.menu.print(MENUS[MENU_ID].title, MENUS[MENU_ID].action); 
+      break; 
 
     default:
       DISPLAY_.display.logo();
@@ -45,7 +55,11 @@ void onRotChange(Rotary &rotary) {
       break;   
     case PLAYLIST: 
     case BEAT: 
-    case ACTION:   
+    case MENU:  
+      if(&rotary == R_DIR) {
+        MENU_ID = currentPosition;
+        DISPLAY_.menu.print(MENUS[MENU_ID].title, MENUS[MENU_ID].action); 
+      } 
       break;   
     default:
       break;
@@ -63,8 +77,10 @@ void onPress(ButtonHandler* buttonHandler, int ID) {
   int JumpPosition;
 
   switch (ASF_MODE) {
+    /**********************
+    * PLAYER:
+    ***********************/
     case PLAYER:
-      // Short press
       switch (ID) {
         case 0:
           Debug::print("Playing", FILE_.path);
@@ -93,14 +109,12 @@ void onPress(ButtonHandler* buttonHandler, int ID) {
             Debug::print("Jump", DATA->markers.getPreviousFrom(AUDIO.getFilePosition()-BITRATE / 4 ));
           } 
           AUDIO.jumpTo(JumpPosition);
-          //AUDIO.startPlayingAtPosition(FILE_.path, JumpPosition);
           Debug::print("Jump Position", JumpPosition);
 
           break;
 
         case 3:
-          Debug::print("Mode PLAYER");
-          setMode(PLAYER);
+          setMode(PLAYLIST);
           break;
 
         case 4:
@@ -119,27 +133,27 @@ void onPress(ButtonHandler* buttonHandler, int ID) {
           break;
       }
       break;
+    /**********************
+    * PLAYLIST:
+    ***********************/
     case PLAYLIST:
+      switch (ID) {
+        case 3:
+          setMode(PLAYER);
+          break;
+        default:
+          break;
+      }
     case BEAT:
-    case ACTION:
-      // Short press
+    /**********************
+    * ACTION:
+    ***********************/
+    case MENU:
       switch (ID) {
         case 0:
-          Debug::print("Load DATA");
-          if (SD_BACKUP.load(MARKERS_FILENAME, &DATAS, sizeof(DATAS))) {
-            Debug::print("OK", SD_BACKUP.getLastMessage());
-          } else {
-            Debug::print("ERREUR", SD_BACKUP.getLastMessage());
-          }
-          break;
-
         case 1:
-          Debug::print("Save DATA");
-          if (SD_BACKUP.save(MARKERS_FILENAME, &DATAS, sizeof(DATAS))) {
-            Debug::print("OK", SD_BACKUP.getLastMessage());
-          } else {
-            Debug::print("ERREUR", SD_BACKUP.getLastMessage());
-          }
+        case 2:
+          doAction(MENUS[MENU_ID].id);
           break;
         case 4:
           setMode(PLAYER);
@@ -174,9 +188,8 @@ void onLongPress(ButtonHandler* buttonHandler, int ID) {
           }
           break;
 
-
         case 4:
-          setMode(ACTION);
+          setMode(MENU);
           break;
         default:
           break;
@@ -339,4 +352,4 @@ void onAfterSelectFile(){
   
   Debug::print("SelectFile",FILE_.fileNum,FILE_.path);  
 
-}     
+}

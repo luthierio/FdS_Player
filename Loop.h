@@ -11,9 +11,9 @@ void smallLoop() {
       DISPLAY_.analogs.gauges(VUSB, VBat,VOLUME, 100, -2, 30, 18);
 
 
-        if(PITCHER.getStep() != 0){
+        if(FILE_.exist() && PITCHER.getStep() != 0){
           space4Pitch = SPACE_FOR_PITCH;
-          DISPLAY_.display.cleanZone(128-space4Pitch, 52, space4Pitch , 12 );        
+          DISPLAY_.display.cleanZone(128-space4Pitch, 50, space4Pitch , 14 );        
           DISPLAY_.pitcher.print(128-space4Pitch + 2  , 52 , 10 , 10 );     
         }
         
@@ -27,6 +27,7 @@ void smallLoop() {
         }  
 
       break;
+
     default:
       break;
   }
@@ -49,15 +50,13 @@ void bigLoop() {
 uint32_t smallLoopTime;
 uint32_t bigLoopTime;
 void loop() {
-  autoPlay();
-
+  
   if(AUDIO.playingMusic){
     SLEEP_WATCH.keepAlive();
   }
   
   SLEEP_WATCH.listen();
-  //Lancé à intervale réduit
-
+  autoPlay();
 
   // Mettre à jour en continu le rotary encoder
   for (byte i = 0; i < 3; ++i) {
@@ -69,13 +68,12 @@ void loop() {
   for (int i = 0; i < 6; i++) {
     BTN_STATE[i] = MUX.state(BTN_CHANNEL[i]);
   }
+  // Passez les états des boutons à la classe ButtonHandler pour la gestion
+  BUTTONS.update(BTN_STATE);
 
   VUSB = (float)round(10*(MUX.value(BTN_CHANNEL[0])* 3.3 * 2 )/ 1024.0)/10.0;
   VBat = (float)round(10*(MUX.value(BTN_CHANNEL[1])* 3.3 * 2 )/ 1024.0)/10.0; // VERIFIER NUMERO!!
   setVolume(map(analogRead(VOLUME_PIN), 5, 1023, MAX_VOLUME, MIN_VOLUME));
-
-  // Passez les états des boutons à la classe ButtonHandler pour la gestion
-  BUTTONS.update(BTN_STATE);
 
   if (millis() - smallLoopTime >= SMALL_LOOP_INTERVAL){
     smallLoopTime = millis();

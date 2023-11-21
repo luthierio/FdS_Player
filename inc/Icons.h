@@ -97,7 +97,7 @@ const unsigned char folderIcon16[] PROGMEM =
   0b11111111, 0b11111111, // ################
   0b00000000, 0b00000000, //     
 };
-const unsigned char sdIcon[] PROGMEM = 
+const unsigned char sdIcon16[] PROGMEM = 
 {           
   0b00000000, 0b00000000, //             
   0b00011111, 0b11111110, //             
@@ -116,7 +116,7 @@ const unsigned char sdIcon[] PROGMEM =
   0b01111111, 0b11111110, //            
   0b00000000, 0b00000000, // 
 };
-const unsigned char arrowRight[] PROGMEM = 
+const unsigned char arrowRight16[] PROGMEM = 
 {           
   0b00000000, 0b00000000, //  
   0b00000000, 0b00000000, //  
@@ -135,7 +135,7 @@ const unsigned char arrowRight[] PROGMEM =
   0b00000000, 0b00000000, //            
   0b00000000, 0b00000000, // 
 };
-const unsigned char arrowLeft[] PROGMEM = 
+const unsigned char arrowLeft16[] PROGMEM = 
 {           
   0b00000000, 0b00000000, //  
   0b00000000, 0b00000000, //  
@@ -235,7 +235,7 @@ const unsigned char pitchDownIcon[] PROGMEM =
   0b11000011,
   0b11111110,     
 };
-const unsigned char errorIcon[] =
+const unsigned char errorIcon16[] =
 {
 	0b00000000, 0b00000000, //                 
 	0b00000011, 0b11100000, //       #####     

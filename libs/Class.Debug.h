@@ -1,30 +1,29 @@
 class Debug {
 public:
-  Debug() {
-    // Constructor if needed
-  }
+  static const bool onOff = true;
+  Debug(){}
 
   static void print(const char* value) {
-    if (SERIAL_ON) {
+    if (onOff) {
       Serial.println(value);
     }
   }
 
   static void print(const __FlashStringHelper* value) {
-    if (SERIAL_ON) {
+    if (onOff) {
       Serial.println(value);
     }
   }
 
   static void print(const char* label, int value) {
-    if (SERIAL_ON) {
+    if (onOff) {
       Serial.print(label);
       Serial.print(": ");
       Serial.println(value);
     }
   }
   static void print(const char* label, uint32_t value) {
-    if (SERIAL_ON) {
+    if (onOff) {
       Serial.print(label);
       Serial.print(": ");
       Serial.println(value);
@@ -32,7 +31,7 @@ public:
   }
 
   static void print(const __FlashStringHelper* label, int value) {
-    if (SERIAL_ON) {
+    if (onOff) {
       Serial.print(label);
       Serial.print(": ");
       Serial.println(value);
@@ -40,7 +39,7 @@ public:
   }
 
   static void print(const char* label, float value) {
-    if (SERIAL_ON) {
+    if (onOff) {
       Serial.print(label);
       Serial.print(": ");
       Serial.println(value, 4);  // Display the float value with 4 decimals
@@ -48,7 +47,7 @@ public:
   }
 
   static void print(const __FlashStringHelper* label, float value) {
-    if (SERIAL_ON) {
+    if (onOff) {
       Serial.print(label);
       Serial.print(": ");
       Serial.println(value, 4);  // Display the float value with 4 decimals
@@ -63,7 +62,7 @@ public:
     }
   }
   static void print(const char* label, const __FlashStringHelper* value) {
-    if (SERIAL_ON) {
+    if (onOff) {
       Serial.print(label);
       Serial.print(": ");
       Serial.println(value);
@@ -71,7 +70,7 @@ public:
   }
 
   static void print(const __FlashStringHelper* label, const __FlashStringHelper* value) {
-    if (SERIAL_ON) {
+    if (onOff) {
       Serial.print(label);
       Serial.print(": ");
       Serial.println(value);
@@ -79,7 +78,7 @@ public:
   }
 
   static void print(const char* label, int id, int value) {
-    if (SERIAL_ON) {
+    if (onOff) {
       Serial.print(label);
       Serial.print(" (");
       Serial.print(id);
@@ -89,7 +88,7 @@ public:
   }
 
   static void print(const char* label, int id, float value) {
-    if (SERIAL_ON) {
+    if (onOff) {
       Serial.print(label);
       Serial.print(" (");
       Serial.print(id);
@@ -99,7 +98,7 @@ public:
   }
 
   static void print(const char* label, int id, const char* value) {
-    if (SERIAL_ON) {
+    if (onOff) {
       Serial.print(label);
       Serial.print(" (");
       Serial.print(id);
@@ -109,7 +108,7 @@ public:
   }
 
   static void print(const __FlashStringHelper* label, int id, int value) {
-    if (SERIAL_ON) {
+    if (onOff) {
       Serial.print(label);
       Serial.print(" (");
       Serial.print(id);
@@ -119,7 +118,7 @@ public:
   }
 
   static void print(const __FlashStringHelper* label, int id, float value) {
-    if (SERIAL_ON) {
+    if (onOff) {
       Serial.print(label);
       Serial.print(" (");
       Serial.print(id);
@@ -129,7 +128,7 @@ public:
   }
 
   static void print(const __FlashStringHelper* label, int id, const char* value) {
-    if (SERIAL_ON) {
+    if (onOff) {
       Serial.print(label);
       Serial.print(" (");
       Serial.print(id);
@@ -139,7 +138,7 @@ public:
   }
 
   static void print(const __FlashStringHelper* label, int id, const __FlashStringHelper* value) {
-    if (SERIAL_ON) {
+    if (onOff) {
       Serial.print(label);
       Serial.print(" (");
       Serial.print(id);
