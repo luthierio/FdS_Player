@@ -31,14 +31,13 @@ void setMode(uint8_t mode) {
 /**********************
 * MESSAGES:
 ***********************/
-void onMessage(){
+void onMessage(const char *Message){
 
-  if (strlen(MESSAGE) != 0) {
+  if (strlen(Message) != 0) {
     // Affichage ou traitement du message
-    DISPLAY_.display.message(MESSAGE);
+    DISPLAY_.display.message(Message);
     // Réinitialisation du message à la prochaine boucle   
-    delay(2000);
-    memset(MESSAGE, 0, sizeof(MESSAGE));
+    delay(MSG_DELAY);
     setMode(ASF_MODE);
   }
 }
@@ -188,9 +187,8 @@ void onLongPress(ButtonHandler* buttonHandler, int ID) {
       // Short press
       switch (ID) {
         case 0:
-          SD_BACKUP.save(MARKERS_FILENAME, &DATAS, sizeof(DATAS));
-          delay(10);
-          AUDIO.startPlayingFile(FILE_.path);
+          //SD_BACKUP.save(MARKERS_FILENAME, &DATAS, sizeof(DATAS));
+          SD_BACKUP.save(STATE_FILENAME, &STATE, sizeof(STATE));
           break;
         case 1:
           //On vérifie que le fichier Sélectionné est bien celui qui joue pour ajouter un marqueur
@@ -223,13 +221,17 @@ void onLongPress(ButtonHandler* buttonHandler, int ID) {
 
 void onRelease(ButtonHandler* buttonHandler, int ID) {
 
-  Debug::print("Release", ID);
-  //On stocke le Bitrate pour les Jumps après quelques temps de release.
-  // Il faut laisser au player une seconde de jeu
-  if(ASF_MODE == PLAYER && ID == 0){
-    //BITRATE = AUDIO.getBitRate();
-    //Debug::print("BitRate", static_cast<int>(BITRATE));
+  switch (ASF_MODE) {
+    /**********************
+    * PLAYER:
+    ***********************/
+    case PLAYER:
+      switch (ID) {
+        case 0:
+          break;
+      }
   }
+  Debug::print("Release", ID);
 }
 void onLongRelease(ButtonHandler* buttonHandler, int ID) {
   Debug::print("LongRelease", ID);
@@ -334,15 +336,14 @@ void onAfterSDWork() {
   Debug::print("Selected", FILE_.path); 
 }
 void onBeforeSDReadWrite() {
+  onMessage("Opération SD en cours");
   //On Stoppe le player avant toute écriture, pour éviter les problèmes
   AUDIO.stopPlaying();
   delay(10);
 }
 void onAfterSDReadWrite() {
   onAfterSDWork();
-  Debug::print("ReadWrite", SD_BACKUP.getLastMessage()); 
-  strcpy_P(MESSAGE, (char*)SD_BACKUP.getLastMessage());
-  onMessage();
+  onMessage((char*)SD_BACKUP.getLastMessage());
 }
 
 
@@ -356,6 +357,7 @@ void onBeforeSelectFile(){
 void onAfterSelectDir(){
 
   onAfterSDWork();
+  STATE.dirNum = FILE_.dirNum;
   DATA = &getFileDataRef(FILE_.dirNum,FILE_.fileNum);
   //TODO ?
   //R_DIR->resetPosition(FILE_.dirNum*R_DIR->getStepsPerClick(), false);
@@ -370,6 +372,7 @@ void onAfterSelectDir(){
 void onAfterSelectFile(){
 
   onAfterSDWork();
+  STATE.fileNum = FILE_.fileNum;
   DATA = &getFileDataRef(FILE_.dirNum,FILE_.fileNum);
   //TODO ?
   //R_DIR->resetPosition(FILE_.fileNum*R_DIR->getStepsPerClick(), false);

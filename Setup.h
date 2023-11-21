@@ -48,13 +48,25 @@ void setup() {
     Debug::print(F("✓✓✓ ⋅ SD Card found "));
   }
 
-  FILE_.begin(0, 0); // Utilisation avec les fonctions de rappel
-  FILE_.setDirCallbacks( onBeforeSelectDir, onAfterSelectDir );
-  FILE_.setFileCallbacks( onBeforeSelectFile, onAfterSelectFile );
 
   // Définir les callbacks
   SD_BACKUP.setCallbacks(onBeforeSDReadWrite, onAfterSDReadWrite , onBeforeSDReadWrite, onAfterSDReadWrite );
   Debug::print(F("✓✓✓ ⋅ FILES ok "));
+
+  if (SD_BACKUP.load(STATE_FILENAME, &STATE, sizeof(STATE))) {
+    Debug::print(F("✓✓✓ ⋅ Chargement Etat ok "));
+  }else{
+    Debug::print(F("××× ⋅ STATE: Pas de chargement"));
+  }
+  if (SD_BACKUP.load(MARKERS_FILENAME, &DATAS, sizeof(DATAS))) {
+    Debug::print(F("✓✓✓ ⋅ Chargement Marqueurs ok "));
+  }else{
+    Debug::print(F("××× ⋅ MARKERS: Pas de chargement"));
+  }
+
+  FILE_.begin(STATE.dirNum, STATE.fileNum); // Initialisation selon carte
+  FILE_.setDirCallbacks( onBeforeSelectDir, onAfterSelectDir );
+  FILE_.setFileCallbacks( onBeforeSelectFile, onAfterSelectFile );
 
   SLEEP_WATCH.setCallbacks(onSleep, onWakeUp);
   SLEEP_WATCH.wakeUp();
