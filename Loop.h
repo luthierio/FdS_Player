@@ -11,15 +11,20 @@ void smallLoop() {
       DISPLAY_.analogs.gauges(VUSB, VBat,VOLUME, 100, -2, 30, 18);
 
 
-      if(PITCHER.getStep() != 0){
-        space4Pitch = SPACE_FOR_PITCH;
-        DISPLAY_.display.cleanZone(128-space4Pitch, 52, space4Pitch , 12 );        
-        DISPLAY_.pitcher.print(128-space4Pitch + 2  , 52 , 10 , 10 );     
-      }
-      
-      DISPLAY_.display.cleanZone(0, 52, 128-space4Pitch, 12 );   
-      DISPLAY_.playing.progressBar(3, 57, 125-space4Pitch, 57, &DATA->markers);
-      DISPLAY_.playing.playMode(125-space4Pitch, 57, STATE.playMode);   
+        if(PITCHER.getStep() != 0){
+          space4Pitch = SPACE_FOR_PITCH;
+          DISPLAY_.display.cleanZone(128-space4Pitch, 52, space4Pitch , 12 );        
+          DISPLAY_.pitcher.print(128-space4Pitch + 2  , 52 , 10 , 10 );     
+        }
+        
+        DISPLAY_.display.cleanZone(0, 52, 128-space4Pitch, 12 );  
+
+        if(FILE_.exist()){
+
+          DISPLAY_.playing.progressBar(3, 57, 125-space4Pitch, 57, &DATA->markers);
+          DISPLAY_.playing.playMode(125-space4Pitch, 57, STATE.playMode); 
+
+        }  
 
       break;
     default:

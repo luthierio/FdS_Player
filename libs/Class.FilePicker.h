@@ -72,6 +72,12 @@
             onAfterSelectDir(); // Appel de la fonction de rappel après la sélection
           }
       }   
+      byte dirExist(){
+        return this->dirname[0] != '\0';
+      }   
+      byte exist(){
+        return this->filename[0] != '\0';
+      }   
       void selectFile(uint8_t num){ 
 
           if (onBeforeSelectFile) {

@@ -36,6 +36,13 @@
       }
 
       // Afficher un texte
+      void printTxtNum(const int num, uint8_t x = 0, uint8_t y = 0, const GFXfont *font = NULL, uint8_t tailleTexte = 1, bool color = WHITE) {
+
+        char txtNum[2];
+        sprintf(txtNum, "%02d", num);  
+        printTxt(txtNum,x,y,font, tailleTexte,color);
+      }
+      // Afficher un texte
       void printNum(const int num, uint8_t x = 0, uint8_t y = 0, const GFXfont *font = NULL, uint8_t tailleTexte = 1, bool color = WHITE) {
         ecran_->setFont(font);
         ecran_->setTextColor(color);
@@ -54,16 +61,6 @@
         ecran_->setTextColor(color);
         ecran_->setTextSize(tailleTexte);
         ecran_->setCursor(x, y);
-        /*
-        ecran_->getTextBounds(texte, x, y, &x1, &y1, &w, &h);
-        if(font){
-          ecran_->fillRect(x, y, w, h*2, BLACK); 
-        }else{
-          ecran_->setCursor(x, y);
-          ecran_->fillRect(x, y, w, h, BLACK); 
-        }
-        */
-
         ecran_->print(texte);
       }
       
@@ -85,10 +82,27 @@
         
         //On efface la zone   
         ecran_->fillRect(0, 0, 100, 12, BLACK); 
-        printDirPath(selectedPath, 0, 3);
+        ecran_->fillRect(0, 16, 128, 34, BLACK); 
 
-        ecran_->fillRect(0, 18, 128, 34, BLACK); 
-        printFilePath(selectedPath, 0, 32, &FreeSerif9pt7b);
+
+        if(!selectedPath->dirExist()){
+
+          ecran_->drawBitmap (2, 32, folderIcon16, 16, 16 ,WHITE);
+          printTxtNum(selectedPath->dirNum, 30, 48, &FreeSans12pt7b); 
+          printTxt("/", 64, 48, &FreeSans12pt7b); 
+          printTxtNum(selectedPath->fileNum, 80, 48, &FreeSans12pt7b); 
+
+        }else{
+
+          printDirPath(selectedPath, 0, 3);
+
+          if (!selectedPath->exist()) {
+            printTxtNum(selectedPath->fileNum, 48, 48, &FreeSans18pt7b);             
+          }else{
+            printFilePath(selectedPath, 0, 32, &FreeSerif9pt7b);
+          }
+
+        } 
 
       }
 
@@ -108,17 +122,9 @@
       }
       
       void printFilePath(FilePicker *selectedPath, int x, int y, const GFXfont *font = NULL, uint8_t textSize = 1) {
-        char fileNum[3];
-        sprintf(fileNum, "%02d", selectedPath->fileNum);
 
-        if (!selectedPath->filename || selectedPath->filename[0] == '\0') {
-          printTxt(fileNum, x, y, font, textSize);
-          //Petits points
-          ecran_->setCursor(x + 20, y);
-          for (int px = x + 22; px < 128; px += 3) {
-            ecran_->drawPixel(px, y + 2, WHITE);
-          }
-        } else {
+        if (selectedPath->filename && selectedPath->filename[0] != '\0') {
+
           char displayedFile[255]; // Assurez-vous que la taille est suffisamment grande
           char fileInfos[255]; // Assurez-vous que la taille est suffisamment grande
           fileInfos[0] = '\0';
@@ -135,6 +141,7 @@
           printTxt(fileInfos, x, y + 10, NULL, textSize);
         }
       }
+
       void getBracketContent(const char *input, char *output, size_t outputSize) {
           const char *startBracket = strchr(input, '[');
           if (startBracket != NULL) {
@@ -213,7 +220,7 @@
             }else if(playMode == REPEATONE){
 
               ecran_->fillTriangle(x-4,y-4, x-4,y+4, x-8,y, WHITE);
-              
+
             }
       }
       void progressBar(uint8_t x1, uint8_t y1, uint8_t x2, uint8_t y2, Array<uint32_t,MAX_MARKERS> *markers = nullptr){  

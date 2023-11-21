@@ -78,7 +78,7 @@ const unsigned char LOGO_128x64 [] PROGMEM ={
 	0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00
 };
 
-const unsigned char folderIcon[] PROGMEM = 
+const unsigned char folderIcon16[] PROGMEM = 
 {       
   0b00000000, 0b00000000, //        
   0b11111111, 0b00000000, // ########
