@@ -33,12 +33,16 @@ void setMode(uint8_t mode) {
 ***********************/
 void onMessage(const char *Message, bool ERROR = false){
 
+  Debug::print("Message",Message);  
   if (strlen(Message) != 0) {
     // Affichage ou traitement du message
     DISPLAY_.display.message(Message);
     // Réinitialisation du message à la prochaine boucle 
-    if(ERROR) delay(ERROR_MSG_DELAY); 
-    delay(MSG_DELAY);
+    if(ERROR){
+      delay(ERROR_MSG_DELAY);
+    }else{
+      delay(MSG_DELAY);
+    }
     setMode(ASF_MODE);
   }
 }
@@ -337,7 +341,8 @@ void onAfterSDWork() {
   Debug::print("Selected", FILE_.path); 
 }
 void onBeforeSDReadWrite() {
-  onMessage("Opération SD en cours");
+  Debug::print("Opération SD en cours"); 
+  //onMessage("Opération SD en cours");
   //On Stoppe le player avant toute écriture, pour éviter les problèmes
   AUDIO.stopPlaying();
   delay(10);
@@ -345,10 +350,12 @@ void onBeforeSDReadWrite() {
 void onAfterSDReadWrite() {
   onAfterSDWork();
   onMessage((char*)SD_BACKUP.getLastMessage());
+  Debug::print(SD_BACKUP.getLastMessage()); 
 }
 void onSDError() {
   onAfterSDWork();
   onMessage((char*)SD_BACKUP.getLastMessage(), true);
+  Debug::print(SD_BACKUP.getLastMessage()); 
 }
 
 

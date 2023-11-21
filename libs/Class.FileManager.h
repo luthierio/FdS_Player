@@ -75,8 +75,8 @@ public:
         }
       }
     } else {
-      setLastMessage(F("Fichier inexistant"));
-      if (errorCallback) errorCallback();
+      setLastMessage(F("Rien à charger"));
+      if (onAfterLoad) onAfterLoad();  // Appel de la fonction de rappel après le chargement
     }
 
     return false;

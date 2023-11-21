@@ -48,7 +48,6 @@ void setup() {
     Debug::print(F("✓✓✓ ⋅ SD Card found "));
   }
 
-
   // Définir les callbacks
   SD_BACKUP.setCallbacks(onSDError, onBeforeSDReadWrite, onAfterSDReadWrite , onBeforeSDReadWrite, onAfterSDReadWrite );
   Debug::print(F("✓✓✓ ⋅ FILES ok "));
