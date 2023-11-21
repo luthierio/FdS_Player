@@ -108,22 +108,12 @@
 
       void printDirPath(FilePicker *selectedPath, int x, int y, const GFXfont *font = NULL, uint8_t textSize = 1){
         
-
-        char dirNum[2];
-        sprintf(dirNum, "%02d", selectedPath->dirNum );  
-
-        if(!selectedPath->dirname[0] == '\0'){
           ecran_->drawBitmap (x, y, folderIcon8, 8,8,WHITE);
           printTxt(selectedPath->dirname+3, x+12, y);
-        }else{
-          printTxt(dirNum, x, y, font, textSize)  ;
-          printTxt("Aucun dossier", x+20, y);
-        }  
+
       }
       
       void printFilePath(FilePicker *selectedPath, int x, int y, const GFXfont *font = NULL, uint8_t textSize = 1) {
-
-        if (selectedPath->filename && selectedPath->filename[0] != '\0') {
 
           char displayedFile[255]; // Assurez-vous que la taille est suffisamment grande
           char fileInfos[255]; // Assurez-vous que la taille est suffisamment grande
@@ -136,10 +126,9 @@
             getBracketContent(selectedPath->filename, fileInfos, sizeof(fileInfos));
           }
 
-
           printTxt(displayedFile, x, y, font, textSize);
           printTxt(fileInfos, x, y + 10, NULL, textSize);
-        }
+          
       }
 
       void getBracketContent(const char *input, char *output, size_t outputSize) {
