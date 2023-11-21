@@ -28,6 +28,19 @@ void setMode(uint8_t mode) {
   ASF_MODE = mode;
 }
 
+/**********************
+* MESSAGES:
+***********************/
+void onMessage(){
+
+  if (strlen(MESSAGE) != 0) {
+    // Affichage ou traitement du message
+    DISPLAY_.display.message(MESSAGE);
+    // Réinitialisation du message à la prochaine boucle   
+    delay(2000);
+    setMode(ASF_MODE);
+  }
+}
 
 /**********************
 * ROTARIES:
@@ -173,6 +186,9 @@ void onLongPress(ButtonHandler* buttonHandler, int ID) {
     case PLAYER:
       // Short press
       switch (ID) {
+        case 0:
+          SD_BACKUP.save(MARKERS_FILENAME, &DATAS, sizeof(DATAS));
+          break;
         case 1:
           //On vérifie que le fichier Sélectionné est bien celui qui joue pour ajouter un marqueur
           if(AUDIO.getFilePosition() && AUDIO.currentTrack.size() == FILE_.getSize()){
@@ -320,6 +336,8 @@ void onBeforeSDReadWrite() {
 void onAfterSDReadWrite() {
   onAfterSDWork();
   Debug::print("ReadWrite", SD_BACKUP.getLastMessage()); 
+  strcpy_P(MESSAGE, (char*)SD_BACKUP.getLastMessage());
+  onMessage();
 }
 
 

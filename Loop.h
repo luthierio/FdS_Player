@@ -32,18 +32,13 @@ void smallLoop() {
       break;
   }
 
+
   if(!SLEEP_WATCH.isSleeping()){
     DISPLAY_.show();
   }
 }
-
 void bigLoop() {
-  if(SLEEP_WATCH.isSleeping()){ 
-  }
 
-  if(AUDIO.playingMusic){
-    //Serial.println(AUDIO.getBitRate());
-  }
 
 }
 

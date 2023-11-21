@@ -147,7 +147,7 @@ const size_t NBR_ACTIONS = sizeof(ACTIONS) / sizeof(ACTIONS[0]);
 /**********************
 * DISPLAY:
 ***********************/
-
+char MESSAGE[255];
 DisplayController DISPLAY_(&SCREEN_,&AUDIO, &FILE_, &PITCHER);
 
 

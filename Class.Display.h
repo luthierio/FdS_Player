@@ -31,10 +31,11 @@
         ecran_->drawBitmap (0,0, LOGO_128x64, 128,64, 1); 
         ecran_->display();
       }
-      void message(const __FlashStringHelper *texte = nullptr) {
-        ecran_->fillRect(5, 5, 118, 54, BLACK); 
-        ecran_->drawRect(5, 5, 118, 54, WHITE); 
-        drawCentreString(texte, 32, 32);
+      void message(const char *texte = nullptr) {
+        ecran_->fillRect(0, 52, 128, 12, BLACK); 
+        //ecran_->drawRect(0, 52, 128, 12, WHITE); 
+        drawCentreString(texte, 64, 55);
+        ecran_->display();
       }
       void error(const __FlashStringHelper *texte = nullptr) {
 
@@ -94,7 +95,7 @@
           ecran_->setFont(font);
           ecran_->setTextSize(tailleTexte);
           ecran_->getTextBounds(texte, x, y, &x1, &y1, &w, &h); //calc width of new string
-          ecran_->setCursor(x - w / 2, y);
+          ecran_->setCursor(x - w / 2, y - h / 2);
           ecran_->print(texte);
       }
       void drawCentreString(const __FlashStringHelper *texte, int x, int y, const GFXfont *font = NULL, uint8_t tailleTexte = 1)
@@ -391,7 +392,7 @@
 
         ecran_->clearDisplay();
         ecran_->drawFastHLine(0, 24, 128, WHITE);
-        drawCentreString(title, 64, 12, &FreeSans9pt7b);
+        drawCentreString(title, 64, 18, &FreeSans9pt7b);
 
         if(reinterpret_cast<const char*>(action) == "Sauver"){    
           ecran_->drawBitmap (128/2-40-8, 34, folderIcon16, 16,16, 1); 
