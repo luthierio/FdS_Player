@@ -38,6 +38,7 @@ void onMessage(){
     DISPLAY_.display.message(MESSAGE);
     // Réinitialisation du message à la prochaine boucle   
     delay(2000);
+    memset(MESSAGE, 0, sizeof(MESSAGE));
     setMode(ASF_MODE);
   }
 }
@@ -188,6 +189,8 @@ void onLongPress(ButtonHandler* buttonHandler, int ID) {
       switch (ID) {
         case 0:
           SD_BACKUP.save(MARKERS_FILENAME, &DATAS, sizeof(DATAS));
+          delay(10);
+          AUDIO.startPlayingFile(FILE_.path);
           break;
         case 1:
           //On vérifie que le fichier Sélectionné est bien celui qui joue pour ajouter un marqueur
@@ -316,6 +319,7 @@ void setVolume(uint8_t reqVolume) {
 
 bool MUST_RESUME = false;
 void onBeforeSDWork() {
+
   if(AUDIO.playingMusic){
     MUST_RESUME = true;
     AUDIO.pausePlaying(true);
@@ -330,8 +334,9 @@ void onAfterSDWork() {
   Debug::print("Selected", FILE_.path); 
 }
 void onBeforeSDReadWrite() {
-  onBeforeSDWork();
-  delay(100);
+  //On Stoppe le player avant toute écriture, pour éviter les problèmes
+  AUDIO.stopPlaying();
+  delay(10);
 }
 void onAfterSDReadWrite() {
   onAfterSDWork();

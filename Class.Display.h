@@ -32,9 +32,9 @@
         ecran_->display();
       }
       void message(const char *texte = nullptr) {
-        ecran_->fillRect(0, 52, 128, 12, BLACK); 
-        //ecran_->drawRect(0, 52, 128, 12, WHITE); 
-        drawCentreString(texte, 64, 55);
+        ecran_->fillRect(0, 52, 128, 32, BLACK); 
+        ecran_->drawFastHLine(0, 52, 128, WHITE);
+        drawCentreString(texte, 64, 60);
         ecran_->display();
       }
       void error(const __FlashStringHelper *texte = nullptr) {
@@ -49,7 +49,8 @@
         ecran_->drawFastHLine(128/2-8, 37, 16, WHITE);
         ecran_->drawBitmap (128/2-6-4, 20, smallCross, 8,8, WHITE); 
         ecran_->drawBitmap (128/2+6-4, 20, smallCross, 8,8, WHITE);   
-        drawCentreString(texte, 64, 56, &FreeSans12pt7b, 2);
+        message((char*)texte);
+        ecran_->display();
       }
       void confirm() {
         ecran_->drawBitmap (0,0, LOGO_128x64, 128,64, 1); 

@@ -22,6 +22,7 @@ void setup() {
   * AUDIO:
   ***********************/
   if (! AUDIO.begin()) { // initialise the music player
+    DISPLAY_.display.error(F("Pas de carte SON?"));
     Debug::print(F("××× ⋅ Couldn't find VS1053, check PINS?"));
     while (1);
   }else{
@@ -40,6 +41,7 @@ void setup() {
   * FILES:
   ***********************/
   if (!SD.begin(CARDCS,SPI_SPEED)) {
+    DISPLAY_.display.error(F("Pas de carte SD"));
     Debug::print(F("××× ⋅ SD failed, or not present"));
     while (1);  // don't do anything more
   }else{
