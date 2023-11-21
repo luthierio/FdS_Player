@@ -50,7 +50,7 @@ void setup() {
 
 
   // Définir les callbacks
-  SD_BACKUP.setCallbacks(onBeforeSDReadWrite, onAfterSDReadWrite , onBeforeSDReadWrite, onAfterSDReadWrite );
+  SD_BACKUP.setCallbacks(onSDError, onBeforeSDReadWrite, onAfterSDReadWrite , onBeforeSDReadWrite, onAfterSDReadWrite );
   Debug::print(F("✓✓✓ ⋅ FILES ok "));
 
   if (SD_BACKUP.load(STATE_FILENAME, &STATE, sizeof(STATE))) {
@@ -85,7 +85,7 @@ void setup() {
   Debug::print(F("✓✓✓ ⋅ Interface ok "));
   
   // Play a file in the background, REQUIRES interrupts!  
-  AUDIO.startPlayingFile(STARTSOUND);    
+  AUDIO.startPlayingFile(STARTSOUND);      
   setMode(PLAYER);
   
 };

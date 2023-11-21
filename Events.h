@@ -31,12 +31,13 @@ void setMode(uint8_t mode) {
 /**********************
 * MESSAGES:
 ***********************/
-void onMessage(const char *Message){
+void onMessage(const char *Message, bool ERROR = false){
 
   if (strlen(Message) != 0) {
     // Affichage ou traitement du message
     DISPLAY_.display.message(Message);
-    // Réinitialisation du message à la prochaine boucle   
+    // Réinitialisation du message à la prochaine boucle 
+    if(ERROR) delay(ERROR_MSG_DELAY); 
     delay(MSG_DELAY);
     setMode(ASF_MODE);
   }
@@ -344,6 +345,10 @@ void onBeforeSDReadWrite() {
 void onAfterSDReadWrite() {
   onAfterSDWork();
   onMessage((char*)SD_BACKUP.getLastMessage());
+}
+void onSDError() {
+  onAfterSDWork();
+  onMessage((char*)SD_BACKUP.getLastMessage(), true);
 }
 
 

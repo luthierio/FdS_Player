@@ -111,7 +111,8 @@ uint8_t ASF_MODE = PLAYER;
 #define SMALL_LOOP_INTERVAL 100
 #define BIG_LOOP_INTERVAL   2000
 #define BLINK_INTERVAL      500
-#define MSG_DELAY           1000
+#define MSG_DELAY           500
+#define ERROR_MSG_DELAY     3000
 
 #define DEBOUNCE_INTERVAL 200
 #define LONG_PRESS_INTERVAL 500

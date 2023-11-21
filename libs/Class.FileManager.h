@@ -6,21 +6,25 @@
 class FileManager {
 public:
   FileManager(SdFat* sdInstance)
-      : sd(sdInstance), lastMessage(nullptr), onBeforeLoad(nullptr), onAfterLoad(nullptr),
+      : sd(sdInstance), lastMessage(nullptr), errorCallback(nullptr),
+        onBeforeLoad(nullptr), onAfterLoad(nullptr),
         onBeforeSave(nullptr), onAfterSave(nullptr) {}
 
   // Définition du type de fonction de rappel
   typedef void (*CallbackFunction)();
 
-  // Ajout de quatre fonctions de rappel
+  // Ajout de cinq fonctions de rappel
+  CallbackFunction errorCallback;
   CallbackFunction onBeforeLoad;
   CallbackFunction onAfterLoad;
   CallbackFunction onBeforeSave;
   CallbackFunction onAfterSave;
 
   // Méthode pour définir les fonctions de rappel
-  void setCallbacks(CallbackFunction beforeLoad, CallbackFunction afterLoad,
-                    CallbackFunction beforeSave, CallbackFunction afterSave) {
+  void setCallbacks(CallbackFunction error, CallbackFunction beforeLoad, 
+                    CallbackFunction afterLoad, CallbackFunction beforeSave, 
+                    CallbackFunction afterSave) {
+    errorCallback = error;
     onBeforeLoad = beforeLoad;
     onAfterLoad = afterLoad;
     onBeforeSave = beforeSave;
@@ -31,6 +35,7 @@ public:
     sd->open("/");
     if (fileExists(nomFichier) && !createBackup(nomFichier)) {
       setLastMessage(F("Le fichier existe, mais la création du backup a échoué"));
+      if (errorCallback) errorCallback();
       return false;
     }
 
@@ -46,6 +51,7 @@ public:
         fichier.close();
         setLastMessage(F("Ecriture impossible"));
         restoreBackup(nomFichier);
+        if (errorCallback) errorCallback();
       }
     }
     fichier.close();
@@ -65,10 +71,12 @@ public:
           return true;
         } else {
           setLastMessage(F("Erreur de lecture"));
+          if (errorCallback) errorCallback();
         }
       }
     } else {
       setLastMessage(F("Fichier inexistant"));
+      if (errorCallback) errorCallback();
     }
 
     return false;
@@ -107,6 +115,7 @@ private:
       return true;
     } else {
       setLastMessage(F("Erreur lors de la création du backup"));
+      if (errorCallback) errorCallback();
     }
 
     return false;
@@ -145,3 +154,4 @@ private:
 };
 
 #endif
+
