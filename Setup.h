@@ -51,7 +51,7 @@ void setup() {
   FILE_.setFileCallbacks( onBeforeSelectFile, onAfterSelectFile );
 
   // Définir les callbacks
-  SD_BACKUP.setCallbacks(onBeforeSDWrite, onAfterSDWork , onBeforeSDWrite, onAfterSDWork );
+  SD_BACKUP.setCallbacks(onBeforeSDReadWrite, onAfterSDReadWrite , onBeforeSDReadWrite, onAfterSDReadWrite );
   Debug::print(F("✓✓✓ ⋅ FILES ok "));
 
   SLEEP_WATCH.setCallbacks(onSleep, onWakeUp);

@@ -119,7 +119,7 @@ t_state STATE;
 * ACTIONS:
 ***********************/
 
-enum CommandIDs { UNSET, ACCORD, SAVE_ALL, LOAD_ALL, ST_SAVE, ST_LOAD, PL_SAVE, PL_LOAD, PL_EXPOR, MAR_SAVE, MAR_LOAD, A_PROPOS, DEBUG };
+enum CommandIDs { UNSET, SAVE_ALL, LOAD_ALL, ST_SAVE, ST_LOAD, PL_SAVE, PL_LOAD, PL_EXPOR, MAR_SAVE, MAR_LOAD, A_PROPOS, DEBUG, ACCORD};
 
 struct Command {
   CommandIDs id;
@@ -127,8 +127,7 @@ struct Command {
   const __FlashStringHelper* action;
 };
 
-Command MENUS[] = {
-  { ACCORD,   F("Accordage"),  F("Ecouter") },
+Command ACTIONS[] = {
   { SAVE_ALL, F("ASF"),        F("Sauver")  },
   { LOAD_ALL, F("ASF"),        F("Charger") },
   { ST_SAVE,  F("Statut"),     F("Sauver")  },
@@ -139,10 +138,11 @@ Command MENUS[] = {
   { MAR_SAVE, F("Marqueurs"),  F("Sauver")  },
   { MAR_LOAD, F("Marqueurs"),  F("Charger") },
   { A_PROPOS, F("A propos"),   F("Credits") },
-  { DEBUG,    F("Debug"),      F("Commuter")}
+  { DEBUG,    F("Debug"),      F("Commuter")},
+  { ACCORD,   F("Accordage"),  F("Ecouter") },
 };
-uint8_t MENU_ID = 0;
-const size_t MENU_SIZE = sizeof(MENUS) / sizeof(MENUS[0]);
+uint8_t ACTION_ID = 0;
+const size_t NBR_ACTIONS = sizeof(ACTIONS) / sizeof(ACTIONS[0]);
 
 /**********************
 * DISPLAY:

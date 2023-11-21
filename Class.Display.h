@@ -31,6 +31,29 @@
         ecran_->drawBitmap (0,0, LOGO_128x64, 128,64, 1); 
         ecran_->display();
       }
+      void message(const __FlashStringHelper *texte = nullptr) {
+        ecran_->fillRect(5, 5, 118, 54, BLACK); 
+        ecran_->drawRect(5, 5, 118, 54, WHITE); 
+        drawCentreString(texte, 32, 32);
+      }
+      void error(const __FlashStringHelper *texte = nullptr) {
+
+        ecran_->clearDisplay();
+        ecran_->setTextSize(1);
+        ecran_->setTextColor(WHITE);
+        ecran_->setCursor(0, 10);
+        
+        ecran_->drawCircle(128/2, 64/2-4, 18, WHITE);
+        ecran_->drawFastHLine(128/2-8, 36, 16, WHITE);
+        ecran_->drawFastHLine(128/2-8, 37, 16, WHITE);
+        ecran_->drawBitmap (128/2-6-4, 20, smallCross, 8,8, WHITE); 
+        ecran_->drawBitmap (128/2+6-4, 20, smallCross, 8,8, WHITE);   
+        drawCentreString(texte, 64, 56, &FreeSans12pt7b, 2);
+      }
+      void confirm() {
+        ecran_->drawBitmap (0,0, LOGO_128x64, 128,64, 1); 
+        ecran_->display();
+      }
       void cleanZone(uint8_t x, uint8_t y, uint8_t w, uint8_t h){  
         ecran_->fillRect(x ,y , w, h,  BLACK);
       }
@@ -64,23 +87,19 @@
         ecran_->print(texte);
       }
 
-      void drawCentreString(const char *texte, int x, int y, const GFXfont *font = NULL)
+      void drawCentreString(const char *texte, int x, int y, const GFXfont *font = NULL, uint8_t tailleTexte = 1)
       {
           int16_t x1, y1;
           uint16_t w, h;
           ecran_->setFont(font);
+          ecran_->setTextSize(tailleTexte);
           ecran_->getTextBounds(texte, x, y, &x1, &y1, &w, &h); //calc width of new string
           ecran_->setCursor(x - w / 2, y);
           ecran_->print(texte);
       }
-      void drawCentreString(const __FlashStringHelper *texte, int x, int y, const GFXfont *font = NULL)
+      void drawCentreString(const __FlashStringHelper *texte, int x, int y, const GFXfont *font = NULL, uint8_t tailleTexte = 1)
       {
-          int16_t x1, y1;
-          uint16_t w, h;
-          ecran_->setFont(font);
-          ecran_->getTextBounds(texte, x, y, &x1, &y1, &w, &h); //calc width of new string
-          ecran_->setCursor(x - w / 2, y);
-          ecran_->print(texte);
+          drawCentreString(reinterpret_cast<const char*>(texte), x, y, font, tailleTexte);
       }
       
 
@@ -100,7 +119,7 @@
       void printPath(FilePicker *selectedPath) {
         
         //On efface la zone   
-        ecran_->fillRect(0, 0, 100, 12, BLACK); 
+        ecran_->fillRect(0, 0, 100, 16, BLACK); 
         ecran_->fillRect(0, 16, 128, 34, BLACK); 
 
 

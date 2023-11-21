@@ -14,10 +14,10 @@ void setMode(uint8_t mode) {
       break;
 
     case MENU:
-      R_DIR->resetPosition(MENU_ID);
+      R_DIR->resetPosition(ACTION_ID);
       R_DIR->setLowerBound(0);
-      R_DIR->setUpperBound(MENU_SIZE);
-      DISPLAY_.menu.print(MENUS[MENU_ID].title, MENUS[MENU_ID].action); 
+      R_DIR->setUpperBound(NBR_ACTIONS);
+      DISPLAY_.menu.print(ACTIONS[ACTION_ID].title, ACTIONS[ACTION_ID].action); 
       break; 
 
     default:
@@ -57,8 +57,8 @@ void onRotChange(Rotary &rotary) {
     case BEAT: 
     case MENU:  
       if(&rotary == R_DIR) {
-        MENU_ID = currentPosition;
-        DISPLAY_.menu.print(MENUS[MENU_ID].title, MENUS[MENU_ID].action); 
+        ACTION_ID = currentPosition;
+        DISPLAY_.menu.print(ACTIONS[ACTION_ID].title, ACTIONS[ACTION_ID].action); 
       } 
       break;   
     default:
@@ -153,7 +153,7 @@ void onPress(ButtonHandler* buttonHandler, int ID) {
         case 0:
         case 1:
         case 2:
-          doAction(MENUS[MENU_ID].id);
+          doAction(ACTIONS[ACTION_ID].id);
           break;
         case 4:
           setMode(PLAYER);
@@ -294,6 +294,7 @@ void setVolume(uint8_t reqVolume) {
 }
 /**********************
 * FILEPICKER:
+* MANAGER:
 ***********************/
 
 
@@ -312,13 +313,17 @@ void onAfterSDWork() {
   }
   Debug::print("Selected", FILE_.path); 
 }
-void onBeforeSDWrite() {
-  if(AUDIO.playingMusic){
-    MUST_RESUME = true;
-    AUDIO.pausePlaying(true);
-    delay(100);
-  }
+void onBeforeSDReadWrite() {
+  onBeforeSDWork();
+  delay(100);
 }
+void onAfterSDReadWrite() {
+  onAfterSDWork();
+  Debug::print("ReadWrite", SD_BACKUP.getLastMessage()); 
+}
+
+
+
 void onBeforeSelectDir(){
   onBeforeSDWork();
 }
