@@ -8,23 +8,21 @@ void setMode(uint8_t mode) {
   switch (mode) {
     case PLAYER:
       R_DIR->resetPosition(FILE_.dirNum);
-      R_DIR->setLowerBound(MIN_DIR_NUM);
       R_DIR->setUpperBound(MAX_DIR_NUM);
+      R_FILES->resetPosition(FILE_.fileNum);
+      R_FILES->setUpperBound(MAX_FILES_NUM);
       DISPLAY_.files.printPath(&FILE_);
       break;
 
     case MENU:
       R_DIR->resetPosition(ACTION_ID);
-      R_DIR->setLowerBound(0);
       R_DIR->setUpperBound(NBR_ACTIONS);
       DISPLAY_.menu.show(ACTIONS[ACTION_ID].title, ACTIONS[ACTION_ID].action); 
       break; 
     case PLAYLIST:
       R_DIR->resetPosition(0);
-      R_DIR->setLowerBound(0);
       R_DIR->setUpperBound(NBR_PLAYLISTS);
       R_FILES->resetPosition(0);
-      R_FILES->setLowerBound(0);
       R_FILES->setUpperBound(NBR_PLAYLIST_ITEMS);
       DISPLAY_.playlists.show(); 
       break; 
@@ -64,11 +62,15 @@ void onRotChange(Rotary &rotary) {
     case PLAYLIST: 
       if(&rotary == R_DIR) {
         PLAYLISTS_.setPosition(currentPosition);
+        DEBUG_.print("Position",PLAYLISTS_.getPosition());  
         DISPLAY_.playlists.printNav(); 
       }
       if(&rotary == R_FILES) {
-        PLAYLISTS_.setPlaylistPosition(currentPosition);
+        PLAYLISTS_.setPlayPosition(currentPosition);
+        DISPLAY_.playlists.printItems(); 
+        DEBUG_.print("Position",PLAYLISTS_.getPlayPosition());  
       }
+      DEBUG_.print("ROT",currentPosition);  
       
       break;   
 

@@ -1,7 +1,7 @@
 /**********************
 * DEBUG
 ***********************/
-#define ASF_DEBUG_MODE false
+#define ASF_DEBUG_MODE true
 
 bool SERIAL_ON = ASF_DEBUG_MODE;
 

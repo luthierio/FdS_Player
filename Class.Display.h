@@ -65,6 +65,9 @@
 
         char txtNum[2];
         sprintf(txtNum, "%02d", num);  
+        if(num < 10 ){
+          txtNum[0] = ' ';
+        }
         printTxt(txtNum,x,y,font, tailleTexte,color);
       }
       // Afficher un texte
@@ -385,9 +388,9 @@
       void show(){
         ecran_->clearDisplay();
         printNav();
+        printItems();
       }
       void printNav(){   
-
         ecran_->fillRect(0,0, 8, 64, BLACK);
         int plHeight = 64/playlists->size;
         int x = 0;
@@ -399,8 +402,30 @@
           }
         }
         ecran_->display();
+      }
+      void printItems(){   
+
+        ecran_->fillRect(14,0, 128-14, 64, BLACK);
+        ecran_->drawFastHLine(2, 12, SCREEN_WIDTH, WHITE);
+        ecran_->drawFastHLine(12, 50, SCREEN_WIDTH, WHITE);
+
+        printTxtNum(playlists->getPlayPosition()+1, 18, SCREEN_HEIGHT/2+4, &FreeSans9pt7b); 
+
+        if(playlists->getPlayPosition() == 0){
+          fillVHatch(14,  0, 126, 12);
+        }
+        if(playlists->getPlayPosition() == playlists->getPlaylistSize() ){
+          fillVHatch(14, 50, 126, 12);
+        }
+        ecran_->display();
 
       }
+      void fillVHatch(uint16_t x0, uint16_t y0, uint16_t w, uint16_t h){
+          for (byte i = 0; i < w/4 ; i = i + 1) {
+            ecran_->drawFastVLine(x0 + i*4, y0, h, WHITE);
+          }
+      } 
+
   private:
     PlaylistManager *playlists;
   };

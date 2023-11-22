@@ -10,7 +10,6 @@ void smallLoop() {
 
       DISPLAY_.analogs.gauges(VUSB, VBat,VOLUME, 100, -2, 30, 18);
 
-
         if(FILE_.exist() && PITCHER.getStep() != 0){
           space4Pitch = SPACE_FOR_PITCH;
           DISPLAY_.display.cleanZone(128-space4Pitch, 50, space4Pitch , 14 );        
@@ -25,7 +24,10 @@ void smallLoop() {
           DISPLAY_.playing.playMode(125-space4Pitch, 57, STATE.playMode); 
 
         }  
+      break;
 
+    case PLAYLIST:
+          DISPLAY_.playing.progressBar(12, 4, 12, 60);
       break;
 
     default:
