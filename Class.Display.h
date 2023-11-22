@@ -381,6 +381,42 @@
       PlaylistsDisplay(Adafruit_SSD1306 *ecran, Playlists *playlists) : 
         Display(ecran),
         playlists (playlists){}
+      void show(){
+
+        int plHeight = 64/playlists->numPlaylists;
+        int x = 0;
+        for (byte i = 0; i < playlists->numPlaylists; i = i + 1) {  
+              ecran_->fillCircle(x+3, plHeight/2 + i*plHeight, 1, WHITE); 
+        }
+        //displayPlaylists(0);
+        
+        ecran_->fillCircle(12, 2 ,2 , WHITE);
+        ecran_->fillCircle(12,SCREEN_HEIGHT-3, 2 , WHITE);
+        /*
+        if(activeState.playlistMode == RANDOM){
+          ecran_->fillTriangle( 28-6,14 , 28,14-4 , 28+6,14 , WHITE);      // Triangle vers le haut
+        }
+        if(activeState.playlistMode == AUTO || activeState.playlistMode == RANDOM){
+          ecran_->fillTriangle( 28-6,48 , 28,48+4 , 28+6,48 , WHITE);      // Triangle vers le bas
+        }  
+        if(activeState.playlistMode == REPEATONE){
+          ecran_->fillTriangle( 28-6,48-2 , 28,48-6 , 28+6,48-2 , WHITE);      // Triangle vers le bas
+        } 
+        
+        if(activeState.playlistReferenceID > 0){
+          displayPlaylistRef(activeState.playlistReferenceID-1, 12, 2, false);
+        }
+          
+        displayPlaylistRef(activeState.playlistReferenceID, 12, 15, true);
+        
+        if(activeState.playlistReferenceID < nbrFilesInList-1){
+          displayPlaylistRef(activeState.playlistReferenceID+1, 12, 50, false);
+        }
+        displayProgressBar(12, 4, 12, 60, false); //Vertical
+        */
+        ecran_->display();
+
+      }
   private:
     Playlists *playlists;
   };
@@ -391,12 +427,14 @@
 
   class MenuDisplay : public Display {
   public:
-      MenuDisplay(Adafruit_SSD1306 *ecran) : Display(ecran){}
+      MenuDisplay(Adafruit_SSD1306 *ecran) : Display(ecran){
 
-      void print(const __FlashStringHelper* title, const __FlashStringHelper* action){  
-        print(reinterpret_cast<const char*>(title), reinterpret_cast<const char*>(action));
       }
-      void print(const char* title, const char* action){  
+
+      void show(const __FlashStringHelper* title, const __FlashStringHelper* action){  
+        show(reinterpret_cast<const char*>(title), reinterpret_cast<const char*>(action));
+      }
+      void show(const char* title, const char* action){  
 
         ecran_->clearDisplay();
         ecran_->drawFastHLine(0, 24, 128, WHITE);

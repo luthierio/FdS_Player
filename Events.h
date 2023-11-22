@@ -17,7 +17,10 @@ void setMode(uint8_t mode) {
       R_DIR->resetPosition(ACTION_ID);
       R_DIR->setLowerBound(0);
       R_DIR->setUpperBound(NBR_ACTIONS);
-      DISPLAY_.menu.print(ACTIONS[ACTION_ID].title, ACTIONS[ACTION_ID].action); 
+      DISPLAY_.menu.show(ACTIONS[ACTION_ID].title, ACTIONS[ACTION_ID].action); 
+      break; 
+    case PLAYLIST:
+      DISPLAY_.playlists.show(); 
       break; 
 
     default:
@@ -58,7 +61,7 @@ void onRotChange(Rotary &rotary) {
       DEBUG_.print("ROT",currentPosition);  
       if(&rotary == R_DIR) {
         ACTION_ID = currentPosition;
-        DISPLAY_.menu.print(ACTIONS[ACTION_ID].title, ACTIONS[ACTION_ID].action); 
+        DISPLAY_.menu.show(ACTIONS[ACTION_ID].title, ACTIONS[ACTION_ID].action); 
       } 
       break;   
     default:
