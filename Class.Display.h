@@ -482,7 +482,7 @@
         }else if(prevItem != nullptr){          
 
           basename(prevItem->fileName);
-          printTxt(prevItem->fileName, 12+30,2, NULL, 0);
+          printTxt(prevItem->fileName+3, 12+30,2, NULL, 0);
 
         }
 

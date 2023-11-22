@@ -7,22 +7,22 @@ void setMode(uint8_t mode) {
 
   switch (mode) {
     case PLAYER:
-      R_DIR->resetPosition(FILE_.dirNum);
+      R_DIR->resetPosition(FILE_.dirNum, false);
       R_DIR->setUpperBound(MAX_DIR_NUM);
-      R_FILES->resetPosition(FILE_.fileNum);
+      R_FILES->resetPosition(FILE_.fileNum, false);
       R_FILES->setUpperBound(MAX_FILES_NUM);
       DISPLAY_.files.printPath(&FILE_);
       break;
 
     case MENU:
-      R_DIR->resetPosition(ACTION_ID);
+      R_DIR->resetPosition(ACTION_ID, false);
       R_DIR->setUpperBound(NBR_ACTIONS);
       DISPLAY_.menu.show(ACTIONS[ACTION_ID].title, ACTIONS[ACTION_ID].action); 
       break; 
     case PLAYLIST:
-      R_DIR->resetPosition(0);
+      R_DIR->resetPosition(PLAYLISTS_.getPosition(), false);
       R_DIR->setUpperBound(NBR_PLAYLISTS);
-      R_FILES->resetPosition(0);
+      R_FILES->resetPosition(PLAYLISTS_.getPlayPosition(), false);
       R_FILES->setUpperBound(NBR_PLAYLIST_ITEMS);
       DISPLAY_.playlists.show(); 
       break; 
