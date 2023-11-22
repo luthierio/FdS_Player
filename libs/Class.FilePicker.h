@@ -49,14 +49,16 @@
         onAfterSelectFile = afterSelect;
       }
 
-      void begin(uint8_t dirNum, uint8_t fileNum){        
+      void select(uint8_t dirNum, uint8_t fileNum){        
         selectDir(dirNum);
         selectFile(fileNum);
       }
+      
       void update(){
         selectDir(this->dirNum);
         selectFile(this->fileNum);
       }
+        
       void selectDir(uint8_t num){   
 
           if (onBeforeSelectDir) {

@@ -56,7 +56,7 @@ void setup() {
   SD_BACKUP.load(STATE_FILENAME, &STATE, sizeof(STATE), true);
   SD_BACKUP.load(MARKERS_FILENAME, &DATAS, sizeof(DATAS), true);
 
-  FILE_.begin(STATE.dirNum, STATE.fileNum); // Initialisation selon carte
+  FILE_.select(STATE.dirNum, STATE.fileNum); // Initialisation selon carte
   FILE_.setDirCallbacks( onBeforeSelectDir, onAfterSelectDir );
   FILE_.setFileCallbacks( onBeforeSelectFile, onAfterSelectFile );
 

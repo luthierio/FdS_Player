@@ -466,9 +466,9 @@
 
         printTxtNum(position, 18, SCREEN_HEIGHT/2+4, &FreeSans9pt7b); 
 
-        PlaylistItem *item =  playlists->getPlaylist()->getItem();
-        PlaylistItem *prevItem =  playlists->getPlaylist()->getItem(position-1);
-        PlaylistItem *nextItem =  playlists->getPlaylist()->getItem(position+1);
+        PlaylistItem *item =  playlists->getItem();
+        PlaylistItem *prevItem =  playlists->getItem(position-1);
+        PlaylistItem *nextItem =  playlists->getItem(position+1);
 
         basename(item->fileName);
 

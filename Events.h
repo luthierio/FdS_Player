@@ -156,6 +156,16 @@ void onPress(ButtonHandler* buttonHandler, int ID) {
     ***********************/
     case PLAYLIST:
       switch (ID) {
+        case 0:
+          //DEBUG_.print("dirNum",PLAYLISTS_.getItem()->dirNum);
+          //DEBUG_.print("fileNum",PLAYLISTS_.getItem()->fileNum);
+          FILE_.select(PLAYLISTS_.getItem()->dirNum, PLAYLISTS_.getItem()->fileNum);
+          AUDIO.startPlayingFile(FILE_.path);
+          break;
+        case 1:
+          break;
+        case 2:
+          break;
         case 3:
           setMode(PLAYER);
           break;
