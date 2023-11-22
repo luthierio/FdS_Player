@@ -49,9 +49,11 @@
         onAfterSelectFile = afterSelect;
       }
 
-      void select(uint8_t dirNum, uint8_t fileNum){        
-        selectDir(dirNum);
-        selectFile(fileNum);
+      void select(uint8_t dirNum, uint8_t fileNum){      
+        if(dirNum < 100 && fileNum < 100){
+          selectDir(dirNum);
+          selectFile(fileNum);
+        }  
       }
       
       void update(){

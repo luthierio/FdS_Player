@@ -459,8 +459,8 @@
       void printItems(){  
        
 
-        ecran_->drawFastHLine(12, 15, SCREEN_WIDTH, WHITE);
-        ecran_->drawFastHLine(12, 47, SCREEN_WIDTH, WHITE);
+        ecran_->drawFastHLine(12, 14, SCREEN_WIDTH, WHITE);
+        ecran_->drawFastHLine(12, 48, SCREEN_WIDTH, WHITE);
 
         uint8_t position = playlists->getPlayPosition();
 
@@ -493,7 +493,7 @@
         }else if(nextItem != nullptr){     
 
           basename(nextItem->fileName);
-          printTxt(nextItem->fileName+3, 12+30,50, NULL, 0);
+          printTxt(nextItem->fileName+3, 12+30,52, NULL, 0);
 
         }
 

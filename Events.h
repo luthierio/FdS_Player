@@ -64,6 +64,7 @@ void onRotChange(Rotary &rotary) {
         PLAYLISTS_.setPosition(currentPosition);
         DEBUG_.print("Position",PLAYLISTS_.getPosition());  
         DISPLAY_.playlists.printNav(); 
+        DISPLAY_.playlists.printPlayList(); 
       }
       if(&rotary == R_FILES) {
         PLAYLISTS_.setPlayPosition(currentPosition);
@@ -159,8 +160,9 @@ void onPress(ButtonHandler* buttonHandler, int ID) {
         case 0:
           //DEBUG_.print("dirNum",PLAYLISTS_.getItem()->dirNum);
           //DEBUG_.print("fileNum",PLAYLISTS_.getItem()->fileNum);
-          FILE_.select(PLAYLISTS_.getItem()->dirNum, PLAYLISTS_.getItem()->fileNum);
-          AUDIO.startPlayingFile(FILE_.path);
+          if(PLAYLISTS_.selectFile(&FILE_)){
+            AUDIO.startPlayingFile(FILE_.path);
+          }
           break;
         case 1:
           break;
@@ -176,7 +178,7 @@ void onPress(ButtonHandler* buttonHandler, int ID) {
           DEBUG_.print("playlistMode", STATE.playlistMode);
           break;
         case 5:
-          PLAYLISTS_.addCurrentFile();
+          PLAYLISTS_.addCurrentFile(&FILE_);
           DISPLAY_.playlists.printPlayList(); 
           break;
         default:
