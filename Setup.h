@@ -54,7 +54,8 @@ void setup() {
   DEBUG_.print(F("✓✓✓ ⋅ FILES ok "));
 
   SD_BACKUP.load(STATE_FILENAME, &STATE, sizeof(STATE), true);
-  SD_BACKUP.load(MARKERS_FILENAME, &DATAS, sizeof(DATAS), true);
+  SD_BACKUP.load(MARKERS_FILENAME, &DATAS, sizeof(DATAS), true);  
+  SD_BACKUP.load(PLAYLISTS_FILENAME, &PLAYLISTS_, sizeof(PLAYLISTS_));
 
   FILE_.select(STATE.dirNum, STATE.fileNum); // Initialisation selon carte
   FILE_.setDirCallbacks( onBeforeSelectDir, onAfterSelectDir );

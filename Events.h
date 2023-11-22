@@ -214,7 +214,7 @@ void onLongPress(ButtonHandler* buttonHandler, int ID) {
 
   switch (ASF_MODE) {
     case PLAYER:
-      // Short press
+      // Long press
       switch (ID) {
         case 0:
           //SD_BACKUP.save(MARKERS_FILENAME, &DATAS, sizeof(DATAS));
@@ -241,6 +241,17 @@ void onLongPress(ButtonHandler* buttonHandler, int ID) {
         default:
           break;
       }
+    case PLAYLIST:
+      // Long press
+      switch (ID) {
+        case 5:
+        case 0:
+          SD_BACKUP.save(PLAYLISTS_FILENAME, &PLAYLISTS_, sizeof(PLAYLISTS_));
+          break;
+        default:
+          break;
+      }
+      break;
     default:
       break;
   }
