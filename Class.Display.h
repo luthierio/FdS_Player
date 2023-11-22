@@ -108,7 +108,7 @@
       }
       void fillVHatch(uint16_t x0, uint16_t y0, uint16_t w, uint16_t h){
           for (byte i = 0; i < w/4 ; i = i + 1) {
-            ecran_->drawFastVLine(2+x0 + i*4, y0, h, WHITE);
+            ecran_->drawFastVLine(x0 + i*4, y0, h, WHITE);
           }
       }
 
@@ -459,8 +459,8 @@
       void printItems(){  
        
 
-        ecran_->drawFastHLine(12, 14, SCREEN_WIDTH, WHITE);
-        ecran_->drawFastHLine(12, 48, SCREEN_WIDTH, WHITE);
+        ecran_->drawFastHLine(18, 14, SCREEN_WIDTH, WHITE);
+        ecran_->drawFastHLine(18, 48, SCREEN_WIDTH, WHITE);
 
         uint8_t position = playlists->getPlayPosition();
 
@@ -477,7 +477,7 @@
 
         if(playlists->getPlayPosition() == 0){
 
-          fillVHatch(16,  0, 112, 14);
+          fillVHatch(18,  0, 112, 14);
           
         }else if(prevItem != nullptr){          
 
@@ -488,12 +488,12 @@
 
         if(playlists->getPlayPosition() == playlists->getPlaylistSize() ){
 
-          fillVHatch(16, 48, 112, 14);
+          fillVHatch(18, 48, 112, 14);
 
         }else if(nextItem != nullptr){     
 
           basename(nextItem->fileName);
-          printTxt(nextItem->fileName+3, 12+30,52, NULL, 0);
+          printTxt(nextItem->fileName+3, 12+30,54, NULL, 0);
 
         }
 
