@@ -107,7 +107,6 @@ struct t_state{
   uint8_t BeatsUp = 0;
   uint8_t playMode = ONEPLAY;
   uint8_t pitchMode = OFF;
-  uint8_t pitchStyle = STEP;
   uint8_t playlistID = 0;
   uint8_t playlistReferenceID = 0;
   uint8_t playingPosition[2] = {0,0}; //Placement du curseur dans les playlist pour autoplay
@@ -119,7 +118,6 @@ t_state STATE;
 * ACTIONS:
 ***********************/
 
-enum CommandIDs { UNSET, SAVE_ALL, LOAD_ALL, ST_SAVE, ST_LOAD, PL_SAVE, PL_LOAD, PL_EXPOR, MAR_SAVE, MAR_LOAD, A_PROPOS, DEBUG, ACCORD};
 
 struct Command {
   CommandIDs id;
@@ -128,16 +126,16 @@ struct Command {
 };
 
 Command ACTIONS[] = {
-  { SAVE_ALL, F("ASF"),        F("Sauver")  },
-  { LOAD_ALL, F("ASF"),        F("Charger") },
-  { ST_SAVE,  F("Statut"),     F("Sauver")  },
-  { ST_LOAD,  F("Statut"),     F("Charger") },
-  { PL_SAVE,  F("Playlists"),  F("Sauver")  },
-  { PL_LOAD,  F("Playlists"),  F("Charger") },
-  { PL_EXPOR, F("Playlists"),  F("Export M3U")},
-  { MAR_SAVE, F("Marqueurs"),  F("Sauver")  },
-  { MAR_LOAD, F("Marqueurs"),  F("Charger") },
   { A_PROPOS, F("A propos"),   F("Credits") },
+  { SAVE_ALL, F("ASF"),        F("Sauver")  },
+  { ST_SAVE,  F("Statut"),     F("Sauver")  },
+  { MAR_SAVE, F("Marqueurs"),  F("Sauver")  },
+  //{ PL_SAVE,  F("Playlists"),  F("Sauver")  },
+  { LOAD_ALL, F("ASF"),        F("Charger") },
+  { ST_LOAD,  F("Statut"),     F("Charger") },
+  { MAR_LOAD, F("Marqueurs"),  F("Charger") },
+  //{ PL_LOAD,  F("Playlists"),  F("Charger") },
+  //{ PL_EXPOR, F("Playlists"),  F("Export M3U")},
   { DEBUG,    F("Debug"),      F("Commuter")},
   { ACCORD,   F("Accordage"),  F("Ecouter") },
 };

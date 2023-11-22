@@ -76,7 +76,7 @@ void setup() {
   Debug::print(F("✓✓✓ ⋅ Interface ok "));
   
   // Play a file in the background, REQUIRES interrupts!  
-  AUDIO.startPlayingFile(STARTSOUND);      
+  AUDIO.playFullFile(STARTSOUND);      
   setMode(PLAYER);
   
 };

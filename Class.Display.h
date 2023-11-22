@@ -390,19 +390,29 @@
       MenuDisplay(Adafruit_SSD1306 *ecran) : Display(ecran){}
 
       void print(const __FlashStringHelper* title, const __FlashStringHelper* action){  
+        print(reinterpret_cast<const char*>(title), reinterpret_cast<const char*>(action));
+      }
+      void print(const char* title, const char* action){  
 
         ecran_->clearDisplay();
         ecran_->drawFastHLine(0, 24, 128, WHITE);
-        drawCentreString(title, 64, 18, &FreeSans9pt7b);
+        drawCentreString(title, 64, 22, &FreeSans9pt7b);
 
-        if(reinterpret_cast<const char*>(action) == "Sauver"){    
-          ecran_->drawBitmap (128/2-40-8, 34, folderIcon16, 16,16, 1); 
-          ecran_->drawBitmap (128/2-8,    34, arrowRight16, 16,16, 1);
-          ecran_->drawBitmap (128/2+40-8, 34, sdIcon16, 16,16, 1); 
-        }else if(reinterpret_cast<const char*>(action) == "Charger"){
-          ecran_->drawBitmap (128/2-40-8, 34, sdIcon16, 16,16, 1); 
-          ecran_->drawBitmap (128/2-8,    34, arrowRight16, 16,16, 1);
-          ecran_->drawBitmap (128/2+40-8, 34, folderIcon16, 16,16, 1); 
+        if (action == "Crédits") {
+            ecran_->drawBitmap(128/2-8, 34+2, heart, 16, 12, 1);
+            drawCentreString(CREDITS, 128/2, 48);
+        } else if (action == "Sauver") {
+            ecran_->drawBitmap(128/2-40-8, 34, folderIcon16, 16, 16, 1);
+            ecran_->drawBitmap(128/2-8, 34, arrowRight16, 16, 16, 1);
+            ecran_->drawBitmap(128/2+40-8, 34, sdIcon16, 16, 16, 1);
+        } else if (action == "Charger") {
+            ecran_->drawBitmap(128/2-40-8, 34, sdIcon16, 16, 16, 1);
+            ecran_->drawBitmap(128/2-8, 34, arrowRight16, 16, 16, 1);
+            ecran_->drawBitmap(128/2+40-8, 34, folderIcon16, 16, 16, 1);
+        } else {
+            ecran_->drawBitmap(128/2-8, 34+2, heart, 16, 12, 1);
+        }
+
         /*} else if(id == DEBUG){
           
           ecran_->setCursor(128/2-10,34+12);  // positionne oui/non   
@@ -414,9 +424,6 @@
             ecran_->print("Non");   
           }
         */
-        }else{
-          ecran_->drawBitmap (128/2-8,    34+2, heart, 16,12, 1);
-        }          
         //ecran_->setFont();
         //drawCentreString(message, 64, 56);   
       }
