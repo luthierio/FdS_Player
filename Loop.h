@@ -9,25 +9,22 @@ void smallLoop() {
     case PLAYER:
 
       DISPLAY_.analogs.gauges(VUSB, VBat,VOLUME, 100, -2, 30, 18);
+      DISPLAY_.display.cleanZone(0, 52, 128, 12 );  
 
-        if(FILE_.exist() && PITCHER.getStep() != 0){
-          space4Pitch = SPACE_FOR_PITCH;
-          DISPLAY_.display.cleanZone(128-space4Pitch, 50, space4Pitch , 14 );        
-          DISPLAY_.pitcher.print(128-space4Pitch + 2  , 52 , 10 , 10 );     
-        }
-        
-        DISPLAY_.display.cleanZone(0, 52, 128-space4Pitch, 12 );  
+      if(FILE_.exist() && PITCHER.getStep() != 0){
+        space4Pitch = 22;      
+        DISPLAY_.pitcher.print(128-space4Pitch + 2  , 52 , 10 , 10 );     
+      }
 
-        if(FILE_.exist()){
+      if(FILE_.exist()){
+        DISPLAY_.playing.progressBar(3, 57, 125-space4Pitch, 57, &DATA->markers);
+        DISPLAY_.playing.playMode(125-space4Pitch, 57); 
+      }  
 
-          DISPLAY_.playing.progressBar(3, 57, 125-space4Pitch, 57, &DATA->markers);
-          DISPLAY_.playing.playMode(125-space4Pitch, 57, STATE.playMode); 
-
-        }  
       break;
 
     case PLAYLIST:
-          DISPLAY_.playing.progressBar(12, 4, 12, 60);
+      DISPLAY_.playing.progressBar(12, 4, 12, 60);
       break;
 
     default:

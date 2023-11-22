@@ -92,29 +92,6 @@ t_fileData emptyData;
 t_fileData *DATA = &DATAS[0];
 
 
-/**********************
-* STATE:
-***********************/
-
-bool SHOULD_PLAY_NEXT = false;  
-
-struct t_state{
-  uint8_t dirNum = 0;
-  uint8_t fileNum = 0;
-  uint8_t pitchStep = 5;
-  uint8_t pitchRatio = 100;// En pourcentage, le ratio de pitch/tempo souhaité
-  boolean beatOn = false;
-  uint8_t BPM = 100;
-  uint8_t Beats = 2;
-  uint8_t BeatsUp = 0;
-  uint8_t playMode = ONEPLAY;
-  uint8_t pitchMode = OFF;
-  uint8_t playlistID = 0;
-  uint8_t playlistReferenceID = 0;
-  uint8_t playingPosition[2] = {0,0}; //Placement du curseur dans les playlist pour autoplay
-  uint8_t playlistMode = ONEPLAY;
-};
-t_state STATE;
 
 /**********************
 * ACTIONS:
@@ -148,6 +125,6 @@ const size_t NBR_ACTIONS = sizeof(ACTIONS) / sizeof(ACTIONS[0]) - 1;
 * DISPLAY:
 ***********************/
 byte SILENT = true;
-DisplayController DISPLAY_(&SCREEN_,&AUDIO, &FILE_, &PITCHER, &PLAYLISTS_);
+DisplayController DISPLAY_(&SCREEN_,&AUDIO, &FILE_, &PITCHER, &PLAYLISTS_, &STATE);
 
 

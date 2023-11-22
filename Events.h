@@ -67,7 +67,7 @@ void onRotChange(Rotary &rotary) {
       }
       if(&rotary == R_FILES) {
         PLAYLISTS_.setPlayPosition(currentPosition);
-        DISPLAY_.playlists.printItems(); 
+        DISPLAY_.playlists.printPlayList(); 
         DEBUG_.print("Position",PLAYLISTS_.getPlayPosition());  
       }
       DEBUG_.print("ROT",currentPosition);  
@@ -120,14 +120,11 @@ void onPress(ButtonHandler* buttonHandler, int ID) {
 
         case 2:         
 
-          DEBUG_.print("Bitrate", AUDIO.getBitRate()); 
-          DEBUG_.print("Position", AUDIO.getFilePosition());
           if(DATA->markers.isEmpty()){
             JumpPosition = (AUDIO.getFilePosition() >= SECONDS_PER_JUMP * (BITRATE / 8)) ? (AUDIO.getFilePosition() - SECONDS_PER_JUMP * (BITRATE / 8)) : 0;   
           }else{
             //on cherche BITRATE / 4 = 2 seconde pour sauter au rpécédent si on est très proche du marker
             JumpPosition =DATA->markers.getPreviousFrom(AUDIO.getFilePosition()- BITRATE / 4); 
-            DEBUG_.print("Jump", DATA->markers.getPreviousFrom(AUDIO.getFilePosition()-BITRATE / 4 ));
           } 
           AUDIO.jumpTo(JumpPosition);
           DEBUG_.print("Jump Position", JumpPosition);
@@ -162,10 +159,22 @@ void onPress(ButtonHandler* buttonHandler, int ID) {
         case 3:
           setMode(PLAYER);
           break;
+        case 4:
+          if(STATE.playlistMode < REPEATONE){STATE.playlistMode++;}        
+          else{STATE.playlistMode = ONEPLAY;}
+          DISPLAY_.playlists.printPlayList(); 
+          DEBUG_.print("playlistMode", STATE.playlistMode);
+          break;
+        case 5:
+          PLAYLISTS_.addCurrentFile();
+          DISPLAY_.playlists.printPlayList(); 
+          break;
         default:
           break;
       }
+      break;
     case BEAT:
+      break;
     /**********************
     * ACTION:
     ***********************/
@@ -182,6 +191,7 @@ void onPress(ButtonHandler* buttonHandler, int ID) {
         default:
           break;
       }
+      break;
     default:
       break;
   }

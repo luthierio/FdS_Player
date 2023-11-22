@@ -23,6 +23,7 @@
 * CONFIG
 ***********************/
 #include "Config.h"
+#include "State.h"
 
 /**********************
 * Local Classes & Functions

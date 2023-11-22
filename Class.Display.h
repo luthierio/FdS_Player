@@ -106,6 +106,11 @@
       {
           drawCentreString(reinterpret_cast<const char*>(texte), x, y, font, tailleTexte);
       }
+      void fillVHatch(uint16_t x0, uint16_t y0, uint16_t w, uint16_t h){
+          for (byte i = 0; i < w/4 ; i = i + 1) {
+            ecran_->drawFastVLine(2+x0 + i*4, y0, h, WHITE);
+          }
+      } 
       
 
   protected:
@@ -233,27 +238,27 @@
 
   class PlayingDisplay : public Display {
   public:
-      PlayingDisplay(Adafruit_SSD1306 *ecran, FdS_Adafruit_VS1053_FilePlayer *player, FilePicker *filePicker) : 
+      PlayingDisplay(Adafruit_SSD1306 *ecran, FdS_Adafruit_VS1053_FilePlayer *player, FilePicker *filePicker, t_state *state) : 
         Display(ecran),
         Player (player),
-        filePicker (filePicker){}
+        filePicker (filePicker),
+        state (state){}
 
-      void playMode(uint8_t x, uint8_t y, uint8_t playMode){ 
-        
-            if(playMode == AUTO){
+      void playMode(uint8_t x, uint8_t y){   
+        if(state->playMode == AUTO){
 
-              ecran_->fillTriangle(x-8,y-4, x-8,y+4, x-4,y, WHITE);
+          ecran_->fillTriangle(x-8,y-4, x-8,y+4, x-4,y, WHITE);
 
-            }else if(playMode == RANDOM){              
+        }else if(state->playMode == RANDOM){              
 
-              ecran_->fillTriangle(x-12,y-4, x-12,y+4, x-8,y, WHITE);
-              ecran_->fillTriangle(x-4,y-4, x-4,y+4, x-8,y, WHITE);
+          ecran_->fillTriangle(x-12,y-4, x-12,y+4, x-8,y, WHITE);
+          ecran_->fillTriangle(x-4,y-4, x-4,y+4, x-8,y, WHITE);
 
-            }else if(playMode == REPEATONE){
+        }else if(state->playMode == REPEATONE){
 
-              ecran_->fillTriangle(x-4,y-4, x-4,y+4, x-8,y, WHITE);
+          ecran_->fillTriangle(x-4,y-4, x-4,y+4, x-8,y, WHITE);
 
-            }
+        }
       }
       void progressBar(uint8_t x1, uint8_t y1, uint8_t x2, uint8_t y2, Array<uint32_t,MAX_MARKERS> *markers = nullptr){  
         
@@ -309,6 +314,7 @@
   private:
     FdS_Adafruit_VS1053_FilePlayer *Player;
     FilePicker *filePicker;
+    t_state *state;
   };
   /**********************
   * PITCH:
@@ -320,6 +326,9 @@
         Display(ecran),
         pitcher (pitcher){}
 
+      void show(){  
+        print(128-22  , 52 , 10 , 10 );
+      }
       void print(uint8_t x, uint8_t y, uint8_t w, uint8_t h){     
         ecran_->fillRect(x,y, w, h, BLACK);
         printSymbol(x + 2  , y , w , h);            
@@ -381,14 +390,15 @@
 
   class PlaylistsDisplay : public Display {
   public:
-      PlaylistsDisplay(Adafruit_SSD1306 *ecran, PlaylistManager *playlists) : 
+      PlaylistsDisplay(Adafruit_SSD1306 *ecran, PlaylistManager *playlists, t_state *state) : 
         Display(ecran),
-        playlists (playlists){}
+        playlists (playlists),
+        state (state){}
 
       void show(){
         ecran_->clearDisplay();
         printNav();
-        printItems();
+        printPlayList();
       }
       void printNav(){   
         ecran_->fillRect(0,0, 8, 64, BLACK);
@@ -403,31 +413,57 @@
         }
         ecran_->display();
       }
-      void printItems(){   
+      void printPlayList(){
+        ecran_->fillRect(14,0, 128-14, 64, BLACK); 
+        printItems();
+        printMode(); 
+        ecran_->display();
+      }
+      void printMode(){
 
-        ecran_->fillRect(14,0, 128-14, 64, BLACK);
-        ecran_->drawFastHLine(2, 12, SCREEN_WIDTH, WHITE);
-        ecran_->drawFastHLine(12, 50, SCREEN_WIDTH, WHITE);
+        if(state->playlistMode == RANDOM){
+          ecran_->fillTriangle( 28-6,14 , 28,14-4 , 28+6,14 , WHITE);      // Triangle vers le haut
+        }
+        if(state->playlistMode == AUTO || state->playlistMode == RANDOM){
+          ecran_->fillTriangle( 28-6,48 , 28,48+4 , 28+6,48 , WHITE);      // Triangle vers le bas
+        }  
+        if(state->playlistMode == REPEATONE){
+          ecran_->fillTriangle( 28-6,48-2 , 28,48-6 , 28+6,48-2 , WHITE);      // Triangle vers le bas
+        } 
+
+      }
+      void printItems(){  
+       
+
+        ecran_->drawFastHLine(12, 15, SCREEN_WIDTH, WHITE);
+        ecran_->drawFastHLine(12, 47, SCREEN_WIDTH, WHITE);
+
 
         printTxtNum(playlists->getPlayPosition(), 18, SCREEN_HEIGHT/2+4, &FreeSans9pt7b); 
 
+        PlaylistItem *item =  playlists->getPlaylist()->getItem();
+        ecran_->setFont();
+        ecran_->setTextSize(0);
+        ecran_->setCursor(12+30, 16 );  
+        ecran_->print(item->dirName);  
+
+        ecran_->setFont(&FreeSerif9pt7b);
+        ecran_->setCursor(12+30, 45);
+        
+        ecran_->print(item->fileName);  
+
         if(playlists->getPlayPosition() == 0){
-          fillVHatch(14,  0, 126, 12);
+          fillVHatch(16,  0, 112, 14);
         }
         if(playlists->getPlayPosition() == playlists->getPlaylistSize() ){
-          fillVHatch(14, 50, 126, 12);
+          fillVHatch(16, 48, 112, 14);
         }
-        ecran_->display();
 
       }
-      void fillVHatch(uint16_t x0, uint16_t y0, uint16_t w, uint16_t h){
-          for (byte i = 0; i < w/4 ; i = i + 1) {
-            ecran_->drawFastVLine(x0 + i*4, y0, h, WHITE);
-          }
-      } 
 
   private:
     PlaylistManager *playlists;
+    t_state *state;
   };
 
   /**********************
@@ -501,12 +537,12 @@
       PitcherDisplay pitcher;
       PlaylistsDisplay playlists;
       MenuDisplay menu;
-      DisplayController(Adafruit_SSD1306 *ecran, FdS_Adafruit_VS1053_FilePlayer *player, FilePicker *filePicker, Pitcher *pitcher, PlaylistManager *playlists) :
+      DisplayController(Adafruit_SSD1306 *ecran, FdS_Adafruit_VS1053_FilePlayer *player, FilePicker *filePicker, Pitcher *pitcher, PlaylistManager *playlists, t_state *state) :
           display(ecran),
           files(ecran,filePicker),
-          playing(ecran,player,filePicker),
+          playing(ecran,player,filePicker,state),
           pitcher(ecran,pitcher),
-          playlists(ecran,playlists),
+          playlists(ecran,playlists,state),
           menu(ecran) ,
           analogs(ecran) {
           // Initialisez d'autres instances de classes ici si nécessaire

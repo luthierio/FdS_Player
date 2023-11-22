@@ -88,8 +88,6 @@ const byte ROT_P_PIN[2] = {1 , 0 };
 ***********************/
 enum asfMode    { PLAYER,   BEAT,   PLAYLIST,   MENU, LOGO  };// Entier déguisé en string :-)
 enum CommandIDs { A_PROPOS, SAVE_ALL, MAR_SAVE, PL_SAVE, ST_SAVE, LOAD_ALL, MAR_LOAD, ST_LOAD, PL_LOAD, PL_EXPOR, DEBUG_ON, ACCORD};
-enum playMode   { ONEPLAY,  AUTO,   RANDOM,   REPEATONE };// Entier déguisé en string :-)
-enum pitchMode  { OFF,      TEMPO,  PITCH };// Entier déguisé en string :-)
 //enum pitchStyle { STEP,     RATIO };// Entier déguisé en string :-)
 uint8_t ASF_MODE = PLAYER;
 
@@ -125,5 +123,4 @@ uint8_t ASF_MODE = PLAYER;
 /**********************
 * DISPLAY
 ***********************/
-#define SPACE_FOR_PITCH 22
 
