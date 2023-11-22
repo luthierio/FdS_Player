@@ -15,6 +15,7 @@ Pitcher PITCHER = Pitcher(&AUDIO);
 
 FilePicker FILE_(&SD);
 FileManager SD_BACKUP(&SD);
+Playlists PLAYLISTS(NBR_PLAYLISTS, NBR_PLAYLIST_FILES);
 
 Metronome METRONOME_(&AUDIO, BEATSOUND, BEATSOUND2); // BPM = 120, 4 beats per bar, with specific beat files
 
@@ -136,16 +137,16 @@ Command ACTIONS[] = {
   { MAR_LOAD, F("Marqueurs"),  F("Charger") },
   //{ PL_LOAD,  F("Playlists"),  F("Charger") },
   //{ PL_EXPOR, F("Playlists"),  F("Export M3U")},
-  { DEBUG_ON,    F("Debug"),      F("Commuter")},
+  { DEBUG_ON, F("Debug"),      F("Commuter")},
   { ACCORD,   F("Accordage"),  F("Ecouter") },
 };
 uint8_t ACTION_ID = 0;
-const size_t NBR_ACTIONS = sizeof(ACTIONS) / sizeof(ACTIONS[0]);
+const size_t NBR_ACTIONS = sizeof(ACTIONS) / sizeof(ACTIONS[0]) - 1;
 
 /**********************
 * DISPLAY:
 ***********************/
 byte SILENT = true;
-DisplayController DISPLAY_(&SCREEN_,&AUDIO, &FILE_, &PITCHER);
+DisplayController DISPLAY_(&SCREEN_,&AUDIO, &FILE_, &PITCHER, &PLAYLISTS);
 
 

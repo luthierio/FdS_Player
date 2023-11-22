@@ -74,6 +74,8 @@ bool SERIAL_ON = ASF_DEBUG_MODE;
 #define PIN_SIG           A0                           // Broche de signal
 #define SEUIL_ANALOGIQUE  512          //Valeur sous laquelle on considère que c'est LOW en lecture analogique (requis avec des résistances de 100k)
 
+#define MIN_VBAT              3.2    //3.5; // Voltage avec lequel la batterie est considérée vide https://learn.adafruit.com/adafruit-feather-m0-adalogger/power-management  
+#define MAX_VBAT              4      // Voltage avec lequel la batterie est considérée pleine
 /**********************
 * Interface
 ***********************/
@@ -96,12 +98,15 @@ uint8_t ASF_MODE = PLAYER;
 ***********************/
 #define BITRATE               64000  //Ce serait mieux de le prendre du fichier mais pour le moment c'est le plus simple
 #define SECONDS_PER_JUMP      2
+
 #define MAX_FILES_DATA        50    //Nombre de tableaux de marqueurs pour le boitier
 #define MAX_MARKERS           10    //Nombre de marqueurs par fichier
+
 #define MAX_VOLUME            0      // Un petit nombre signifie un volume fort
 #define MIN_VOLUME            100    // Au dela de ce nombre 255 (Volume OFF) est envoyé.
-#define MIN_VBAT              3.2    //3.5; // Voltage avec lequel la batterie est considérée vide https://learn.adafruit.com/adafruit-feather-m0-adalogger/power-management  
-#define MAX_VBAT              4      // Voltage avec lequel la batterie est considérée pleine
+
+#define NBR_PLAYLISTS        8    //Nombre de tableaux de marqueurs pour le boitier
+#define NBR_PLAYLIST_FILES   20    //Nombre de marqueurs par fichier
 
 /**********************
 * UX

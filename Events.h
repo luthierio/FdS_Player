@@ -192,7 +192,7 @@ void onLongPress(ButtonHandler* buttonHandler, int ID) {
           }
           break;
 
-        case 4:
+        case 5:
           setMode(MENU);
           break;
         default:

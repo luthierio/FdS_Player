@@ -376,9 +376,13 @@
   * PLAYLISTS:
   ***********************/
 
-  class PlaylistDisplay : public Display {
+  class PlaylistsDisplay : public Display {
   public:
+      PlaylistsDisplay(Adafruit_SSD1306 *ecran, Playlists *playlists) : 
+        Display(ecran),
+        playlists (playlists){}
   private:
+    Playlists *playlists;
   };
 
   /**********************
@@ -398,9 +402,9 @@
         ecran_->drawFastHLine(0, 24, 128, WHITE);
         drawCentreString(title, 64, 22, &FreeSans9pt7b);
 
-        if (action == "Crédits") {
-            ecran_->drawBitmap(128/2-8, 34+2, heart, 16, 12, 1);
-            drawCentreString(CREDITS, 128/2, 48);
+        if (action == "Credits") {
+            //ecran_->drawBitmap(128/2-8, 34+2, heart, 16, 12, 1);
+            drawCentreString(CREDITS, 128/2, 34+2);
         } else if (action == "Sauver") {
             ecran_->drawBitmap(128/2-40-8, 34, folderIcon16, 16, 16, 1);
             ecran_->drawBitmap(128/2-8, 34, arrowRight16, 16, 16, 1);
@@ -448,12 +452,14 @@
       AnalogDisplay analogs;
       PlayingDisplay playing;
       PitcherDisplay pitcher;
+      PlaylistsDisplay playlists;
       MenuDisplay menu;
-      DisplayController(Adafruit_SSD1306 *ecran, FdS_Adafruit_VS1053_FilePlayer *player, FilePicker *filePicker, Pitcher *pitcher) :
+      DisplayController(Adafruit_SSD1306 *ecran, FdS_Adafruit_VS1053_FilePlayer *player, FilePicker *filePicker, Pitcher *pitcher, Playlists *playlists) :
           display(ecran),
           files(ecran,filePicker),
           playing(ecran,player,filePicker),
           pitcher(ecran,pitcher),
+          playlists(ecran,playlists),
           menu(ecran) ,
           analogs(ecran) {
           // Initialisez d'autres instances de classes ici si nécessaire
