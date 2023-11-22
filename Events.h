@@ -2,7 +2,7 @@
 * MODE
 ***********************/
 void setMode(uint8_t mode) {
-  Debug::print("MODE", mode);
+  DEBUG_.print("MODE", mode);
   DISPLAY_.clear();
 
   switch (mode) {
@@ -47,14 +47,15 @@ void onRotChange(Rotary &rotary) {
       }
       if(&rotary == R_PITCH) {
         PITCHER.setPitchStep(currentPosition);
-        Debug::print("ROT",currentPosition);  
-        Debug::print("PITCHER Step",PITCHER.getStep());  
-        Debug::print("PITCHER Value",PITCHER.getValue());  
+        DEBUG_.print("ROT",currentPosition);  
+        DEBUG_.print("PITCHER Step",PITCHER.getStep());  
+        DEBUG_.print("PITCHER Value",PITCHER.getValue());  
       }
       break;   
     case PLAYLIST: 
     case BEAT: 
     case MENU:  
+      DEBUG_.print("ROT",currentPosition);  
       if(&rotary == R_DIR) {
         ACTION_ID = currentPosition;
         DISPLAY_.menu.print(ACTIONS[ACTION_ID].title, ACTIONS[ACTION_ID].action); 
@@ -82,33 +83,33 @@ void onPress(ButtonHandler* buttonHandler, int ID) {
     case PLAYER:
       switch (ID) {
         case 0:
-          Debug::print("Playing", FILE_.path);
+          DEBUG_.print("Playing", FILE_.path);
           AUDIO.startPlayingFile(FILE_.path);
           break;
 
         case 1:
           if (AUDIO.playingMusic) {
             AUDIO.pausePlaying(true);
-            Debug::print("Paused");
+            DEBUG_.print("Paused");
           } else {
             AUDIO.pausePlaying(false);
-            Debug::print("Resumed");
+            DEBUG_.print("Resumed");
           }
           break;
 
         case 2:         
 
-          Debug::print("Bitrate", AUDIO.getBitRate()); 
-          Debug::print("Position", AUDIO.getFilePosition());
+          DEBUG_.print("Bitrate", AUDIO.getBitRate()); 
+          DEBUG_.print("Position", AUDIO.getFilePosition());
           if(DATA->markers.isEmpty()){
             JumpPosition = (AUDIO.getFilePosition() >= SECONDS_PER_JUMP * (BITRATE / 8)) ? (AUDIO.getFilePosition() - SECONDS_PER_JUMP * (BITRATE / 8)) : 0;   
           }else{
             //on cherche BITRATE / 4 = 2 seconde pour sauter au rpécédent si on est très proche du marker
             JumpPosition =DATA->markers.getPreviousFrom(AUDIO.getFilePosition()- BITRATE / 4); 
-            Debug::print("Jump", DATA->markers.getPreviousFrom(AUDIO.getFilePosition()-BITRATE / 4 ));
+            DEBUG_.print("Jump", DATA->markers.getPreviousFrom(AUDIO.getFilePosition()-BITRATE / 4 ));
           } 
           AUDIO.jumpTo(JumpPosition);
-          Debug::print("Jump Position", JumpPosition);
+          DEBUG_.print("Jump Position", JumpPosition);
 
           break;
 
@@ -119,13 +120,13 @@ void onPress(ButtonHandler* buttonHandler, int ID) {
         case 4:
           if(STATE.playMode < REPEATONE){STATE.playMode++;}        
           else{STATE.playMode = ONEPLAY;}
-          Debug::print("playMode", STATE.playMode);
+          DEBUG_.print("playMode", STATE.playMode);
           break;
 
         case 5:
           PITCHER.switchSign();
           PITCHER.reset();
-          Debug::print("PITCHER", PITCHER.getSign());
+          DEBUG_.print("PITCHER", PITCHER.getSign());
 
           break;
         default:
@@ -163,7 +164,7 @@ void onPress(ButtonHandler* buttonHandler, int ID) {
     default:
       break;
   }
-  Debug::print("Pressed", ID);
+  DEBUG_.print("Pressed", ID);
   delay(10);
 }
 void onLongPress(ButtonHandler* buttonHandler, int ID) {
@@ -181,7 +182,7 @@ void onLongPress(ButtonHandler* buttonHandler, int ID) {
           if(AUDIO.getFilePosition() && AUDIO.currentTrack.size() == FILE_.getSize()){
             DATA->addMarker(&FILE_,&AUDIO);
             AUDIO.pausePlaying(false);
-            Debug::print("New marker", static_cast<int>(AUDIO.getFilePosition()));
+            DEBUG_.print("New marker", static_cast<int>(AUDIO.getFilePosition()));
           }
           break;
 
@@ -200,7 +201,7 @@ void onLongPress(ButtonHandler* buttonHandler, int ID) {
     default:
       break;
   }
-  Debug::print("LongPress", ID);
+  DEBUG_.print("LongPress", ID);
   
 }
 
@@ -217,10 +218,10 @@ void onRelease(ButtonHandler* buttonHandler, int ID) {
           break;
       }
   }
-  Debug::print("Release", ID);
+  DEBUG_.print("Release", ID);
 }
 void onLongRelease(ButtonHandler* buttonHandler, int ID) {
-  Debug::print("LongRelease", ID);
+  DEBUG_.print("LongRelease", ID);
 }
 
 /**********************
@@ -241,7 +242,7 @@ void autoPlay(){
       if(FILE_.fileNum == 99){    
         FILE_.selectFile(0);
         SHOULD_PLAY_NEXT = false;
-        Debug::print("FIN AutoPlay");
+        DEBUG_.print("FIN AutoPlay");
 
       //Il faudrait essayer d'en jouer une autre
       }else if(!AUDIO.playingMusic && !AUDIO.currentTrack){  
@@ -272,11 +273,11 @@ void autoPlay(){
 ***********************/
 void onSleep(){
   SCREEN_.ssd1306_command(SSD1306_DISPLAYOFF);
-  Debug::print("Sleeping");
+  DEBUG_.print("Sleeping");
 }
 void onWakeUp(){
   SCREEN_.ssd1306_command(SSD1306_DISPLAYON);
-  Debug::print("Wakeup");
+  DEBUG_.print("Wakeup");
 }
 
 /**********************
@@ -319,10 +320,10 @@ void onAfterSDWork() {
     AUDIO.pausePlaying(false);
     MUST_RESUME = false;
   }
-  Debug::print("Selected", FILE_.path); 
+  DEBUG_.print("Selected", FILE_.path); 
 }
 void onBeforeSDReadWrite(const char* fileName, const char* message) {
-  Debug::print("SD", fileName, message); 
+  DEBUG_.print("SD", fileName, message); 
   DISPLAY_.display.message(fileName);
   //onMessage("Opération SD en cours");
   //On Stoppe le player avant toute écriture, pour éviter les problèmes
@@ -330,14 +331,14 @@ void onBeforeSDReadWrite(const char* fileName, const char* message) {
   delay(10);
 }
 void onAfterSDReadWrite(const char* fileName, const char* message) {
-  Debug::print("✓✓✓ ⋅ ", fileName, message); 
+  DEBUG_.print("✓✓✓ ⋅ ", fileName, message); 
   onAfterSDWork();
   DISPLAY_.display.message(message);
   delay(MSG_DELAY);
   setMode(ASF_MODE);
 }
 void onSDError(const char* fileName, const char* message) {
-  Debug::print("××× ⋅ ", fileName, message); 
+  DEBUG_.print("××× ⋅ ", fileName, message); 
   onAfterSDWork();
   DISPLAY_.display.message(message);
   delay(ERROR_MSG_DELAY);
@@ -364,7 +365,7 @@ void onAfterSelectDir(){
     DISPLAY_.files.printPath(&FILE_);
   }
 
-  Debug::print("SelectDir",FILE_.dirNum,FILE_.path);  
+  DEBUG_.print("SelectDir",FILE_.dirNum,FILE_.path);  
 
 }
 void onAfterSelectFile(){
@@ -379,6 +380,6 @@ void onAfterSelectFile(){
     DISPLAY_.files.printPath(&FILE_);
   }
   
-  Debug::print("SelectFile",FILE_.fileNum,FILE_.path);  
+  DEBUG_.print("SelectFile",FILE_.fileNum,FILE_.path);  
 
 }

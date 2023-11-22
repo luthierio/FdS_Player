@@ -5,29 +5,30 @@ void setup() {
   /**********************
   * SERIAL:
   ***********************/
+  Serial.begin(115200);
   if(SERIAL_ON){
-    Serial.begin(115200);
-    // Wait for serial port to be opened, remove this line for 'standalone' operation
-    while (!Serial) { delay(1); }
+    // Wait for serial port to be opened, remove this line for 'non debug'
+    while (!Serial) { delay(1); }  
   }
+
   /**********************
   * DISPLAY:
   ***********************/    
   if(SCREEN_.begin(SSD1306_SWITCHCAPVCC, SCREEN_ADDRESS)){
     DISPLAY_.init();
     setMode(LOGO);
-    Debug::print(F("✓✓✓ ⋅ Screen OK"));
+    DEBUG_.print(F("✓✓✓ ⋅ Screen OK"));
   }
   /**********************
   * AUDIO:
   ***********************/
   if (! AUDIO.begin()) { // initialise the music player
     DISPLAY_.display.error(F("Pas de carte SON?"));
-    Debug::print(F("××× ⋅ Couldn't find VS1053, check PINS?"));
+    DEBUG_.print(F("××× ⋅ Couldn't find VS1053, check PINS?"));
     while (1);
   }else{
     AUDIO.useInterrupt(VS1053_FILEPLAYER_PIN_INT);
-    Debug::print(F("✓✓✓ ⋅ VS1053 found and started"));
+    DEBUG_.print(F("✓✓✓ ⋅ VS1053 found and started"));
     //Attention il faut désactiver Pitcher.init() pour faire le test... sinon ca buggue
     //AUDIO.sineTest(0x44, 500);    // Make a tone to indicate VS1053 is working
     //while (1);
@@ -42,15 +43,15 @@ void setup() {
   ***********************/
   if (!SD.begin(CARDCS,SPI_SPEED)) {
     DISPLAY_.display.error(F("Pas de carte SD"));
-    Debug::print(F("××× ⋅ SD failed, or not present"));
+    DEBUG_.print(F("××× ⋅ SD failed, or not present"));
     while (1);  // don't do anything more
   }else{
-    Debug::print(F("✓✓✓ ⋅ SD Card found "));
+    DEBUG_.print(F("✓✓✓ ⋅ SD Card found "));
   }
 
   // Définir les callbacks
   SD_BACKUP.setCallbacks(onSDError, onBeforeSDReadWrite, onAfterSDReadWrite , onBeforeSDReadWrite, onAfterSDReadWrite );
-  Debug::print(F("✓✓✓ ⋅ FILES ok "));
+  DEBUG_.print(F("✓✓✓ ⋅ FILES ok "));
 
   SD_BACKUP.load(STATE_FILENAME, &STATE, sizeof(STATE), true);
   SD_BACKUP.load(MARKERS_FILENAME, &DATAS, sizeof(DATAS), true);
@@ -61,7 +62,7 @@ void setup() {
 
   SLEEP_WATCH.setCallbacks(onSleep, onWakeUp);
   SLEEP_WATCH.wakeUp();
-  Debug::print(F("✓✓✓ ⋅ Sleep Watch ok "));
+  DEBUG_.print(F("✓✓✓ ⋅ Sleep Watch ok "));
 
   /**********************
   * INTERFACE: ROTARIES & BUTTONS  
@@ -73,7 +74,8 @@ void setup() {
   }
   MUX.begin();
   BUTTONS.setCallbacks(onPress,onRelease,onLongPress,onLongRelease);
-  Debug::print(F("✓✓✓ ⋅ Interface ok "));
+  DEBUG_.print(F("✓✓✓ ⋅ Interface ok "));
+  DEBUG_.setSerial(SERIAL_ON); // A part les message d'entrée, on désactive le Serial
   
   // Play a file in the background, REQUIRES interrupts!  
   AUDIO.playFullFile(STARTSOUND);      

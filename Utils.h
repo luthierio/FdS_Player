@@ -15,7 +15,7 @@ t_fileData &getFileDataRef(int dirNum, int fileNum) {
 
     // Si on a rien trouvé de disponible, on envoie un tableau qui se vide et ne se sauve pas
     // Il faudra avertir l'utilisateur sur l'écran
-    Debug::print(F("Plus de place disponible pour de nouveau marqueurs. Impossible de sauver."));  
+    DEBUG_.print(F("Plus de place disponible pour de nouveau marqueurs. Impossible de sauver."));  
     emptyData.clear();
     return emptyData;
 }

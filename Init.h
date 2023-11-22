@@ -1,5 +1,5 @@
 
-
+Debug DEBUG_;
 /**********************
 * FAT Files
 ***********************/
@@ -136,7 +136,7 @@ Command ACTIONS[] = {
   { MAR_LOAD, F("Marqueurs"),  F("Charger") },
   //{ PL_LOAD,  F("Playlists"),  F("Charger") },
   //{ PL_EXPOR, F("Playlists"),  F("Export M3U")},
-  { DEBUG,    F("Debug"),      F("Commuter")},
+  { DEBUG_ON,    F("Debug"),      F("Commuter")},
   { ACCORD,   F("Accordage"),  F("Ecouter") },
 };
 uint8_t ACTION_ID = 0;
