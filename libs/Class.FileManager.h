@@ -31,7 +31,7 @@ public:
     onAfterSave = afterSave;
   }
 
-  bool save(const char* nomFichier, const void* dataPointer, size_t dataSize) {
+  bool save(const char* nomFichier, const void* dataPointer, size_t dataSize, bool silent = false) {
     sd->open("/");
     if (fileExists(nomFichier) && !createBackup(nomFichier)) {
       if (errorCallback) errorCallback(nomFichier, "Le fichier existe, mais la création du backup a échoué");
@@ -40,10 +40,10 @@ public:
 
     File fichier = sd->open(nomFichier, O_WRITE | O_CREAT | O_TRUNC);
     if (fichier) {
-      if (onBeforeSave) onBeforeSave(nomFichier, nullptr);  // Appel de la fonction de rappel avant la sauvegarde
+      if (onBeforeSave && !silent) onBeforeSave(nomFichier, nullptr);  // Appel de la fonction de rappel avant la sauvegarde
       if (fichier.write(dataPointer, dataSize) == dataSize) {
         fichier.close();
-        if (onAfterSave) onAfterSave(nomFichier, "Sauvegarde OK!");  // Appel de la fonction de rappel après la sauvegarde
+        if (onAfterSave && !silent) onAfterSave(nomFichier, "Sauvegarde OK!");  // Appel de la fonction de rappel après la sauvegarde
         return true;
       } else {
         fichier.close();
@@ -56,21 +56,21 @@ public:
     return false;
   }
 
-  bool load(const char* nomFichier, void* dataPointer, size_t dataSize) {
+  bool load(const char* nomFichier, void* dataPointer, size_t dataSize, bool silent = false) {
     if (fileExists(nomFichier)) {
       File fichier = sd->open(nomFichier, O_RDONLY);
       if (fichier) {
-        if (onBeforeLoad) onBeforeLoad(nomFichier, nullptr);  // Appel de la fonction de rappel avant le chargement
+        if (onBeforeLoad && !silent) onBeforeLoad(nomFichier, nullptr);  // Appel de la fonction de rappel avant le chargement
         if (fichier.read(dataPointer, dataSize) == dataSize) {
           fichier.close();
-          if (onAfterLoad) onAfterLoad(nomFichier, "Chargement OK!");  // Appel de la fonction de rappel après le chargement
+          if (onAfterLoad && !silent) onAfterLoad(nomFichier, "Chargement OK!");  // Appel de la fonction de rappel après le chargement
           return true;
         } else {
           if (errorCallback) errorCallback(nomFichier, "Erreur de lecture");
         }
       }
     } else {
-      if (onAfterLoad) onAfterLoad(nomFichier, "Rien à charger");  // Appel de la fonction de rappel après le chargement
+      if (onAfterLoad && !silent) onAfterLoad(nomFichier, "Rien à charger");  // Appel de la fonction de rappel après le chargement
     }
 
     return false;

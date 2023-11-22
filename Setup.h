@@ -52,16 +52,8 @@ void setup() {
   SD_BACKUP.setCallbacks(onSDError, onBeforeSDReadWrite, onAfterSDReadWrite , onBeforeSDReadWrite, onAfterSDReadWrite );
   Debug::print(F("✓✓✓ ⋅ FILES ok "));
 
-  if (SD_BACKUP.load(STATE_FILENAME, &STATE, sizeof(STATE))) {
-    Debug::print(F("✓✓✓ ⋅ Chargement Etat ok "));
-  }else{
-    Debug::print(F("××× ⋅ STATE: Pas de chargement"));
-  }
-  if (SD_BACKUP.load(MARKERS_FILENAME, &DATAS, sizeof(DATAS))) {
-    Debug::print(F("✓✓✓ ⋅ Chargement Marqueurs ok "));
-  }else{
-    Debug::print(F("××× ⋅ MARKERS: Pas de chargement"));
-  }
+  SD_BACKUP.load(STATE_FILENAME, &STATE, sizeof(STATE), true);
+  SD_BACKUP.load(MARKERS_FILENAME, &DATAS, sizeof(DATAS), true);
 
   FILE_.begin(STATE.dirNum, STATE.fileNum); // Initialisation selon carte
   FILE_.setDirCallbacks( onBeforeSelectDir, onAfterSelectDir );
