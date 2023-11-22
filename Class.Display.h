@@ -125,7 +125,7 @@
         
         //On efface la zone   
         ecran_->fillRect(0, 0, 100, 16, BLACK); 
-        ecran_->fillRect(0, 16, 128, 34, BLACK); 
+        ecran_->fillRect(0, 16, 128, 35, BLACK); 
 
 
         if(!selectedPath->dirExist()){
@@ -409,7 +409,7 @@
         ecran_->drawFastHLine(2, 12, SCREEN_WIDTH, WHITE);
         ecran_->drawFastHLine(12, 50, SCREEN_WIDTH, WHITE);
 
-        printTxtNum(playlists->getPlayPosition()+1, 18, SCREEN_HEIGHT/2+4, &FreeSans9pt7b); 
+        printTxtNum(playlists->getPlayPosition(), 18, SCREEN_HEIGHT/2+4, &FreeSans9pt7b); 
 
         if(playlists->getPlayPosition() == 0){
           fillVHatch(14,  0, 126, 12);
