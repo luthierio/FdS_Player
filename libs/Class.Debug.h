@@ -106,6 +106,15 @@ public:
       Serial.println(value);
     }
   }
+  static void print(const char* label, const char* id, const char* value) {
+    if (onOff) {
+      Serial.print(label);
+      Serial.print(" (");
+      Serial.print(id);
+      Serial.print("): ");
+      Serial.println(value);
+    }
+  }
 
   static void print(const __FlashStringHelper* label, int id, int value) {
     if (onOff) {

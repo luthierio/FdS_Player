@@ -6,12 +6,12 @@
 class FileManager {
 public:
   FileManager(SdFat* sdInstance)
-      : sd(sdInstance), lastMessage(nullptr), errorCallback(nullptr),
+      : sd(sdInstance), errorCallback(nullptr),
         onBeforeLoad(nullptr), onAfterLoad(nullptr),
         onBeforeSave(nullptr), onAfterSave(nullptr) {}
 
   // Définition du type de fonction de rappel
-  typedef void (*CallbackFunction)();
+  typedef void (*CallbackFunction)(const char* fileName, const char* message);
 
   // Ajout de cinq fonctions de rappel
   CallbackFunction errorCallback;
@@ -34,24 +34,21 @@ public:
   bool save(const char* nomFichier, const void* dataPointer, size_t dataSize) {
     sd->open("/");
     if (fileExists(nomFichier) && !createBackup(nomFichier)) {
-      setLastMessage(F("Le fichier existe, mais la création du backup a échoué"));
-      if (errorCallback) errorCallback();
+      if (errorCallback) errorCallback(nomFichier, "Le fichier existe, mais la création du backup a échoué");
       return false;
     }
 
     File fichier = sd->open(nomFichier, O_WRITE | O_CREAT | O_TRUNC);
     if (fichier) {
-      if (onBeforeSave) onBeforeSave();  // Appel de la fonction de rappel avant la sauvegarde
+      if (onBeforeSave) onBeforeSave(nomFichier, nullptr);  // Appel de la fonction de rappel avant la sauvegarde
       if (fichier.write(dataPointer, dataSize) == dataSize) {
         fichier.close();
-        setLastMessage(F("Sauvegarde OK!"));
-        if (onAfterSave) onAfterSave();  // Appel de la fonction de rappel après la sauvegarde
+        if (onAfterSave) onAfterSave(nomFichier, "Sauvegarde OK!");  // Appel de la fonction de rappel après la sauvegarde
         return true;
       } else {
         fichier.close();
-        setLastMessage(F("Ecriture impossible"));
         restoreBackup(nomFichier);
-        if (errorCallback) errorCallback();
+        if (errorCallback) errorCallback(nomFichier, "Ecriture impossible");
       }
     }
     fichier.close();
@@ -63,33 +60,25 @@ public:
     if (fileExists(nomFichier)) {
       File fichier = sd->open(nomFichier, O_RDONLY);
       if (fichier) {
-        if (onBeforeLoad) onBeforeLoad();  // Appel de la fonction de rappel avant le chargement
+        if (onBeforeLoad) onBeforeLoad(nomFichier, nullptr);  // Appel de la fonction de rappel avant le chargement
         if (fichier.read(dataPointer, dataSize) == dataSize) {
           fichier.close();
-          setLastMessage(F("Chargement OK!"));
-          if (onAfterLoad) onAfterLoad();  // Appel de la fonction de rappel après le chargement
+          if (onAfterLoad) onAfterLoad(nomFichier, "Chargement OK!");  // Appel de la fonction de rappel après le chargement
           return true;
         } else {
-          setLastMessage(F("Erreur de lecture"));
-          if (errorCallback) errorCallback();
+          if (errorCallback) errorCallback(nomFichier, "Erreur de lecture");
         }
       }
     } else {
-      setLastMessage(F("Rien à charger"));
-      if (onAfterLoad) onAfterLoad();  // Appel de la fonction de rappel après le chargement
+      if (onAfterLoad) onAfterLoad(nomFichier, "Rien à charger");  // Appel de la fonction de rappel après le chargement
     }
 
     return false;
   }
 
-  const __FlashStringHelper* getLastMessage() const {
-    return lastMessage;
-  }
-
 private:
   static const size_t MAX_FILE_NAME_LENGTH = 255;
   SdFat* sd;
-  const __FlashStringHelper* lastMessage;
 
   bool fileExists(const char* nomFichier) {
     sd->chdir();
@@ -101,7 +90,7 @@ private:
     char nomFichierBackup[MAX_FILE_NAME_LENGTH];
 
     if (strlen(nomFichier) + strlen(suffixeBackup) > MAX_FILE_NAME_LENGTH - 1) {
-      setLastMessage(F("Le nom de fichier avec le suffixe de backup dépasse la limite de taille"));
+      if (errorCallback) errorCallback(nomFichier, "Le nom de fichier avec le suffixe de backup dépasse la limite de taille");
       return false;
     }
 
@@ -111,11 +100,9 @@ private:
     sd->rename(nomFichier, nomFichierBackup);
 
     if (sd->exists(nomFichierBackup)) {
-      setLastMessage(F("Création du backup OK"));
       return true;
     } else {
-      setLastMessage(F("Erreur lors de la création du backup"));
-      if (errorCallback) errorCallback();
+      if (errorCallback) errorCallback(nomFichier, "Erreur lors de la création du backup");
     }
 
     return false;
@@ -126,7 +113,7 @@ private:
     char nomFichierBackup[MAX_FILE_NAME_LENGTH];
 
     if (strlen(nomFichier) + strlen(suffixeBackup) > MAX_FILE_NAME_LENGTH - 1) {
-      setLastMessage(F("Le nom de fichier avec le suffixe de backup dépasse la limite de taille"));
+      if (errorCallback) errorCallback(nomFichier, "Le nom de fichier avec le suffixe de backup dépasse la limite de taille");
       return;
     }
 
@@ -134,22 +121,6 @@ private:
     strcat(nomFichierBackup, suffixeBackup);
 
     if (sd->exists(nomFichierBackup)) sd->rename(nomFichierBackup, nomFichier);
-  }
-
-  bool loadDataSize(const char* nomFichier, size_t& dataSize) {
-    File fichier = sd->open(nomFichier, O_RDONLY);
-    if (fichier) {
-      dataSize = fichier.fileSize();
-      fichier.close();
-      return true;
-    } else {
-      return false;
-    }
-  }
-
-  void setLastMessage(const __FlashStringHelper* message) {
-    lastMessage = message;
-    //Serial.println(message);
   }
 };
 

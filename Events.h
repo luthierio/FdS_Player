@@ -29,25 +29,6 @@ void setMode(uint8_t mode) {
 }
 
 /**********************
-* MESSAGES:
-***********************/
-void onMessage(const char *Message, bool ERROR = false){
-
-  Debug::print("Message",Message);  
-  if (strlen(Message) != 0) {
-    // Affichage ou traitement du message
-    DISPLAY_.display.message(Message);
-    // Réinitialisation du message à la prochaine boucle 
-    if(ERROR){
-      delay(ERROR_MSG_DELAY);
-    }else{
-      delay(MSG_DELAY);
-    }
-    setMode(ASF_MODE);
-  }
-}
-
-/**********************
 * ROTARIES:
 ***********************/
 void onRotChange(Rotary &rotary) {
@@ -340,22 +321,27 @@ void onAfterSDWork() {
   }
   Debug::print("Selected", FILE_.path); 
 }
-void onBeforeSDReadWrite() {
-  Debug::print("Opération SD en cours"); 
+void onBeforeSDReadWrite(const char* fileName, const char* message) {
+  Debug::print("SD", fileName, message); 
+  DISPLAY_.display.message(fileName);
   //onMessage("Opération SD en cours");
   //On Stoppe le player avant toute écriture, pour éviter les problèmes
   AUDIO.stopPlaying();
   delay(10);
 }
-void onAfterSDReadWrite() {
+void onAfterSDReadWrite(const char* fileName, const char* message) {
+  Debug::print("✓✓✓ ⋅ ", fileName, message); 
   onAfterSDWork();
-  onMessage((char*)SD_BACKUP.getLastMessage());
-  Debug::print(SD_BACKUP.getLastMessage()); 
+  DISPLAY_.display.message(message);
+  delay(MSG_DELAY);
+  setMode(ASF_MODE);
 }
-void onSDError() {
+void onSDError(const char* fileName, const char* message) {
+  Debug::print("××× ⋅ ", fileName, message); 
   onAfterSDWork();
-  onMessage((char*)SD_BACKUP.getLastMessage(), true);
-  Debug::print(SD_BACKUP.getLastMessage()); 
+  DISPLAY_.display.message(message);
+  delay(ERROR_MSG_DELAY);
+  setMode(ASF_MODE);
 }
 
 
