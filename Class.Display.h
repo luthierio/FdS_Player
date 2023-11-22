@@ -110,7 +110,31 @@
           for (byte i = 0; i < w/4 ; i = i + 1) {
             ecran_->drawFastVLine(2+x0 + i*4, y0, h, WHITE);
           }
+      }
+
+      void basename(char* filename){
+        const char toClip[] = {'.', '['};
+        deleteAfterChars(filename, toClip);
       } 
+
+      void deleteAfterChar(char* texte, char caractere) {
+          for (int i = 0; i < strlen(texte); i++) {
+              if (texte[i] == caractere) {
+                  texte[i] = '\0'; // Remplace le caractère trouvé par le caractère nul pour terminer la chaîne.
+                  break; // Sort de la boucle dès qu'on trouve le caractère.
+              }
+          }
+      }
+      void deleteAfterChars(char* texte, const char* caracteres) {
+          for (int i = 0; i < strlen(texte); i++) {
+              for (int j = 0; j < strlen(caracteres); j++) {
+                  if (texte[i] == caracteres[j]) {
+                      texte[i] = '\0'; // Remplace le caractère trouvé par le caractère nul pour terminer la chaîne.
+                      return; // Sort de la fonction dès qu'on trouve l'un des caractères.
+                  }
+              }
+          }
+      }
       
 
   protected:
@@ -438,25 +462,39 @@
         ecran_->drawFastHLine(12, 15, SCREEN_WIDTH, WHITE);
         ecran_->drawFastHLine(12, 47, SCREEN_WIDTH, WHITE);
 
+        uint8_t position = playlists->getPlayPosition();
 
-        printTxtNum(playlists->getPlayPosition(), 18, SCREEN_HEIGHT/2+4, &FreeSans9pt7b); 
+        printTxtNum(position, 18, SCREEN_HEIGHT/2+4, &FreeSans9pt7b); 
 
         PlaylistItem *item =  playlists->getPlaylist()->getItem();
-        ecran_->setFont();
-        ecran_->setTextSize(0);
-        ecran_->setCursor(12+30, 16 );  
-        ecran_->print(item->dirName);  
+        PlaylistItem *prevItem =  playlists->getPlaylist()->getItem(position-1);
+        PlaylistItem *nextItem =  playlists->getPlaylist()->getItem(position+1);
 
-        ecran_->setFont(&FreeSerif9pt7b);
-        ecran_->setCursor(12+30, 45);
-        
-        ecran_->print(item->fileName);  
+        basename(item->fileName);
+
+        printTxt(item->dirName, 12+30,18, NULL, 0);
+        printTxt(item->fileName+3, 12+30, 40, &FreeSerif9pt7b);
 
         if(playlists->getPlayPosition() == 0){
+
           fillVHatch(16,  0, 112, 14);
+          
+        }else if(prevItem != nullptr){          
+
+          basename(prevItem->fileName);
+          printTxt(prevItem->fileName, 12+30,2, NULL, 0);
+
         }
+
         if(playlists->getPlayPosition() == playlists->getPlaylistSize() ){
+
           fillVHatch(16, 48, 112, 14);
+
+        }else if(nextItem != nullptr){     
+
+          basename(nextItem->fileName);
+          printTxt(nextItem->fileName+3, 12+30,50, NULL, 0);
+
         }
 
       }
