@@ -106,7 +106,7 @@ uint8_t ASF_MODE = PLAYER;
 #define MIN_VOLUME            100    // Au dela de ce nombre 255 (Volume OFF) est envoyé.
 
 #define NBR_PLAYLISTS        8    //Nombre de tableaux de marqueurs pour le boitier
-#define NBR_PLAYLIST_FILES   20    //Nombre de marqueurs par fichier
+#define NBR_PLAYLIST_ITEMS  20    //Nombre de marqueurs par fichier
 
 /**********************
 * UX

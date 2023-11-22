@@ -15,7 +15,8 @@ Pitcher PITCHER = Pitcher(&AUDIO);
 
 FilePicker FILE_(&SD);
 FileManager SD_BACKUP(&SD);
-Playlists PLAYLISTS(NBR_PLAYLISTS, NBR_PLAYLIST_FILES);
+PlaylistManager PLAYLISTS_(&FILE_);
+
 
 Metronome METRONOME_(&AUDIO, BEATSOUND, BEATSOUND2); // BPM = 120, 4 beats per bar, with specific beat files
 
@@ -147,6 +148,6 @@ const size_t NBR_ACTIONS = sizeof(ACTIONS) / sizeof(ACTIONS[0]) - 1;
 * DISPLAY:
 ***********************/
 byte SILENT = true;
-DisplayController DISPLAY_(&SCREEN_,&AUDIO, &FILE_, &PITCHER, &PLAYLISTS);
+DisplayController DISPLAY_(&SCREEN_,&AUDIO, &FILE_, &PITCHER, &PLAYLISTS_);
 
 

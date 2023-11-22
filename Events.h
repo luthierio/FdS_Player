@@ -20,6 +20,12 @@ void setMode(uint8_t mode) {
       DISPLAY_.menu.show(ACTIONS[ACTION_ID].title, ACTIONS[ACTION_ID].action); 
       break; 
     case PLAYLIST:
+      R_DIR->resetPosition(0);
+      R_DIR->setLowerBound(0);
+      R_DIR->setUpperBound(NBR_PLAYLISTS);
+      R_FILES->resetPosition(0);
+      R_FILES->setLowerBound(0);
+      R_FILES->setUpperBound(NBR_PLAYLIST_ITEMS);
       DISPLAY_.playlists.show(); 
       break; 
 
@@ -56,6 +62,16 @@ void onRotChange(Rotary &rotary) {
       }
       break;   
     case PLAYLIST: 
+      if(&rotary == R_DIR) {
+        PLAYLISTS_.setPosition(currentPosition);
+        DISPLAY_.playlists.printNav(); 
+      }
+      if(&rotary == R_FILES) {
+        PLAYLISTS_.setPlaylistPosition(currentPosition);
+      }
+      
+      break;   
+
     case BEAT: 
     case MENU:  
       DEBUG_.print("ROT",currentPosition);  

@@ -378,47 +378,31 @@
 
   class PlaylistsDisplay : public Display {
   public:
-      PlaylistsDisplay(Adafruit_SSD1306 *ecran, Playlists *playlists) : 
+      PlaylistsDisplay(Adafruit_SSD1306 *ecran, PlaylistManager *playlists) : 
         Display(ecran),
         playlists (playlists){}
-      void show(){
 
-        int plHeight = 64/playlists->numPlaylists;
+      void show(){
+        ecran_->clearDisplay();
+        printNav();
+      }
+      void printNav(){   
+
+        ecran_->fillRect(0,0, 8, 64, BLACK);
+        int plHeight = 64/playlists->size;
         int x = 0;
-        for (byte i = 0; i < playlists->numPlaylists; i = i + 1) {  
+        for (byte i = 0; i < playlists->size; i = i + 1) {  
+          if(playlists->getPosition() == i){
+              ecran_->fillCircle(x+3, plHeight/2 + i*plHeight, 3, WHITE); 
+          }else{
               ecran_->fillCircle(x+3, plHeight/2 + i*plHeight, 1, WHITE); 
+          }
         }
-        //displayPlaylists(0);
-        
-        ecran_->fillCircle(12, 2 ,2 , WHITE);
-        ecran_->fillCircle(12,SCREEN_HEIGHT-3, 2 , WHITE);
-        /*
-        if(activeState.playlistMode == RANDOM){
-          ecran_->fillTriangle( 28-6,14 , 28,14-4 , 28+6,14 , WHITE);      // Triangle vers le haut
-        }
-        if(activeState.playlistMode == AUTO || activeState.playlistMode == RANDOM){
-          ecran_->fillTriangle( 28-6,48 , 28,48+4 , 28+6,48 , WHITE);      // Triangle vers le bas
-        }  
-        if(activeState.playlistMode == REPEATONE){
-          ecran_->fillTriangle( 28-6,48-2 , 28,48-6 , 28+6,48-2 , WHITE);      // Triangle vers le bas
-        } 
-        
-        if(activeState.playlistReferenceID > 0){
-          displayPlaylistRef(activeState.playlistReferenceID-1, 12, 2, false);
-        }
-          
-        displayPlaylistRef(activeState.playlistReferenceID, 12, 15, true);
-        
-        if(activeState.playlistReferenceID < nbrFilesInList-1){
-          displayPlaylistRef(activeState.playlistReferenceID+1, 12, 50, false);
-        }
-        displayProgressBar(12, 4, 12, 60, false); //Vertical
-        */
         ecran_->display();
 
       }
   private:
-    Playlists *playlists;
+    PlaylistManager *playlists;
   };
 
   /**********************
@@ -492,7 +476,7 @@
       PitcherDisplay pitcher;
       PlaylistsDisplay playlists;
       MenuDisplay menu;
-      DisplayController(Adafruit_SSD1306 *ecran, FdS_Adafruit_VS1053_FilePlayer *player, FilePicker *filePicker, Pitcher *pitcher, Playlists *playlists) :
+      DisplayController(Adafruit_SSD1306 *ecran, FdS_Adafruit_VS1053_FilePlayer *player, FilePicker *filePicker, Pitcher *pitcher, PlaylistManager *playlists) :
           display(ecran),
           files(ecran,filePicker),
           playing(ecran,player,filePicker),

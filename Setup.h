@@ -79,6 +79,6 @@ void setup() {
   
   // Play a file in the background, REQUIRES interrupts!  
   AUDIO.playFullFile(STARTSOUND);      
-  setMode(PLAYER);
+  setMode(PLAYLIST);
   
 };
