@@ -101,6 +101,11 @@
       bool selectFile(FilePicker *filePicker) {
           PlaylistItem *current = &playlists[position[0]][position[1]];
           if (!current->isEmpty()) {
+              if(current->dirNum == filePicker->dirNum && current->fileNum == filePicker->fileNum){
+                //On est déja sur le bon fichier
+                return true;
+              }
+              
               filePicker->select(current->dirNum, current->fileNum);
               // Ajoutez le reste de votre logique pour sélectionner le fichier
               if (filePicker->exist()) {
