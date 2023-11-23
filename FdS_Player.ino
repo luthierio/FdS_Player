@@ -38,9 +38,10 @@
 #include "libs/Class.Rotary.h"
 #include "libs/Class.Debug.h"
 #include "libs/Class.FileManager.h"
-#include "Class.Playlists.h"
+#include "libs/Class.Playlists.h"
+#include "libs/Class.Array.h"
+#include "Class.Markers.h"
 #include "Class.Metronome.h"
-#include "Class.Array.h"
 #include "Class.Display.h"
 
 /**********************

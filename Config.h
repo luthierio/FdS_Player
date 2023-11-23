@@ -95,8 +95,8 @@ enum CommandIDs { A_PROPOS, SAVE_ALL, MAR_SAVE, PL_SAVE, ST_SAVE, LOAD_ALL, MAR_
 #define BITRATE               64000  //Ce serait mieux de le prendre du fichier mais pour le moment c'est le plus simple
 #define SECONDS_PER_JUMP      2
 
-#define MAX_FILES_DATA        50    //Nombre de tableaux de marqueurs pour le boitier
-#define MAX_MARKERS           10    //Nombre de marqueurs par fichier
+#define MAX_FILES_DATA        100    //Nombre de tableaux de marqueurs pour le boitier
+#define MAX_MARKERS           20    //Nombre de marqueurs par fichier
 
 #define MAX_VOLUME            0      // Un petit nombre signifie un volume fort
 #define MIN_VOLUME            100    // Au dela de ce nombre 255 (Volume OFF) est envoyé.

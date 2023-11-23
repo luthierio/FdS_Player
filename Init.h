@@ -1,5 +1,6 @@
 
 Debug DEBUG_;
+byte INTERRUPTS = true; // IF false, buttons etc desactivated
 /**********************
 * FAT Files
 ***********************/
@@ -17,9 +18,7 @@ FilePicker FILE_(&SD);
 FileManager SD_BACKUP(&SD);
 
 PlaylistItem PLAYLISTS[NBR_PLAYLISTS][NBR_PLAYLIST_ITEMS];
-
 PlaylistManager PLAYLISTS_(PLAYLISTS);
-
 
 Metronome METRONOME_(&AUDIO, BEATSOUND, BEATSOUND2); // BPM = 120, 4 beats per bar, with specific beat files
 
@@ -74,25 +73,6 @@ char  activeSoundPath[512];
 ***********************/
 //Toutes les variables à sauvegarder sur la carte SD
 
-struct t_fileData {
-    uint8_t dirNum;
-    uint8_t fileNum;
-    Array<uint32_t, MAX_MARKERS> markers;
-    void addMarker(FilePicker *FILE_, FdS_Adafruit_VS1053_FilePlayer *AUDIO) {
-      this->dirNum = FILE_->dirNum;
-      this->fileNum = FILE_->fileNum;
-      markers.push(AUDIO->getFilePosition());
-    }
-    void clear() {
-        // Remettez vos membres de structure à leurs valeurs par défaut ici
-        dirNum = 0;
-        fileNum = 0;
-        markers.clean(); // Assurez-vous que la classe Array a une méthode clean() ou équivalente
-    }
-};
-t_fileData DATAS[MAX_FILES_DATA];
-t_fileData emptyData;
-t_fileData *DATA = &DATAS[0];
 
 
 

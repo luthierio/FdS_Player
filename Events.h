@@ -1,5 +1,6 @@
+
 /**********************
-* MODE
+* MODE:
 ***********************/
 void setMode(uint8_t mode) {
   DEBUG_.print("MODE", mode);
@@ -34,7 +35,15 @@ void setMode(uint8_t mode) {
 
   STATE.MODE = mode;
 }
-
+/**********************
+* MESSAGE:
+***********************/
+void sendMessage(const char* label, const char* message, int DELAY) {
+  DEBUG_.print(label, message); 
+  DISPLAY_.display.message(message);
+  delay(DELAY);
+  setMode(STATE.MODE);
+}
 /**********************
 * ROTARIES:
 ***********************/
@@ -59,12 +68,12 @@ void onRotChange(Rotary &rotary) {
     case PLAYLIST: 
       if(&rotary == R_DIR) {
         PLAYLISTS_.setPosition(currentPosition); 
-        DISPLAY_.playlists.printNav(); 
-        DISPLAY_.playlists.printPlayList(); 
+        DISPLAY_.playlists.nav(); 
+        DISPLAY_.playlists.playList(); 
       }
       if(&rotary == R_FILES) {
         PLAYLISTS_.setPlayPosition(currentPosition);
-        DISPLAY_.playlists.printPlayList(); 
+        DISPLAY_.playlists.playList(); 
       }
       
       break;   
@@ -99,8 +108,7 @@ void onPress(ButtonHandler* buttonHandler, int ID) {
     case PLAYER:
       switch (ID) {
         case 0:
-          DEBUG_.print("Playing", FILE_.path);
-          AUDIO.startPlayingFile(FILE_.path);
+          //Play on release
           break;
 
         case 1:
@@ -140,8 +148,8 @@ void onPress(ButtonHandler* buttonHandler, int ID) {
           PITCHER.switchSign();
           PITCHER.reset();
           DEBUG_.print("PITCHER", PITCHER.getSign());
-
           break;
+
         default:
           break;
       }
@@ -152,11 +160,7 @@ void onPress(ButtonHandler* buttonHandler, int ID) {
     case PLAYLIST:
       switch (ID) {
         case 0:
-          //DEBUG_.print("dirNum",PLAYLISTS_.getItem()->dirNum);
-          //DEBUG_.print("fileNum",PLAYLISTS_.getItem()->fileNum);
-          if(PLAYLISTS_.selectFile(&FILE_)){
-            AUDIO.startPlayingFile(FILE_.path);
-          }
+          //Play on Release
           break;
         case 1:
           break;
@@ -168,12 +172,12 @@ void onPress(ButtonHandler* buttonHandler, int ID) {
         case 4:
           if(STATE.playlistMode < REPEATONE){STATE.playlistMode++;}        
           else{STATE.playlistMode = ONEPLAY;}
-          DISPLAY_.playlists.printPlayList(); 
+          DISPLAY_.playlists.playList(); 
           DEBUG_.print("playlistMode", STATE.playlistMode);
           break;
         case 5:
           PLAYLISTS_.addCurrentFile(&FILE_);
-          DISPLAY_.playlists.printPlayList(); 
+          DISPLAY_.playlists.playList(); 
           break;
         default:
           break;
@@ -214,7 +218,7 @@ void onLongPress(ButtonHandler* buttonHandler, int ID) {
       // Long press
       switch (ID) {
         case 0:
-          //SD_BACKUP.save(MARKERS_FILENAME, &DATAS, sizeof(DATAS));
+          SD_BACKUP.save(MARKERS_FILENAME, &DATAS, sizeof(DATAS));
           SD_BACKUP.save(STATE_FILENAME, &STATE, sizeof(STATE));
           break;
         case 1:
@@ -243,9 +247,9 @@ void onLongPress(ButtonHandler* buttonHandler, int ID) {
       switch (ID) {
         case 0:
           SD_BACKUP.save(STATE_FILENAME, &STATE, sizeof(STATE));
+          SD_BACKUP.save(PLAYLISTS_FILENAME, &PLAYLISTS, sizeof(PLAYLISTS));
           break;
         case 5:
-          SD_BACKUP.save(PLAYLISTS_FILENAME, &PLAYLISTS, sizeof(PLAYLISTS));
           break;
         default:
           break;
@@ -268,8 +272,28 @@ void onRelease(ButtonHandler* buttonHandler, int ID) {
     case PLAYER:
       switch (ID) {
         case 0:
+          DEBUG_.print("Playing", FILE_.path);
+          AUDIO.startPlayingFile(FILE_.path);
+          break;
+        default:
           break;
       }
+      break;
+    case PLAYLIST:
+      switch (ID) {
+        case 0:
+          //DEBUG_.print("dirNum",PLAYLISTS_.getItem()->dirNum);
+          //DEBUG_.print("fileNum",PLAYLISTS_.getItem()->fileNum);
+          if(PLAYLISTS_.selectFile(&FILE_)){
+            AUDIO.startPlayingFile(FILE_.path);
+          }
+          break;
+        default:
+          break;
+      }
+      break;
+    default:
+      break;
   }
   DEBUG_.print("Release", ID);
 }
@@ -376,26 +400,20 @@ void onAfterSDWork() {
   DEBUG_.print("Selected", FILE_.path); 
 }
 void onBeforeSDReadWrite(const char* fileName, const char* message) {
-  DEBUG_.print("SD", fileName, message); 
-  DISPLAY_.display.message(fileName);
-  //onMessage("Opération SD en cours");
-  //On Stoppe le player avant toute écriture, pour éviter les problèmes
+  INTERRUPTS = false;
+  //sendMessage(fileName, message,MSG_DELAY);
   AUDIO.stopPlaying();
   delay(10);
 }
 void onAfterSDReadWrite(const char* fileName, const char* message) {
-  DEBUG_.print("✓✓✓ ⋅ ", fileName, message); 
   onAfterSDWork();
-  DISPLAY_.display.message(message);
-  delay(MSG_DELAY);
-  setMode(STATE.MODE);
+  sendMessage(fileName, message,MSG_DELAY);
+  INTERRUPTS = true;
 }
 void onSDError(const char* fileName, const char* message) {
-  DEBUG_.print("××× ⋅ ", fileName, message); 
   onAfterSDWork();
-  DISPLAY_.display.message(message);
-  delay(ERROR_MSG_DELAY);
-  setMode(STATE.MODE);
+  sendMessage(fileName, message,ERROR_MSG_DELAY);
+  INTERRUPTS = true;
 }
 
 

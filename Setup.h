@@ -53,16 +53,11 @@ void setup() {
   SD_BACKUP.setCallbacks(onSDError, onBeforeSDReadWrite, onAfterSDReadWrite , onBeforeSDReadWrite, onAfterSDReadWrite );
   DEBUG_.print(F("✓✓✓ ⋅ FILES ok "));
 
-  SD_BACKUP.load(STATE_FILENAME, &STATE, sizeof(STATE), true);
-  SD_BACKUP.load(MARKERS_FILENAME, &DATAS, sizeof(DATAS), true);  
-  SD_BACKUP.load(PLAYLISTS_FILENAME, &PLAYLISTS, sizeof(PLAYLISTS));
 
-  FILE_.select(STATE.dirNum, STATE.fileNum); // Initialisation selon carte
   FILE_.setDirCallbacks( onBeforeSelectDir, onAfterSelectDir );
   FILE_.setFileCallbacks( onBeforeSelectFile, onAfterSelectFile );
 
   PLAYLISTS_.setCallbacks( onSetPosition );
-  PLAYLISTS_.setPosition( STATE.playlistPosition, true );
 
   SLEEP_WATCH.setCallbacks(onSleep, onWakeUp);
   SLEEP_WATCH.wakeUp();
@@ -82,7 +77,15 @@ void setup() {
   DEBUG_.setSerial(SERIAL_ON); // A part les message d'entrée, on désactive le Serial
   
   // Play a file in the background, REQUIRES interrupts!  
-  AUDIO.playFullFile(STARTSOUND);      
+
+  SD_BACKUP.load(MARKERS_FILENAME, &DATAS, sizeof(DATAS), true);  
+  SD_BACKUP.load(PLAYLISTS_FILENAME, &PLAYLISTS, sizeof(PLAYLISTS), true);
+  FILE_.select(STATE.dirNum, STATE.fileNum); // Initialisation selon carte
+  
+  SD_BACKUP.load(STATE_FILENAME, &STATE, sizeof(STATE), true);
+  PLAYLISTS_.setPosition( STATE.playlistPosition, true );  
+  AUDIO.playFullFile(STARTSOUND);    
+  
   setMode(STATE.MODE);
   
 };

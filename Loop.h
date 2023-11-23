@@ -24,8 +24,9 @@ void smallLoop() {
       break;
 
     case PLAYLIST:
-      DISPLAY_.display.cleanZone(8, 0, 4 , 64 );  
-      DISPLAY_.playing.progressBar(12, 4, 12, 60);
+      DISPLAY_.display.cleanZone(118, 0, 10 , 64 );  
+      DISPLAY_.playing.progressBar(124, 4, 124, 60);
+      DISPLAY_.playlists.playing();  
       break;
 
     default:
@@ -52,23 +53,24 @@ void loop() {
   
   SLEEP_WATCH.listen();
   autoPlay();
+  if(INTERRUPTS){
+    // Mettre à jour en continu le rotary encoder
+    for (byte i = 0; i < 3; ++i) {
+      ROTARIES[i].update();    
+    }
 
-  // Mettre à jour en continu le rotary encoder
-  for (byte i = 0; i < 3; ++i) {
-    ROTARIES[i].update();    
+    // Mettez à jour les états des boutons en lisant les broches ici
+    int BTN_STATE[6];
+    for (int i = 0; i < 6; i++) {
+      BTN_STATE[i] = MUX.state(BTN_CHANNEL[i]);
+    }
+    // Passez les états des boutons à la classe ButtonHandler pour la gestion
+    BUTTONS.update(BTN_STATE);
+    VUSB = (float)round(10*(MUX.value(BTN_CHANNEL[0])* 3.3 * 2 )/ 1024.0)/10.0;
+    VBat = (float)round(10*(MUX.value(BTN_CHANNEL[1])* 3.3 * 2 )/ 1024.0)/10.0;
+    setVolume(map(analogRead(VOLUME_PIN), 5, 1023, MAX_VOLUME, MIN_VOLUME));
   }
 
-  // Mettez à jour les états des boutons en lisant les broches ici
-  int BTN_STATE[6];
-  for (int i = 0; i < 6; i++) {
-    BTN_STATE[i] = MUX.state(BTN_CHANNEL[i]);
-  }
-  // Passez les états des boutons à la classe ButtonHandler pour la gestion
-  BUTTONS.update(BTN_STATE);
-
-  VUSB = (float)round(10*(MUX.value(BTN_CHANNEL[0])* 3.3 * 2 )/ 1024.0)/10.0;
-  VBat = (float)round(10*(MUX.value(BTN_CHANNEL[1])* 3.3 * 2 )/ 1024.0)/10.0; // VERIFIER NUMERO!!
-  setVolume(map(analogRead(VOLUME_PIN), 5, 1023, MAX_VOLUME, MIN_VOLUME));
 
   if (millis() - smallLoopTime >= SMALL_LOOP_INTERVAL){
     smallLoopTime = millis();

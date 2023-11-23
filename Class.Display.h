@@ -421,10 +421,19 @@
 
       void show(){
         ecran_->clearDisplay();
-        printNav();
-        printPlayList();
+        nav();
+        playList();
       }
-      void printNav(){   
+      void playing(){  
+
+        ecran_->fillRect(10+2, SCREEN_HEIGHT/2-2, 4 , 4, BLACK);
+        PlaylistItem *item =  playlists->getItem(); //Position courante
+        //Le fichier qui est sélectionné dans le player est celui ci
+        if(state->dirNum == item->dirNum && state->fileNum == item->fileNum ){
+            ecran_->fillTriangle( 10, SCREEN_HEIGHT/2-2 , 10, SCREEN_HEIGHT/2+2, 10+2,SCREEN_HEIGHT/2, WHITE);      // Triangles forward
+        }
+      }
+      void nav(){   
         ecran_->fillRect(0,0, 8, 64, BLACK);
         int plHeight = 64/playlists->nbr;
         int x = 0;
@@ -437,13 +446,13 @@
         }
         ecran_->display();
       }
-      void printPlayList(){
-        ecran_->fillRect(14,0, 128-14, 64, BLACK); 
-        printItems();
-        printMode(); 
+      void playList(){
+        ecran_->fillRect(10,0, 128-20, 64, BLACK); 
+        items();
+        mode(); 
         ecran_->display();
       }
-      void printMode(){
+      void mode(){
 
         if(state->playlistMode == RANDOM){
           ecran_->fillTriangle( 28-6,14 , 28,14-4 , 28+6,14 , WHITE);      // Triangle vers le haut
@@ -456,11 +465,9 @@
         } 
 
       }
-      void printItems(){  
+      void items(){  
        
 
-        ecran_->drawFastHLine(18, 14, SCREEN_WIDTH, WHITE);
-        ecran_->drawFastHLine(18, 48, SCREEN_WIDTH, WHITE);
 
         uint8_t position = playlists->getPosition()[1];
 
@@ -471,35 +478,33 @@
 
         basename(item->fileName);
 
-        printTxt(item->dirName, 12+34,18, NULL, 0);
-        printTxt(item->fileName+3, 12+34, 40, &FreeSerif9pt7b);
+        printTxt(item->dirName, 10+34,18, NULL, 0);
+        printTxt(item->fileName+3, 10+34, 40, &FreeSerif9pt7b);
 
-        printTxtNum(position, 22, SCREEN_HEIGHT/2+4, &FreeSans9pt7b); 
+        ecran_->drawFastHLine(10, 14, SCREEN_WIDTH-10*2, WHITE);
+        ecran_->drawFastHLine(10, 48, SCREEN_WIDTH-10*2, WHITE);
 
-        //Le fichier qui est sélectionné dans le player est celui ci
-        if(state->dirNum == item->dirNum && state->fileNum == item->fileNum ){
-            ecran_->fillTriangle( 18, SCREEN_HEIGHT/2-2 , 18, SCREEN_HEIGHT/2+2, 18+2,SCREEN_HEIGHT/2, WHITE);      // Triangles forward
-        }
+        printTxtNum(position+1, 16, SCREEN_HEIGHT/2+4, &FreeSans9pt7b); 
 
         if(position == 0){
 
-          fillVHatch(18,  0, 112, 14);
+          fillVHatch(10,  0, SCREEN_WIDTH-10*2, 14);
           
         }else if(prevItem != nullptr){          
 
           basename(prevItem->fileName);
-          printTxt(prevItem->fileName+3, 12+34,2, NULL, 0);
+          printTxt(prevItem->fileName+3, 10+34,2, NULL, 0);
 
         }
 
         if(position == playlists->size ){
 
-          fillVHatch(18, 48, 112, 14);
+          fillVHatch(10, 48, SCREEN_WIDTH-10*2, 14);
 
         }else if(nextItem != nullptr){     
 
           basename(nextItem->fileName);
-          printTxt(nextItem->fileName+3, 12+34,54, NULL, 0);
+          printTxt(nextItem->fileName+3, 10+34,54, NULL, 0);
 
         }
 
