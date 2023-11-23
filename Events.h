@@ -304,9 +304,12 @@ void onLongRelease(ButtonHandler* buttonHandler, int ID) {
 /**********************
 * AUTOPLAY:
 ***********************/
+
 void autoPlay(){
 
-  if(STATE.playMode != ONEPLAY){
+  bool AUTOPLAY_ON = (STATE.MODE == PLAYER && STATE.playMode != ONEPLAY) || (STATE.MODE == PLAYLIST && STATE.playlistMode != ONEPLAY) ;
+  
+  if(AUTOPLAY_ON){
 
     //La fin d'un fichier forcera l'autoplay à se lancer dès que la musique est finie!    
     if(AUDIO.playingMusic && ((AUDIO.currentTrack.size()-AUDIO.getFilePosition()) < 5000)){    
@@ -314,9 +317,9 @@ void autoPlay(){
     }
 
     if(SHOULD_PLAY_NEXT && STATE.MODE == PLAYER) {
-
+          
       //Fin du répertoire
-      if(FILE_.fileNum == 99){    
+      if(FILE_.fileNum == MAX_FILES_NUM){    
         FILE_.selectFile(0);
         SHOULD_PLAY_NEXT = false;
         DEBUG_.print("FIN AutoPlay");
@@ -328,7 +331,7 @@ void autoPlay(){
             FILE_.selectFile(FILE_.fileNum + 1);
             break;
           case RANDOM:
-            FILE_.selectFile(random(0, 99));
+            FILE_.selectFile(random(0, MAX_FILES_NUM));
             break;
           case REPEATONE:
             break;
@@ -339,7 +342,36 @@ void autoPlay(){
         }
         AUDIO.startPlayingFile(FILE_.path); 
       }
-          
+
+    } else if(SHOULD_PLAY_NEXT && STATE.MODE == PLAYLIST) {
+
+      //Fin du répertoire
+      if(PLAYLISTS_.getPlayPosition() == NBR_PLAYLIST_ITEMS){    
+        PLAYLISTS_.setPlayPosition(0);
+        SHOULD_PLAY_NEXT = false;
+        DEBUG_.print("FIN AutoPlay");
+
+      //Il faudrait essayer d'en jouer une autre
+      }else if(!AUDIO.playingMusic && !AUDIO.currentTrack){  
+        switch (STATE.playMode) {
+          case AUTO:  
+            PLAYLISTS_.setPlayPosition(PLAYLISTS_.getPlayPosition()+1);
+            PLAYLISTS_.selectFile(&FILE_);
+            break;
+          case RANDOM:
+            PLAYLISTS_.setPlayPosition(random(0, NBR_PLAYLIST_ITEMS));
+            PLAYLISTS_.selectFile(&FILE_);
+            break;
+          case REPEATONE:
+            break;
+          default:
+            //Not necessary but secure
+            SHOULD_PLAY_NEXT = false;
+            break;
+        }
+        AUDIO.startPlayingFile(FILE_.path); 
+      }      
+
     }
   }
 

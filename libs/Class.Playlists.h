@@ -54,6 +54,10 @@
       uint8_t *getPosition() {
           return position;
       }
+      // Retourne les deux curseurs de position
+      uint8_t getPlayPosition() {
+          return position[1];
+      }
 
       //Défini la playlist
       void setPosition(uint8_t index, bool silent = false) {

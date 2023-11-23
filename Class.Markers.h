@@ -19,7 +19,7 @@
           fileNum = -1;
           markers.clean(); // Assurez-vous que la classe Array a une méthode clean() ou équivalente
       }
-      bool isEmpty() const {
+      bool isUnset() const {
           return (dirNum == -1);
       }
   };
@@ -47,14 +47,14 @@
       }
 
       bool isEmpty() {
-        return active->isEmpty();        
+        return active->markers.isEmpty();        
       }
       uint32_t *getMarkers() {
         return active->markers.get();        
       }
 
       void addMarker(uint32_t position) {
-        if(active->isEmpty()){
+        if(active->isUnset()){
           active->dirNum = filePicker->dirNum;
           active->fileNum = filePicker->fileNum;   
         }     
