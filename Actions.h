@@ -16,24 +16,24 @@ void doAction(int ID){
       break;  
     case SAVE_ALL:
       // Save playlists
-      SD_BACKUP.save(MARKERS_FILENAME, &DATAS, sizeof(DATAS));
+      SD_BACKUP.save(MARKERS_FILENAME, &MARKERS, sizeof(MARKERS));
       SD_BACKUP.save(STATE_FILENAME, &STATE, sizeof(STATE));
       //SD_BACKUP.save(sizeof(playLists),&playLists,PLAYLISTS_FILENAME);
       break;
     case LOAD_ALL:
       // Save playlists
-      SD_BACKUP.load(MARKERS_FILENAME, &DATAS, sizeof(DATAS));
+      SD_BACKUP.load(MARKERS_FILENAME, &MARKERS, sizeof(MARKERS));
       SD_BACKUP.load(STATE_FILENAME, &STATE, sizeof(STATE));
       //SD_BACKUP.load(sizeof(playLists),&playLists,PLAYLISTS_FILENAME);
       // updateState(true);
       break;
     case MAR_SAVE:
       // Save markers
-      SD_BACKUP.save(MARKERS_FILENAME, &DATAS, sizeof(DATAS));
+      SD_BACKUP.save(MARKERS_FILENAME, &MARKERS, sizeof(MARKERS));
       break;
     case MAR_LOAD:
       // load 
-      SD_BACKUP.load(MARKERS_FILENAME, &DATAS, sizeof(DATAS));
+      SD_BACKUP.load(MARKERS_FILENAME, &MARKERS, sizeof(MARKERS));
       break;
     case ST_SAVE:
       // Save state

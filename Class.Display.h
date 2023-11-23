@@ -262,10 +262,11 @@
 
   class PlayingDisplay : public Display {
   public:
-      PlayingDisplay(Adafruit_SSD1306 *ecran, FdS_Adafruit_VS1053_FilePlayer *player, FilePicker *filePicker, t_state *state) : 
+      PlayingDisplay(Adafruit_SSD1306 *ecran, FdS_Adafruit_VS1053_FilePlayer *player, FilePicker *filePicker, t_state *state, MarkersManager *markers) : 
         Display(ecran),
         Player (player),
         filePicker (filePicker),
+        markers (markers),
         state (state){}
 
       void playMode(uint8_t x, uint8_t y){   
@@ -284,7 +285,7 @@
 
         }
       }
-      void progressBar(uint8_t x1, uint8_t y1, uint8_t x2, uint8_t y2, Array<uint32_t,NBR_MARKERS> *markers = nullptr){  
+      void progressBar(uint8_t x1, uint8_t y1, uint8_t x2, uint8_t y2, bool disPlayMarkers = false){  
         
         int playingSize = Player->currentTrack.size();
         int pickedSize = filePicker->getSize();
@@ -306,13 +307,18 @@
         int l = 5; //Longeur segment perpendiculaire souhaité  
 
         //marqueurs
-        if(markers && pickedSize){
-          for (byte i = 0; i < markers->count; i = ++i) {  
-            float relativeMarkerPosition = (float)markers->get()[i]/(float)pickedSize;       
+        if(disPlayMarkers && pickedSize){
+          uint32_t* markersArray = markers->getMarkers();
+
+          for (byte i = 0; i < NBR_MARKERS; i = ++i) {  
+
+
+            float relativeMarkerPosition = (float)markersArray[i]/(float)pickedSize;       
             float markerPosition[] = {x1+delta_X*relativeMarkerPosition,y1+delta_Y*relativeMarkerPosition};
                     
             ecran_->drawLine( markerPosition[0]+l*delta_x, markerPosition[1]-l*delta_y, markerPosition[0]-l*delta_x, markerPosition[1]+l*delta_y, WHITE);
           }
+
         }
         
         //Test pour voir si l'on est actuellement en train de jouer la poste dont la barre s'affiche
@@ -338,6 +344,7 @@
   private:
     FdS_Adafruit_VS1053_FilePlayer *Player;
     FilePicker *filePicker;
+    MarkersManager *markers;
     t_state *state;
   };
   /**********************
@@ -586,10 +593,10 @@
       PitcherDisplay pitcher;
       PlaylistsDisplay playlists;
       MenuDisplay menu;
-      DisplayController(Adafruit_SSD1306 *ecran, FdS_Adafruit_VS1053_FilePlayer *player, FilePicker *filePicker, Pitcher *pitcher, PlaylistManager *playlists, t_state *state) :
+      DisplayController(Adafruit_SSD1306 *ecran, FdS_Adafruit_VS1053_FilePlayer *player, FilePicker *filePicker, Pitcher *pitcher, PlaylistManager *playlists, t_state *state, MarkersManager *markers) :
           display(ecran),
           files(ecran,filePicker),
-          playing(ecran,player,filePicker,state),
+          playing(ecran,player,filePicker,state, markers),
           pitcher(ecran,pitcher),
           playlists(ecran,playlists,state),
           menu(ecran) ,

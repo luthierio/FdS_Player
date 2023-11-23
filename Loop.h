@@ -17,7 +17,7 @@ void smallLoop() {
       }
 
       if(FILE_.exist()){
-        DISPLAY_.playing.progressBar(3, 57, 125-space4Pitch, 57, &DATA->markers);
+        DISPLAY_.playing.progressBar(3, 57, 125-space4Pitch, 57, true);
         DISPLAY_.playing.playMode(125-space4Pitch, 57); 
       }  
 

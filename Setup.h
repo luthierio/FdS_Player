@@ -78,14 +78,14 @@ void setup() {
   
   // Play a file in the background, REQUIRES interrupts!  
 
-  SD_BACKUP.load(MARKERS_FILENAME, &DATAS, sizeof(DATAS), true);  
+  SD_BACKUP.load(MARKERS_FILENAME, &MARKERS, sizeof(MARKERS), true);  
   SD_BACKUP.load(PLAYLISTS_FILENAME, &PLAYLISTS, sizeof(PLAYLISTS), true);
   FILE_.select(STATE.dirNum, STATE.fileNum); // Initialisation selon carte
   
   SD_BACKUP.load(STATE_FILENAME, &STATE, sizeof(STATE), true);
   PLAYLISTS_.setPosition( STATE.playlistPosition, true );  
   AUDIO.playFullFile(STARTSOUND);    
-  
+
   setMode(STATE.MODE);
   
 };

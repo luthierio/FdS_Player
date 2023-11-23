@@ -123,11 +123,11 @@ void onPress(ButtonHandler* buttonHandler, int ID) {
 
         case 2:         
 
-          if(DATA->markers.isEmpty()){
+          if(MARKERS_.isEmpty()){
             JumpPosition = (AUDIO.getFilePosition() >= SECONDS_PER_JUMP * (BITRATE / 8)) ? (AUDIO.getFilePosition() - SECONDS_PER_JUMP * (BITRATE / 8)) : 0;   
           }else{
             //on cherche BITRATE / 4 = 2 seconde pour sauter au rpécédent si on est très proche du marker
-            JumpPosition =DATA->markers.getPreviousFrom(AUDIO.getFilePosition()- BITRATE / 4); 
+            JumpPosition =MARKERS_.getPrevious(AUDIO.getFilePosition()- BITRATE / 4); 
           } 
           AUDIO.jumpTo(JumpPosition);
           DEBUG_.print("Jump Position", JumpPosition);
@@ -218,21 +218,20 @@ void onLongPress(ButtonHandler* buttonHandler, int ID) {
       // Long press
       switch (ID) {
         case 0:
-          SD_BACKUP.save(MARKERS_FILENAME, &DATAS, sizeof(DATAS));
+          SD_BACKUP.save(MARKERS_FILENAME, &MARKERS, sizeof(MARKERS));
           SD_BACKUP.save(STATE_FILENAME, &STATE, sizeof(STATE));
           break;
         case 1:
           //On vérifie que le fichier Sélectionné est bien celui qui joue pour ajouter un marqueur
           if(AUDIO.getFilePosition() && AUDIO.currentTrack.size() == FILE_.getSize()){
-            DATA->addMarker(&FILE_,&AUDIO);
+            MARKERS_.addMarker(AUDIO.getFilePosition());
             AUDIO.pausePlaying(false);
-            DEBUG_.print("New marker", static_cast<int>(AUDIO.getFilePosition()));
           }
           break;
 
         case 2:
           if(AUDIO.getFilePosition() && AUDIO.currentTrack.size() == FILE_.getSize()){
-            DATA->markers.popPrevious(AUDIO.getFilePosition());
+            MARKERS_.deletePrevious(AUDIO.getFilePosition());
           }
           break;
 
@@ -428,7 +427,7 @@ void onAfterSelectDir(){
 
   onAfterSDWork();
   STATE.dirNum = FILE_.dirNum;
-  DATA = &getFileDataRef(FILE_.dirNum,FILE_.fileNum);
+  //DATA = &getFileDataRef(FILE_.dirNum,FILE_.fileNum);
   //TODO ?
   //R_DIR->resetPosition(FILE_.dirNum*R_DIR->getStepsPerClick(), false);
 
@@ -443,7 +442,7 @@ void onAfterSelectFile(){
 
   onAfterSDWork();
   STATE.fileNum = FILE_.fileNum;
-  DATA = &getFileDataRef(FILE_.dirNum,FILE_.fileNum);
+  //DATA = &getFileDataRef(FILE_.dirNum,FILE_.fileNum);
   //TODO ?
   //R_DIR->resetPosition(FILE_.fileNum*R_DIR->getStepsPerClick(), false);
 

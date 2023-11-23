@@ -40,8 +40,18 @@
       void setCallbacks(void (*setPositionCallback)(uint8_t[2])) {
           onSetPosition = setPositionCallback;
       }
+
+      bool isEmpty() {
+        markerArray *array = getFileArray();
+        return array->isEmpty();        
+      }
+      uint32_t *getMarkers() {
+        markerArray *array = getFileArray();
+        return array->markers.get();        
+      }
+
       void addMarker(uint32_t position) {
-        markerArray *array = getAvailableArray();
+        markerArray *array = getFileArray();
         if(array->isEmpty()){
           array->dirNum = filePicker->dirNum;
           array->fileNum = filePicker->fileNum;        
@@ -50,16 +60,16 @@
       }
 
       void deletePrevious(uint32_t position) {
-        markerArray *array = getAvailableArray();
+        markerArray *array = getFileArray();
         array->markers.popPrevious(position);
       }
 
-      void getPrevious( uint32_t position) {
-        markerArray *array = getAvailableArray();
-        array->markers.getPreviousFrom(position);
+      uint32_t getPrevious( uint32_t position) {
+        markerArray *array = getFileArray();
+        return array->markers.getPreviousFrom(position);
       }
 
-      markerArray *getAvailableArray() {
+      markerArray *getFileArray() {
         if (filePicker->exist()) {
           // Si il existe et n'est pas vide, on l'utilise
           for (byte i = 0; i < NBR_MARKER_ARRAYS; i = i + 1) {
@@ -79,51 +89,5 @@
         return nullptr;
       }
   };
-
-
-
-
-  struct t_fileData {
-      uint8_t dirNum;
-      uint8_t fileNum;
-      Array<uint32_t, NBR_MARKERS> markers;
-      void addMarker(FilePicker *FILE_, FdS_Adafruit_VS1053_FilePlayer *AUDIO) {
-        this->dirNum = FILE_->dirNum;
-        this->fileNum = FILE_->fileNum;
-        markers.push(AUDIO->getFilePosition());
-      }
-      void clear() {
-          // Remettez vos membres de structure à leurs valeurs par défaut ici
-          dirNum = 0;
-          fileNum = 0;
-          markers.clean(); // Assurez-vous que la classe Array a une méthode clean() ou équivalente
-      }
-  };
-  t_fileData DATAS[NBR_MARKER_ARRAYS];
-  t_fileData emptyData;
-  t_fileData *DATA = &DATAS[0];
-
-  t_fileData &getFileDataRef(int dirNum, int fileNum) {
-      // Si il existe et n'est pas vide, on l'utilise
-      for (byte i = 0; i < NBR_MARKER_ARRAYS; i = i + 1) {
-          if (dirNum == DATAS[i].dirNum && DATAS[i].fileNum == fileNum) {
-              return DATAS[i];
-          }
-      }
-
-      // Sinon on prend le prochain espace vide comme référence
-      for (byte i = 0; i < NBR_MARKER_ARRAYS; i = i + 1) {
-          if (DATAS[i].markers.isEmpty()) {            
-              return DATAS[i];
-          }
-      }
-
-      // Si on a rien trouvé de disponible, on envoie un tableau qui se vide et ne se sauve pas
-      // Il faudra avertir l'utilisateur sur l'écran
-      emptyData.clear();
-      return emptyData;
-  }
-
-
 
 #endif
