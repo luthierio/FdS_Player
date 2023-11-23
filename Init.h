@@ -17,12 +17,19 @@ Pitcher PITCHER = Pitcher(&AUDIO);
 FilePicker FILE_(&SD);
 FileManager SD_BACKUP(&SD);
 
-PlaylistItem PLAYLISTS[NBR_PLAYLISTS][NBR_PLAYLIST_ITEMS];
-PlaylistManager PLAYLISTS_(PLAYLISTS);
 
 Metronome METRONOME_(&AUDIO, BEATSOUND, BEATSOUND2); // BPM = 120, 4 beats per bar, with specific beat files
 
 uint8_t VOLUME = 10;          // Defaut volume
+
+/**********************
+* MARKERS & PLAYLISTS
+***********************/
+PlaylistItem PLAYLISTS[NBR_PLAYLISTS][NBR_PLAYLIST_ITEMS];
+PlaylistManager PLAYLISTS_(PLAYLISTS);
+
+markerArray MARKERS[NBR_MARKER_ARRAYS][NBR_MARKERS];
+MarkersManager MARKERS_(&FILE_, MARKERS);
 
 /**********************
 * SCREEN

@@ -28,7 +28,7 @@
   };
 
   class PlaylistManager {
-  private:
+    private:
       static const uint8_t nameSize = 18;
       uint8_t position[2] = {0, 0};
       // Tableau de références de playlists
@@ -37,7 +37,7 @@
       // Tableau pour suivre le nombre d'éléments dans chaque playlist
       int playlistItemCount[NBR_PLAYLISTS] = {0};
 
-  public:
+    public:
       static const uint8_t nbr = NBR_PLAYLISTS;
       static const uint8_t size = NBR_PLAYLIST_ITEMS;
       // Define event function pointers
