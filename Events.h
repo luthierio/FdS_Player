@@ -28,8 +28,8 @@ void setMode(uint8_t mode) {
       DISPLAY_.playlists.show(); 
       break; 
 
-    default:
-      DISPLAY_.display.logo();
+    default:  
+      setMode(PLAYER);
       break;
   }
 

@@ -85,11 +85,11 @@ void setup() {
 
   FILE_.select(STATE.dirNum, STATE.fileNum); // Initialisation selon carte  
   PLAYLISTS_.setPosition( STATE.playlistPosition, true );  
-  
+
   DISPLAY_.display.message(CREDITS);
 
   AUDIO.playFullFile(STARTSOUND);    
-
+  
   setMode(STATE.MODE);
   
 };
