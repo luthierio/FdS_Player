@@ -61,6 +61,9 @@ void setup() {
   FILE_.setDirCallbacks( onBeforeSelectDir, onAfterSelectDir );
   FILE_.setFileCallbacks( onBeforeSelectFile, onAfterSelectFile );
 
+  PLAYLISTS_.setCallbacks( onSetPosition, onSetPlayPosition );
+  PLAYLISTS_.setPosition( STATE.playlistPosition[0], STATE.playlistPosition[1], true );
+
   SLEEP_WATCH.setCallbacks(onSleep, onWakeUp);
   SLEEP_WATCH.wakeUp();
   DEBUG_.print(F("✓✓✓ ⋅ Sleep Watch ok "));
@@ -80,6 +83,6 @@ void setup() {
   
   // Play a file in the background, REQUIRES interrupts!  
   AUDIO.playFullFile(STARTSOUND);      
-  setMode(PLAYLIST);
+  setMode(STATE.MODE);
   
 };

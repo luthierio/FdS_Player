@@ -32,7 +32,7 @@ void setMode(uint8_t mode) {
       break;
   }
 
-  ASF_MODE = mode;
+  STATE.MODE = mode;
 }
 
 /**********************
@@ -44,7 +44,7 @@ void onRotChange(Rotary &rotary) {
 
   int currentPosition = rotary.getPosition();
 
-  switch (ASF_MODE) {
+  switch (STATE.MODE) {
     case PLAYER:            
       if(&rotary == R_DIR) {
         FILE_.selectDir(currentPosition);
@@ -98,7 +98,7 @@ void onPress(ButtonHandler* buttonHandler, int ID) {
   SLEEP_WATCH.wakeUp();
   int JumpPosition;
 
-  switch (ASF_MODE) {
+  switch (STATE.MODE) {
     /**********************
     * PLAYER:
     ***********************/
@@ -186,6 +186,7 @@ void onPress(ButtonHandler* buttonHandler, int ID) {
       }
       break;
     case BEAT:
+      setMode(PLAYER);
       break;
     /**********************
     * ACTION:
@@ -205,14 +206,16 @@ void onPress(ButtonHandler* buttonHandler, int ID) {
       }
       break;
     default:
+      setMode(PLAYER);
       break;
   }
+  DEBUG_.print("MODE", STATE.MODE);
   DEBUG_.print("Pressed", ID);
   delay(10);
 }
 void onLongPress(ButtonHandler* buttonHandler, int ID) {
 
-  switch (ASF_MODE) {
+  switch (STATE.MODE) {
     case PLAYER:
       // Long press
       switch (ID) {
@@ -244,8 +247,10 @@ void onLongPress(ButtonHandler* buttonHandler, int ID) {
     case PLAYLIST:
       // Long press
       switch (ID) {
-        case 5:
         case 0:
+          SD_BACKUP.save(STATE_FILENAME, &STATE, sizeof(STATE));
+          break;
+        case 5:
           SD_BACKUP.save(PLAYLISTS_FILENAME, &PLAYLISTS_, sizeof(PLAYLISTS_));
           break;
         default:
@@ -262,7 +267,7 @@ void onLongPress(ButtonHandler* buttonHandler, int ID) {
 
 void onRelease(ButtonHandler* buttonHandler, int ID) {
 
-  switch (ASF_MODE) {
+  switch (STATE.MODE) {
     /**********************
     * PLAYER:
     ***********************/
@@ -290,7 +295,7 @@ void autoPlay(){
         SHOULD_PLAY_NEXT = true;
     }
 
-    if(SHOULD_PLAY_NEXT && ASF_MODE == PLAYER) {
+    if(SHOULD_PLAY_NEXT && STATE.MODE == PLAYER) {
 
       //Fin du répertoire
       if(FILE_.fileNum == 99){    
@@ -389,14 +394,14 @@ void onAfterSDReadWrite(const char* fileName, const char* message) {
   onAfterSDWork();
   DISPLAY_.display.message(message);
   delay(MSG_DELAY);
-  setMode(ASF_MODE);
+  setMode(STATE.MODE);
 }
 void onSDError(const char* fileName, const char* message) {
   DEBUG_.print("××× ⋅ ", fileName, message); 
   onAfterSDWork();
   DISPLAY_.display.message(message);
   delay(ERROR_MSG_DELAY);
-  setMode(ASF_MODE);
+  setMode(STATE.MODE);
 }
 
 
@@ -415,7 +420,7 @@ void onAfterSelectDir(){
   //TODO ?
   //R_DIR->resetPosition(FILE_.dirNum*R_DIR->getStepsPerClick(), false);
 
-  if(ASF_MODE == PLAYER){
+  if(STATE.MODE == PLAYER){
     DISPLAY_.files.printPath(&FILE_);
   }
 
@@ -430,10 +435,20 @@ void onAfterSelectFile(){
   //TODO ?
   //R_DIR->resetPosition(FILE_.fileNum*R_DIR->getStepsPerClick(), false);
 
-  if(ASF_MODE == PLAYER){
+  if(STATE.MODE == PLAYER){
     DISPLAY_.files.printPath(&FILE_);
   }
   
   DEBUG_.print("SelectFile",FILE_.fileNum,FILE_.path);  
 
+}
+
+/**********************
+* PLAYLISTS:
+***********************/
+void onSetPosition(uint8_t position){
+  STATE.playlistPosition[0] = position;
+}
+void onSetPlayPosition(uint8_t position){
+  STATE.playlistPosition[1] = position;
 }

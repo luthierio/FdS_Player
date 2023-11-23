@@ -464,16 +464,22 @@
 
         uint8_t position = playlists->getPlayPosition();
 
-        printTxtNum(position, 18, SCREEN_HEIGHT/2+4, &FreeSans9pt7b); 
 
-        PlaylistItem *item =  playlists->getItem();
+        PlaylistItem *item =  playlists->getItem(); //Position courante
         PlaylistItem *prevItem =  playlists->getItem(position-1);
         PlaylistItem *nextItem =  playlists->getItem(position+1);
 
         basename(item->fileName);
 
-        printTxt(item->dirName, 12+30,18, NULL, 0);
-        printTxt(item->fileName+3, 12+30, 40, &FreeSerif9pt7b);
+        printTxt(item->dirName, 12+34,18, NULL, 0);
+        printTxt(item->fileName+3, 12+34, 40, &FreeSerif9pt7b);
+
+        printTxtNum(position, 22, SCREEN_HEIGHT/2+4, &FreeSans9pt7b); 
+
+        //Le fichier qui est sélectionné dans le player est celui ci
+        if(state->dirNum == item->dirNum && state->fileNum == item->fileNum ){
+            ecran_->fillTriangle( 18, SCREEN_HEIGHT/2-2 , 18, SCREEN_HEIGHT/2+2, 18+2,SCREEN_HEIGHT/2, WHITE);      // Triangles forward
+        }
 
         if(playlists->getPlayPosition() == 0){
 
@@ -482,7 +488,7 @@
         }else if(prevItem != nullptr){          
 
           basename(prevItem->fileName);
-          printTxt(prevItem->fileName+3, 12+30,2, NULL, 0);
+          printTxt(prevItem->fileName+3, 12+34,2, NULL, 0);
 
         }
 
@@ -493,7 +499,7 @@
         }else if(nextItem != nullptr){     
 
           basename(nextItem->fileName);
-          printTxt(nextItem->fileName+3, 12+30,54, NULL, 0);
+          printTxt(nextItem->fileName+3, 12+34,54, NULL, 0);
 
         }
 
