@@ -310,8 +310,7 @@
         if(disPlayMarkers && pickedSize){
           uint32_t* markersArray = markers->getMarkers();
 
-          for (byte i = 0; i < NBR_MARKERS; i = ++i) {  
-
+          for (byte i = 0; i < markers->getCount(); i = ++i) {  
 
             float relativeMarkerPosition = (float)markersArray[i]/(float)pickedSize;       
             float markerPosition[] = {x1+delta_X*relativeMarkerPosition,y1+delta_Y*relativeMarkerPosition};

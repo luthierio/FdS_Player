@@ -46,30 +46,45 @@
         active = getFileArray();
       }
 
-      bool isEmpty() {
-        return active->markers.isEmpty();        
+
+      bool isEmpty() const {
+          return (active == nullptr) ? true : active->markers.isEmpty();
       }
-      uint32_t *getMarkers() {
-        return active->markers.get();        
+
+      uint32_t getCount() const {
+          return (active == nullptr) ? 0 : active->markers.count;
+      }
+
+      uint32_t* getMarkers() {
+          return (active == nullptr) ? nullptr : active->markers.get();
       }
 
       void addMarker(uint32_t position) {
-        if(active->isUnset()){
-          active->dirNum = filePicker->dirNum;
-          active->fileNum = filePicker->fileNum;   
-        }     
-        active->markers.push(position);
-        if (onAdd != nullptr) {
-            onAdd(position);
-        }
-      }
+          if (active == nullptr || active->isUnset()) {
+              active = getFileArray();
+              if (active == nullptr) {
+                  // Gérer le cas où il n'y a plus d'espace pour les références de fichiers
+                  return;
+              }
+              active->dirNum = filePicker->dirNum;
+              active->fileNum = filePicker->fileNum;
+          }
 
+          active->markers.push(position);
+
+          if (onAdd != nullptr) {
+              onAdd(position);
+          }
+      }
+      
       void deletePrevious(uint32_t position) {
-        active->markers.popPrevious(position);
+          if (active != nullptr) {
+              active->markers.popPrevious(position);
+          }
       }
 
-      uint32_t getPrevious( uint32_t position) {
-        return active->markers.getPreviousFrom(position);
+      uint32_t getPrevious(uint32_t position) const {
+          return (active == nullptr) ? 0 : active->markers.getPreviousFrom(position);
       }
 
       markerArray *getFileArray() {

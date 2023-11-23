@@ -6,35 +6,34 @@ void setMode(uint8_t mode) {
   DEBUG_.print("MODE", mode);
   DISPLAY_.clear();
 
-  switch (mode) {
-    case PLAYER:
+  if (mode == PLAYER) {
+
       R_DIR->resetPosition(FILE_.dirNum, false);
       R_DIR->setUpperBound(MAX_DIR_NUM);
       R_FILES->resetPosition(FILE_.fileNum, false);
       R_FILES->setUpperBound(MAX_FILES_NUM);
-      DISPLAY_.files.printPath(&FILE_);
-      break;
-
-    case MENU:
+      DISPLAY_.files.printPath(&FILE_); 
+  
+  } else if (mode == MENU) {
+    
       R_DIR->resetPosition(ACTION_ID, false);
       R_DIR->setUpperBound(NBR_ACTIONS);
       DISPLAY_.menu.show(ACTIONS[ACTION_ID].title, ACTIONS[ACTION_ID].action); 
-      break; 
-    case PLAYLIST:
+
+  } else if (mode == PLAYLIST) {
+
       R_DIR->resetPosition(PLAYLISTS_.getPosition()[0], false);
       R_DIR->setUpperBound(NBR_PLAYLISTS);
       R_FILES->resetPosition(PLAYLISTS_.getPosition()[1], false);
       R_FILES->setUpperBound(NBR_PLAYLIST_ITEMS);
       DISPLAY_.playlists.show(); 
-      break; 
 
-    case LOGO:
+  } else if (mode == LOGO) {
+
       DISPLAY_.display.logo();
-    default:
-      DISPLAY_.display.logo();
-      break;
+
   }
-
+  DISPLAY_.show();
   STATE.MODE = mode;
 }
 /**********************
@@ -55,8 +54,11 @@ void onRotChange(Rotary &rotary) {
 
   int currentPosition = rotary.getPosition();
 
-  switch (STATE.MODE) {
-    case PLAYER:            
+  /**********************
+  * PLAYER:
+  ***********************/
+  if (STATE.MODE == PLAYER) {
+
       if(&rotary == R_DIR) {
         FILE_.selectDir(currentPosition);
       }
@@ -65,30 +67,38 @@ void onRotChange(Rotary &rotary) {
       }
       if(&rotary == R_PITCH) {
         PITCHER.setPitchStep(currentPosition);
-      }
-      break;   
-    case PLAYLIST: 
+      }   
+
+  /**********************
+  * PLAYLIST:
+  ***********************/
+  } else if (STATE.MODE == PLAYLIST) {
+
       if(&rotary == R_DIR) {
         PLAYLISTS_.setPosition(currentPosition); 
       }
       if(&rotary == R_FILES) {
         PLAYLISTS_.setPlayPosition(currentPosition);
       }
-      
-      break;   
+       
 
-    case BEAT: 
-    case MENU:  
+  /**********************
+  * MENU:
+  ***********************/
+  } else if (STATE.MODE == MENU) {
+
       DEBUG_.print("ROT",currentPosition);  
       if(&rotary == R_DIR) {
         ACTION_ID = currentPosition;
         DISPLAY_.menu.show(ACTIONS[ACTION_ID].title, ACTIONS[ACTION_ID].action); 
       } 
-      break;   
-    default:
-      break;
 
   }  
+}
+
+void onRotUpLimit(Rotary &rotary) {
+}
+void onRotLowLimit(Rotary &rotary) {  
 }
 
 /**********************
@@ -100,11 +110,11 @@ void onPress(ButtonHandler* buttonHandler, int ID) {
   SLEEP_WATCH.wakeUp();
   int JumpPosition;
 
-  switch (STATE.MODE) {
-    /**********************
-    * PLAYER:
-    ***********************/
-    case PLAYER:
+  /**********************
+  * PLAYER:
+  ***********************/
+  if (STATE.MODE == PLAYER) {
+
       switch (ID) {
         case 0:
           //Play on release
@@ -153,11 +163,12 @@ void onPress(ButtonHandler* buttonHandler, int ID) {
         default:
           break;
       }
-      break;
-    /**********************
-    * PLAYLIST:
-    ***********************/
-    case PLAYLIST:
+
+  /**********************
+  * PLAYLIST:
+  ***********************/
+  } else if (STATE.MODE == PLAYLIST) {
+
       switch (ID) {
         case 0:
           //Play on Release
@@ -189,14 +200,19 @@ void onPress(ButtonHandler* buttonHandler, int ID) {
         default:
           break;
       }
-      break;
-    case BEAT:
+
+  /**********************
+  * METRONOME:
+  ***********************/
+  } else if (STATE.MODE == BEAT) {
+
       setMode(PLAYER);
-      break;
-    /**********************
-    * ACTION:
-    ***********************/
-    case MENU:
+
+  /**********************
+  * ACTION:
+  ***********************/
+  } else if (STATE.MODE == MENU) {
+
       switch (ID) {
         case 0:
         case 1:
@@ -209,10 +225,7 @@ void onPress(ButtonHandler* buttonHandler, int ID) {
         default:
           break;
       }
-      break;
-    default:
-      setMode(PLAYER);
-      break;
+
   }
   DEBUG_.print("MODE", STATE.MODE);
   DEBUG_.print("Pressed", ID);
@@ -220,8 +233,11 @@ void onPress(ButtonHandler* buttonHandler, int ID) {
 }
 void onLongPress(ButtonHandler* buttonHandler, int ID) {
 
-  switch (STATE.MODE) {
-    case PLAYER:
+  /**********************
+  * PLAYER:
+  ***********************/
+  if (STATE.MODE == PLAYER) {
+
       // Long press
       switch (ID) {
         case 0:
@@ -248,7 +264,12 @@ void onLongPress(ButtonHandler* buttonHandler, int ID) {
         default:
           break;
       }
-    case PLAYLIST:
+
+  /**********************
+  * PLAYLIST:
+  ***********************/
+  } else if (STATE.MODE == PLAYLIST) {
+
       // Long press
       switch (ID) {
         case 0:
@@ -260,10 +281,9 @@ void onLongPress(ButtonHandler* buttonHandler, int ID) {
         default:
           break;
       }
-      break;
-    default:
-      break;
-  }
+
+  } 
+  
   DEBUG_.print("LongPress", ID);
   
 }
@@ -271,11 +291,10 @@ void onLongPress(ButtonHandler* buttonHandler, int ID) {
 
 void onRelease(ButtonHandler* buttonHandler, int ID) {
 
-  switch (STATE.MODE) {
-    /**********************
-    * PLAYER:
-    ***********************/
-    case PLAYER:
+  /**********************
+  * PLAYER:
+  ***********************/
+  if (STATE.MODE == PLAYER) {
       switch (ID) {
         case 0:
           DEBUG_.print("Playing", FILE_.path);
@@ -284,8 +303,12 @@ void onRelease(ButtonHandler* buttonHandler, int ID) {
         default:
           break;
       }
-      break;
-    case PLAYLIST:
+
+  /**********************
+  * PLAYLIST:
+  ***********************/
+  } else if (STATE.MODE == PLAYLIST) {
+
       switch (ID) {
         case 0:
           //DEBUG_.print("dirNum",PLAYLISTS_.getItem()->dirNum);
@@ -297,9 +320,7 @@ void onRelease(ButtonHandler* buttonHandler, int ID) {
         default:
           break;
       }
-      break;
-    default:
-      break;
+
   }
   DEBUG_.print("Release", ID);
 }

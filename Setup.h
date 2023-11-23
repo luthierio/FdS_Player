@@ -16,7 +16,7 @@ void setup() {
   ***********************/    
   if(SCREEN_.begin(SSD1306_SWITCHCAPVCC, SCREEN_ADDRESS)){    
     DISPLAY_.init();
-    setMode(LOGO);
+    DISPLAY_.display.logo();
     DEBUG_.print(F("✓✓✓ ⋅ Screen OK"));
   }
   /**********************
@@ -71,6 +71,8 @@ void setup() {
   for (byte i = 0; i < 3; ++i) {
     ROTARIES[i].begin(); // Remplacez 2 et 3 par les broches réelles de votre rotary encoder
     ROTARIES[i].setChangedHandler(onRotChange);
+    ROTARIES[i].setLowerOverflowHandler(onRotUpLimit);
+    ROTARIES[i].setUpperOverflowHandler(onRotLowLimit);
   }
   MUX.begin();
   BUTTONS.setCallbacks(onPress,onRelease,onLongPress,onLongRelease);
@@ -79,17 +81,18 @@ void setup() {
   
   // Play a file in the background, REQUIRES interrupts!  
 
-  SD_BACKUP.load(MARKERS_FILENAME, &MARKERS, sizeof(MARKERS), SILENT);  
-  SD_BACKUP.load(PLAYLISTS_FILENAME, &PLAYLISTS, sizeof(PLAYLISTS), SILENT);
+  //SD_BACKUP.load(MARKERS_FILENAME, &MARKERS, sizeof(MARKERS), SILENT);  
+  //SD_BACKUP.load(PLAYLISTS_FILENAME, &PLAYLISTS, sizeof(PLAYLISTS), SILENT);
 
-  SD_BACKUP.load(STATE_FILENAME, &STATE, sizeof(STATE), SILENT);
+  DISPLAY_.display.message(CREDITS);
+  DISPLAY_.show();
+
+  AUDIO.playFullFile(STARTSOUND);  
+
+  //SD_BACKUP.load(STATE_FILENAME, &STATE, sizeof(STATE), SILENT);
   FILE_.select(STATE.dirNum, STATE.fileNum, SILENT); // Initialisation selon carte  
   PLAYLISTS_.setPosition( STATE.playlistPosition, SILENT ); 
-  
-  DISPLAY_.display.message(CREDITS);
-
-  AUDIO.playFullFile(STARTSOUND);     
-  
+    
   setMode(STATE.MODE);
   
 };

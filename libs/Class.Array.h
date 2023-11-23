@@ -10,7 +10,7 @@
       DATATYPE values[SIZE];
 
   public:
-      unsigned char count;
+      uint32_t count;
       Array() : count(0) {}
 
       DATATYPE* get() {
