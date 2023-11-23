@@ -49,10 +49,10 @@
         onAfterSelectFile = afterSelect;
       }
 
-      void select(uint8_t dirNum, uint8_t fileNum){      
+      void select(uint8_t dirNum, uint8_t fileNum, bool silent = false){      
         if(dirNum < 100 && fileNum < 100){
-          selectDir(dirNum);
-          selectFile(fileNum);
+          selectDir(dirNum,silent);
+          selectFile(fileNum,silent);
         }  
       }
       
@@ -61,18 +61,18 @@
         selectFile(this->fileNum);
       }
         
-      void selectDir(uint8_t num){   
+      void selectDir(uint8_t num, bool silent = false){   
 
-          if (onBeforeSelectDir) {
+          if (!silent && onBeforeSelectDir) {
             onBeforeSelectDir(); // Appel de la fonction de rappel avant la sélection
           }
 
           this->dirNum = num;      
           this->DIR = getByNum(this->SD->open("/"), num);
-          selectFile(this->fileNum);
+          selectFile(this->fileNum, silent);
           updatePath();
 
-          if (onAfterSelectDir) {
+          if (!silent && onAfterSelectDir) {
             onAfterSelectDir(); // Appel de la fonction de rappel après la sélection
           }
       }   
@@ -82,9 +82,9 @@
       byte exist(){
         return this->filename[0] != '\0';
       }   
-      void selectFile(uint8_t num){ 
+      void selectFile(uint8_t num, bool silent = false){ 
 
-          if (onBeforeSelectFile) {
+          if (!silent && onBeforeSelectFile) {
             onBeforeSelectFile(); // Appel de la fonction de rappel avant la sélection
           }
 
@@ -92,7 +92,7 @@
           this->FILE = getByNum(this->DIR, num);
           updatePath();
 
-          if (onAfterSelectFile) {
+          if (!silent && onAfterSelectFile) {
             onAfterSelectFile(); // Appel de la fonction de rappel après la sélection
           }
       }  

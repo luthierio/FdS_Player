@@ -10,7 +10,7 @@ enum playMode   { ONEPLAY,  AUTO,   RANDOM,   REPEATONE };// Entier déguisé en
 enum pitchMode  { OFF,      TEMPO,  PITCH };// Entier déguisé en string :-)
 
 struct t_state{
-  uint8_t MODE = PLAYER;
+  uint8_t MODE;
   uint8_t dirNum = 0;
   uint8_t fileNum = 0;
   uint8_t pitchStep = 5;

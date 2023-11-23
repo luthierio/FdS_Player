@@ -14,7 +14,7 @@ void setup() {
   /**********************
   * DISPLAY:
   ***********************/    
-  if(SCREEN_.begin(SSD1306_SWITCHCAPVCC, SCREEN_ADDRESS)){
+  if(SCREEN_.begin(SSD1306_SWITCHCAPVCC, SCREEN_ADDRESS)){    
     DISPLAY_.init();
     setMode(LOGO);
     DEBUG_.print(F("✓✓✓ ⋅ Screen OK"));
@@ -79,16 +79,16 @@ void setup() {
   
   // Play a file in the background, REQUIRES interrupts!  
 
-  SD_BACKUP.load(MARKERS_FILENAME, &MARKERS, sizeof(MARKERS), true);  
-  SD_BACKUP.load(PLAYLISTS_FILENAME, &PLAYLISTS, sizeof(PLAYLISTS), true);
-  SD_BACKUP.load(STATE_FILENAME, &STATE, sizeof(STATE), true);
+  SD_BACKUP.load(MARKERS_FILENAME, &MARKERS, sizeof(MARKERS), SILENT);  
+  SD_BACKUP.load(PLAYLISTS_FILENAME, &PLAYLISTS, sizeof(PLAYLISTS), SILENT);
 
-  FILE_.select(STATE.dirNum, STATE.fileNum); // Initialisation selon carte  
-  PLAYLISTS_.setPosition( STATE.playlistPosition, true );  
-
+  SD_BACKUP.load(STATE_FILENAME, &STATE, sizeof(STATE), SILENT);
+  FILE_.select(STATE.dirNum, STATE.fileNum, SILENT); // Initialisation selon carte  
+  PLAYLISTS_.setPosition( STATE.playlistPosition, SILENT ); 
+  
   DISPLAY_.display.message(CREDITS);
 
-  AUDIO.playFullFile(STARTSOUND);    
+  AUDIO.playFullFile(STARTSOUND);     
   
   setMode(STATE.MODE);
   

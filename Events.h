@@ -28,8 +28,10 @@ void setMode(uint8_t mode) {
       DISPLAY_.playlists.show(); 
       break; 
 
-    default:  
-      setMode(PLAYER);
+    case LOGO:
+      DISPLAY_.display.logo();
+    default:
+      DISPLAY_.display.logo();
       break;
   }
 
@@ -350,7 +352,7 @@ void autoPlay(){
     //PLAYLIST AUTOPLAY
     } else if(SHOULD_PLAY_NEXT && STATE.MODE == PLAYLIST) {
 
-      //Fin du répertoire dans la lecture en continu
+      //Fin du répertoire dans la lecture en
       if(STATE.playlistMode == AUTO && PLAYLISTS_.getPlayPosition() == NBR_PLAYLIST_ITEMS-1){    
         PLAYLISTS_.setPlayPosition(0);
         SHOULD_PLAY_NEXT = false;
