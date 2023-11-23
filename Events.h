@@ -324,7 +324,7 @@ void autoPlay(){
     if(SHOULD_PLAY_NEXT && STATE.MODE == PLAYER) {
           
       //Fin du répertoire
-      if(FILE_.fileNum == MAX_FILES_NUM-1){    
+      if(STATE.playMode == AUTO && FILE_.fileNum == MAX_FILES_NUM-1){    
         FILE_.selectFile(0);
         SHOULD_PLAY_NEXT = false;
         DEBUG_.print("FIN AutoPlay");
@@ -350,8 +350,8 @@ void autoPlay(){
     //PLAYLIST AUTOPLAY
     } else if(SHOULD_PLAY_NEXT && STATE.MODE == PLAYLIST) {
 
-      //Fin du répertoire
-      if(PLAYLISTS_.getPlayPosition() == NBR_PLAYLIST_ITEMS-1){    
+      //Fin du répertoire dans la lecture en continu
+      if(STATE.playlistMode == AUTO && PLAYLISTS_.getPlayPosition() == NBR_PLAYLIST_ITEMS-1){    
         PLAYLISTS_.setPlayPosition(0);
         SHOULD_PLAY_NEXT = false;
         DEBUG_.print("FIN AutoPlay");
