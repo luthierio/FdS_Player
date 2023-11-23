@@ -16,8 +16,8 @@
     private:
       SdFat* SD;
       File DIR;
-      File FILE; 
     public:
+      File FILE; 
       int dirNum;
       int fileNum;  
       char dirname[MAX_FILENAME_LENGTH]; 

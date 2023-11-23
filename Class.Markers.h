@@ -27,46 +27,49 @@
   class MarkersManager {
     private:
       markerArray (*markerArrays)[NBR_MARKERS];
+      markerArray *active;
     public:
       static const uint8_t nbr = NBR_MARKER_ARRAYS;
       static const uint8_t size = NBR_MARKERS;
       FilePicker *filePicker;
       // Define event function pointers
-      void (*onSetPosition)(uint8_t position[2]) = nullptr;
+      void (*onAdd)(uint32_t position) = nullptr;
 
       MarkersManager(FilePicker *filePicker, markerArray (*markerArrays)[NBR_MARKERS]) : filePicker(filePicker), markerArrays(markerArrays) {}
 
       // Set callback functions
-      void setCallbacks(void (*setPositionCallback)(uint8_t[2])) {
-          onSetPosition = setPositionCallback;
+      void setCallbacks(void (*onAddCallback)(uint32_t)) {
+          onAdd = onAddCallback;
+      }
+      
+      void selectArray(){
+        active = getFileArray();
       }
 
       bool isEmpty() {
-        markerArray *array = getFileArray();
-        return array->isEmpty();        
+        return active->isEmpty();        
       }
       uint32_t *getMarkers() {
-        markerArray *array = getFileArray();
-        return array->markers.get();        
+        return active->markers.get();        
       }
 
       void addMarker(uint32_t position) {
-        markerArray *array = getFileArray();
-        if(array->isEmpty()){
-          array->dirNum = filePicker->dirNum;
-          array->fileNum = filePicker->fileNum;        
-          array->markers.push(position);
+        if(active->isEmpty()){
+          active->dirNum = filePicker->dirNum;
+          active->fileNum = filePicker->fileNum;   
+        }     
+        active->markers.push(position);
+        if (onAdd != nullptr) {
+            onAdd(position);
         }
       }
 
       void deletePrevious(uint32_t position) {
-        markerArray *array = getFileArray();
-        array->markers.popPrevious(position);
+        active->markers.popPrevious(position);
       }
 
       uint32_t getPrevious( uint32_t position) {
-        markerArray *array = getFileArray();
-        return array->markers.getPreviousFrom(position);
+        return active->markers.getPreviousFrom(position);
       }
 
       markerArray *getFileArray() {

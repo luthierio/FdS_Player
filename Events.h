@@ -427,6 +427,7 @@ void onAfterSelectDir(){
 
   onAfterSDWork();
   STATE.dirNum = FILE_.dirNum;
+  MARKERS_.selectArray();
   //DATA = &getFileDataRef(FILE_.dirNum,FILE_.fileNum);
   //TODO ?
   //R_DIR->resetPosition(FILE_.dirNum*R_DIR->getStepsPerClick(), false);
@@ -442,6 +443,8 @@ void onAfterSelectFile(){
 
   onAfterSDWork();
   STATE.fileNum = FILE_.fileNum;
+  MARKERS_.selectArray();
+  Serial.print(MARKERS_.getPrevious(FILE_.FILE.size()));  
   //DATA = &getFileDataRef(FILE_.dirNum,FILE_.fileNum);
   //TODO ?
   //R_DIR->resetPosition(FILE_.fileNum*R_DIR->getStepsPerClick(), false);
@@ -460,4 +463,11 @@ void onAfterSelectFile(){
 void onSetPosition(uint8_t position[2]){
   STATE.playlistPosition[0] = position[0];
   STATE.playlistPosition[1] = position[1];
+}
+/**********************
+* MARKERS:
+***********************/
+void onMarkerAdd(uint32_t position){
+  DEBUG_.print("MArker",position);  
+  DEBUG_.print("Depuis previous?",(int)MARKERS_.getPrevious(position+1000));  
 }
