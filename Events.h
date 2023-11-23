@@ -123,6 +123,7 @@ void onPress(ButtonHandler* buttonHandler, int ID) {
 
         case 2:         
 
+          DEBUG_.print("MARKERS_.isEmpty()", MARKERS_.isEmpty());
           if(MARKERS_.isEmpty()){
             JumpPosition = (AUDIO.getFilePosition() >= SECONDS_PER_JUMP * (BITRATE / 8)) ? (AUDIO.getFilePosition() - SECONDS_PER_JUMP * (BITRATE / 8)) : 0;   
           }else{
