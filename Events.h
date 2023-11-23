@@ -20,9 +20,9 @@ void setMode(uint8_t mode) {
       DISPLAY_.menu.show(ACTIONS[ACTION_ID].title, ACTIONS[ACTION_ID].action); 
       break; 
     case PLAYLIST:
-      R_DIR->resetPosition(PLAYLISTS_.getPosition(), false);
+      R_DIR->resetPosition(PLAYLISTS_.getPosition()[0], false);
       R_DIR->setUpperBound(NBR_PLAYLISTS);
-      R_FILES->resetPosition(PLAYLISTS_.getPlayPosition(), false);
+      R_FILES->resetPosition(PLAYLISTS_.getPosition()[1], false);
       R_FILES->setUpperBound(NBR_PLAYLIST_ITEMS);
       DISPLAY_.playlists.show(); 
       break; 
@@ -54,24 +54,18 @@ void onRotChange(Rotary &rotary) {
       }
       if(&rotary == R_PITCH) {
         PITCHER.setPitchStep(currentPosition);
-        DEBUG_.print("ROT",currentPosition);  
-        DEBUG_.print("PITCHER Step",PITCHER.getStep());  
-        DEBUG_.print("PITCHER Value",PITCHER.getValue());  
       }
       break;   
     case PLAYLIST: 
       if(&rotary == R_DIR) {
-        PLAYLISTS_.setPosition(currentPosition);
-        DEBUG_.print("Position",PLAYLISTS_.getPosition());  
+        PLAYLISTS_.setPosition(currentPosition); 
         DISPLAY_.playlists.printNav(); 
         DISPLAY_.playlists.printPlayList(); 
       }
       if(&rotary == R_FILES) {
         PLAYLISTS_.setPlayPosition(currentPosition);
         DISPLAY_.playlists.printPlayList(); 
-        DEBUG_.print("Position",PLAYLISTS_.getPlayPosition());  
       }
-      DEBUG_.print("ROT",currentPosition);  
       
       break;   
 
@@ -251,7 +245,7 @@ void onLongPress(ButtonHandler* buttonHandler, int ID) {
           SD_BACKUP.save(STATE_FILENAME, &STATE, sizeof(STATE));
           break;
         case 5:
-          SD_BACKUP.save(PLAYLISTS_FILENAME, &PLAYLISTS_, sizeof(PLAYLISTS_));
+          SD_BACKUP.save(PLAYLISTS_FILENAME, &PLAYLISTS, sizeof(PLAYLISTS));
           break;
         default:
           break;
@@ -446,9 +440,7 @@ void onAfterSelectFile(){
 /**********************
 * PLAYLISTS:
 ***********************/
-void onSetPosition(uint8_t position){
-  STATE.playlistPosition[0] = position;
-}
-void onSetPlayPosition(uint8_t position){
-  STATE.playlistPosition[1] = position;
+void onSetPosition(uint8_t position[2]){
+  STATE.playlistPosition[0] = position[0];
+  STATE.playlistPosition[1] = position[1];
 }

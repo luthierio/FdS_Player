@@ -426,10 +426,10 @@
       }
       void printNav(){   
         ecran_->fillRect(0,0, 8, 64, BLACK);
-        int plHeight = 64/playlists->size;
+        int plHeight = 64/playlists->nbr;
         int x = 0;
-        for (byte i = 0; i < playlists->size; i = i + 1) {  
-          if(playlists->getPosition() == i){
+        for (byte i = 0; i < playlists->nbr; i = i + 1) {  
+          if(playlists->getPosition()[0] == i){
               ecran_->fillCircle(x+3, plHeight/2 + i*plHeight, 3, WHITE); 
           }else{
               ecran_->fillCircle(x+3, plHeight/2 + i*plHeight, 1, WHITE); 
@@ -462,7 +462,7 @@
         ecran_->drawFastHLine(18, 14, SCREEN_WIDTH, WHITE);
         ecran_->drawFastHLine(18, 48, SCREEN_WIDTH, WHITE);
 
-        uint8_t position = playlists->getPlayPosition();
+        uint8_t position = playlists->getPosition()[1];
 
 
         PlaylistItem *item =  playlists->getItem(); //Position courante
@@ -481,7 +481,7 @@
             ecran_->fillTriangle( 18, SCREEN_HEIGHT/2-2 , 18, SCREEN_HEIGHT/2+2, 18+2,SCREEN_HEIGHT/2, WHITE);      // Triangles forward
         }
 
-        if(playlists->getPlayPosition() == 0){
+        if(position == 0){
 
           fillVHatch(18,  0, 112, 14);
           
@@ -492,7 +492,7 @@
 
         }
 
-        if(playlists->getPlayPosition() == playlists->getPlaylistSize() ){
+        if(position == playlists->size ){
 
           fillVHatch(18, 48, 112, 14);
 

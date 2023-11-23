@@ -55,14 +55,14 @@ void setup() {
 
   SD_BACKUP.load(STATE_FILENAME, &STATE, sizeof(STATE), true);
   SD_BACKUP.load(MARKERS_FILENAME, &DATAS, sizeof(DATAS), true);  
-  SD_BACKUP.load(PLAYLISTS_FILENAME, &PLAYLISTS_, sizeof(PLAYLISTS_));
+  SD_BACKUP.load(PLAYLISTS_FILENAME, &PLAYLISTS, sizeof(PLAYLISTS));
 
   FILE_.select(STATE.dirNum, STATE.fileNum); // Initialisation selon carte
   FILE_.setDirCallbacks( onBeforeSelectDir, onAfterSelectDir );
   FILE_.setFileCallbacks( onBeforeSelectFile, onAfterSelectFile );
 
-  PLAYLISTS_.setCallbacks( onSetPosition, onSetPlayPosition );
-  PLAYLISTS_.setPosition( STATE.playlistPosition[0], STATE.playlistPosition[1], true );
+  PLAYLISTS_.setCallbacks( onSetPosition );
+  PLAYLISTS_.setPosition( STATE.playlistPosition, true );
 
   SLEEP_WATCH.setCallbacks(onSleep, onWakeUp);
   SLEEP_WATCH.wakeUp();

@@ -15,7 +15,10 @@ Pitcher PITCHER = Pitcher(&AUDIO);
 
 FilePicker FILE_(&SD);
 FileManager SD_BACKUP(&SD);
-PlaylistManager PLAYLISTS_;
+
+PlaylistItem PLAYLISTS[NBR_PLAYLISTS][NBR_PLAYLIST_ITEMS];
+
+PlaylistManager PLAYLISTS_(PLAYLISTS);
 
 
 Metronome METRONOME_(&AUDIO, BEATSOUND, BEATSOUND2); // BPM = 120, 4 beats per bar, with specific beat files
