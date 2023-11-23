@@ -40,8 +40,9 @@
 #include "libs/Class.FileManager.h"
 #include "libs/Class.Playlists.h"
 #include "libs/Class.Array.h"
-#include "Class.Markers.h"
-#include "Class.Metronome.h"
+#include "libs/Class.Markers.h"
+#include "libs/Class.Metronome.h"
+
 #include "Class.Display.h"
 
 /**********************
