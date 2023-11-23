@@ -68,12 +68,9 @@ void onRotChange(Rotary &rotary) {
     case PLAYLIST: 
       if(&rotary == R_DIR) {
         PLAYLISTS_.setPosition(currentPosition); 
-        DISPLAY_.playlists.nav(); 
-        DISPLAY_.playlists.playList(); 
       }
       if(&rotary == R_FILES) {
         PLAYLISTS_.setPlayPosition(currentPosition);
-        DISPLAY_.playlists.playList(); 
       }
       
       break;   
@@ -164,6 +161,13 @@ void onPress(ButtonHandler* buttonHandler, int ID) {
           //Play on Release
           break;
         case 1:
+          if (AUDIO.playingMusic) {
+            AUDIO.pausePlaying(true);
+            DEBUG_.print("Paused");
+          } else {
+            AUDIO.pausePlaying(false);
+            DEBUG_.print("Resumed");
+          }
           break;
         case 2:
           break;
@@ -316,10 +320,11 @@ void autoPlay(){
         SHOULD_PLAY_NEXT = true;
     }
 
+    //PLAYER AUTOPLAY
     if(SHOULD_PLAY_NEXT && STATE.MODE == PLAYER) {
           
       //Fin du répertoire
-      if(FILE_.fileNum == MAX_FILES_NUM){    
+      if(FILE_.fileNum == MAX_FILES_NUM-1){    
         FILE_.selectFile(0);
         SHOULD_PLAY_NEXT = false;
         DEBUG_.print("FIN AutoPlay");
@@ -342,25 +347,23 @@ void autoPlay(){
         }
         AUDIO.startPlayingFile(FILE_.path); 
       }
-
+    //PLAYLIST AUTOPLAY
     } else if(SHOULD_PLAY_NEXT && STATE.MODE == PLAYLIST) {
 
       //Fin du répertoire
-      if(PLAYLISTS_.getPlayPosition() == NBR_PLAYLIST_ITEMS){    
+      if(PLAYLISTS_.getPlayPosition() == NBR_PLAYLIST_ITEMS-1){    
         PLAYLISTS_.setPlayPosition(0);
         SHOULD_PLAY_NEXT = false;
         DEBUG_.print("FIN AutoPlay");
 
       //Il faudrait essayer d'en jouer une autre
       }else if(!AUDIO.playingMusic && !AUDIO.currentTrack){  
-        switch (STATE.playMode) {
+        switch (STATE.playlistMode) {
           case AUTO:  
             PLAYLISTS_.setPlayPosition(PLAYLISTS_.getPlayPosition()+1);
-            PLAYLISTS_.selectFile(&FILE_);
             break;
           case RANDOM:
             PLAYLISTS_.setPlayPosition(random(0, NBR_PLAYLIST_ITEMS));
-            PLAYLISTS_.selectFile(&FILE_);
             break;
           case REPEATONE:
             break;
@@ -368,8 +371,10 @@ void autoPlay(){
             //Not necessary but secure
             SHOULD_PLAY_NEXT = false;
             break;
+        }        
+        if(!PLAYLISTS_.currentPositionIsEmpty() && PLAYLISTS_.selectFile(&FILE_)){
+          AUDIO.startPlayingFile(FILE_.path); 
         }
-        AUDIO.startPlayingFile(FILE_.path); 
       }      
 
     }
@@ -429,7 +434,6 @@ void onAfterSDWork() {
     AUDIO.pausePlaying(false);
     MUST_RESUME = false;
   }
-  DEBUG_.print("Selected", FILE_.path); 
 }
 void onBeforeSDReadWrite(const char* fileName, const char* message) {
   INTERRUPTS = false;
@@ -461,9 +465,6 @@ void onAfterSelectDir(){
   onAfterSDWork();
   STATE.dirNum = FILE_.dirNum;
   MARKERS_.selectArray();
-  //DATA = &getFileDataRef(FILE_.dirNum,FILE_.fileNum);
-  //TODO ?
-  //R_DIR->resetPosition(FILE_.dirNum*R_DIR->getStepsPerClick(), false);
 
   if(STATE.MODE == PLAYER){
     DISPLAY_.files.printPath(&FILE_);
@@ -477,10 +478,6 @@ void onAfterSelectFile(){
   onAfterSDWork();
   STATE.fileNum = FILE_.fileNum;
   MARKERS_.selectArray();
-  Serial.print(MARKERS_.getPrevious(FILE_.FILE.size()));  
-  //DATA = &getFileDataRef(FILE_.dirNum,FILE_.fileNum);
-  //TODO ?
-  //R_DIR->resetPosition(FILE_.fileNum*R_DIR->getStepsPerClick(), false);
 
   if(STATE.MODE == PLAYER){
     DISPLAY_.files.printPath(&FILE_);
@@ -496,11 +493,11 @@ void onAfterSelectFile(){
 void onSetPosition(uint8_t position[2]){
   STATE.playlistPosition[0] = position[0];
   STATE.playlistPosition[1] = position[1];
+  DISPLAY_.playlists.nav(); 
+  DISPLAY_.playlists.playList(); 
 }
 /**********************
 * MARKERS:
 ***********************/
 void onMarkerAdd(uint32_t position){
-  DEBUG_.print("MArker",position);  
-  DEBUG_.print("Depuis previous?",(int)MARKERS_.getPrevious(position+1000));  
 }

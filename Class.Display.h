@@ -495,7 +495,7 @@
 
         if(position == 0){
 
-          fillVHatch(10,  0, SCREEN_WIDTH-10*2, 14);
+          fillVHatch(12,  0, SCREEN_WIDTH-10*2, 14);
           
         }else if(prevItem != nullptr){          
 
@@ -504,9 +504,9 @@
 
         }
 
-        if(position == playlists->size ){
+        if(position+1 == playlists->size ){
 
-          fillVHatch(10, 48, SCREEN_WIDTH-10*2, 14);
+          fillVHatch(12, 48, SCREEN_WIDTH-10*2, 14);
 
         }else if(nextItem != nullptr){     
 

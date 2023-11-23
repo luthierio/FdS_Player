@@ -58,6 +58,10 @@
       uint8_t getPlayPosition() {
           return position[1];
       }
+      bool currentPositionIsEmpty(){   
+          PlaylistItem *current = &playlists[position[0]][position[1]];  
+          return current->isEmpty();
+      }
 
       //Défini la playlist
       void setPosition(uint8_t index, bool silent = false) {
@@ -99,7 +103,9 @@
           if (!current->isEmpty()) {
               filePicker->select(current->dirNum, current->fileNum);
               // Ajoutez le reste de votre logique pour sélectionner le fichier
-              return true;
+              if (filePicker->exist()) {
+                return true;
+              }
           }
           return false;
       }

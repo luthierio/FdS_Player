@@ -53,6 +53,7 @@ void loop() {
   
   SLEEP_WATCH.listen();
   autoPlay();
+  
   if(INTERRUPTS){
     // Mettre à jour en continu le rotary encoder
     for (byte i = 0; i < 3; ++i) {
