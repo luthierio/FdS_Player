@@ -16,41 +16,41 @@ void doAction(int ID){
       break;  
     case SAVE_ALL:
       // Save playlists
-      SD_BACKUP.save(MARKERS_FILENAME, &MARKERS, sizeof(MARKERS));
-      SD_BACKUP.save(STATE_FILENAME, &STATE, sizeof(STATE));
-      //SD_BACKUP.save(sizeof(playLists),&playLists,PLAYLISTS_FILENAME);
+      SD_FS.save(MARKERS_FILENAME, &MARKERS, sizeof(MARKERS));
+      SD_FS.save(STATE_FILENAME, &STATE, sizeof(STATE));
+      //SD_FS.save(sizeof(playLists),&playLists,PLAYLISTS_FILENAME);
       break;
     case LOAD_ALL:
       // Save playlists
-      SD_BACKUP.load(MARKERS_FILENAME, &MARKERS, sizeof(MARKERS));
-      SD_BACKUP.load(STATE_FILENAME, &STATE, sizeof(STATE));
-      //SD_BACKUP.load(sizeof(playLists),&playLists,PLAYLISTS_FILENAME);
+      SD_FS.load(MARKERS_FILENAME, &MARKERS, sizeof(MARKERS));
+      SD_FS.load(STATE_FILENAME, &STATE, sizeof(STATE));
+      //SD_FS.load(sizeof(playLists),&playLists,PLAYLISTS_FILENAME);
       // updateState(true);
       break;
     case MAR_SAVE:
       // Save markers
-      SD_BACKUP.save(MARKERS_FILENAME, &MARKERS, sizeof(MARKERS));
+      SD_FS.save(MARKERS_FILENAME, &MARKERS, sizeof(MARKERS));
       break;
     case MAR_LOAD:
       // load 
-      SD_BACKUP.load(MARKERS_FILENAME, &MARKERS, sizeof(MARKERS));
+      SD_FS.load(MARKERS_FILENAME, &MARKERS, sizeof(MARKERS));
       break;
     case ST_SAVE:
       // Save state
-      SD_BACKUP.save(STATE_FILENAME, &STATE, sizeof(STATE));
+      SD_FS.save(STATE_FILENAME, &STATE, sizeof(STATE));
       break;
     case ST_LOAD:
       // Load state
-      SD_BACKUP.load(STATE_FILENAME, &STATE, sizeof(STATE));
+      SD_FS.load(STATE_FILENAME, &STATE, sizeof(STATE));
       // updateState(true);
       break;
     case PL_SAVE:
       // Save playlists
-      //SD_BACKUP.save(sizeof(playLists),&playLists,PLAYLISTS_FILENAME);
+      //SD_FS.save(sizeof(playLists),&playLists,PLAYLISTS_FILENAME);
       break;
     case PL_LOAD:
       // Load playlists
-      //SD_BACKUP.load(sizeof(playLists),&playLists,PLAYLISTS_FILENAME);
+      //SD_FS.load(sizeof(playLists),&playLists,PLAYLISTS_FILENAME);
       break;
     case PL_EXPOR:
       // export m3u

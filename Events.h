@@ -258,9 +258,9 @@ void onLongPress(ButtonHandler* buttonHandler, int ID) {
       switch (ID) {
         case 0:
           if(!MARKERS_.isEmpty()){
-            SD_BACKUP.save(MARKERS_FILENAME, &MARKERS, sizeof(MARKERS));
+            SD_FS.save(MARKERS_FILENAME, &MARKERS, sizeof(MARKERS));
           }
-          SD_BACKUP.save(STATE_FILENAME, &STATE, sizeof(STATE));
+          SD_FS.save(STATE_FILENAME, &STATE, sizeof(STATE));
           refreshDisplay();
           break;
         case 1:
@@ -292,8 +292,8 @@ void onLongPress(ButtonHandler* buttonHandler, int ID) {
       // Long press
       switch (ID) {
         case 0:
-          SD_BACKUP.save(STATE_FILENAME, &STATE, sizeof(STATE));
-          SD_BACKUP.save(PLAYLISTS_FILENAME, &PLAYLISTS, sizeof(PLAYLISTS));
+          SD_FS.save(STATE_FILENAME, &STATE, sizeof(STATE));
+          SD_FS.save(PLAYLISTS_FILENAME, &PLAYLISTS, sizeof(PLAYLISTS));
           refreshDisplay();
           break;
         case 5:

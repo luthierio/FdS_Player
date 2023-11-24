@@ -1,10 +1,10 @@
 /**********************
 * DEBUG
 ***********************/
-#define ASF_DEBUG_MODE true
+#define ASF_DEBUG_MODE false
 
 bool SERIAL_ON = ASF_DEBUG_MODE;
-bool SERIAL_WAIT = true; //It true, wait serial to start
+bool SERIAL_WAIT = false; //It true, wait serial to start
 
 /**********************
 * CONFIG CONST
@@ -17,6 +17,11 @@ bool SERIAL_WAIT = true; //It true, wait serial to start
 #define PLAYLISTS_FILENAME  "/.Playlists.bin"
 #define MARKERS_FILENAME    "/.Markers.bin"
 #define STATE_FILENAME      "/.State.bin"
+
+/**********************
+* SD
+***********************/
+#define BACKUP_REQUIRED false //If true create a backup before saving any file
 
 /**********************
 * FILES

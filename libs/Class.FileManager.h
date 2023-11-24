@@ -30,10 +30,15 @@ public:
     onBeforeSave = beforeSave;
     onAfterSave = afterSave;
   }
-
-  bool save(const char* nomFichier, const void* dataPointer, size_t dataSize, bool silent = false, bool backup = true) {
+  
+  // Méthode pour activer/désactiver le backup
+  void setBackupEnabled(bool enableBackup) {
+    backupEnabled = enableBackup;
+  }
+  
+  bool save(const char* nomFichier, const void* dataPointer, size_t dataSize, bool silent = false) {
     
-    if (sd->exists(nomFichier) && (backup && !createBackup(nomFichier))) {
+    if (backupEnabled && sd->exists(nomFichier) && !createBackup(nomFichier) ) {
       if (errorCallback) errorCallback(nomFichier, "Error: Backup Fail");
       return false;
     }
@@ -83,7 +88,7 @@ public:
 private:
   static const size_t MAX_FILE_NAME_LENGTH = 255;
   SdFat* sd;
-
+  bool backupEnabled = false;  // Nouvelle variable booléenne pour activer/désactiver le backup
 
   bool createBackup(const char* nomFichier) {
     const char* suffixeBackup = ".bkp";
