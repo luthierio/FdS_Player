@@ -2,6 +2,28 @@
 /**********************
 * MODE:
 ***********************/
+void refreshDisplay() {
+
+  if (STATE.MODE == PLAYER) {
+
+      DISPLAY_.files.printPath(&FILE_); 
+  
+  } else if (STATE.MODE == MENU) {
+
+      DISPLAY_.menu.show(ACTIONS[ACTION_ID].title, ACTIONS[ACTION_ID].action); 
+
+  } else if (STATE.MODE == PLAYLIST) {
+
+      DISPLAY_.playlists.show(); 
+
+  } else if (STATE.MODE == LOGO) {
+
+      DISPLAY_.display.logo();
+
+  }
+  DISPLAY_.show();
+
+}
 void setMode(uint8_t mode) {
   DEBUG_.print("MODE", mode);
   //DISPLAY_.clear();
@@ -12,13 +34,11 @@ void setMode(uint8_t mode) {
       R_DIR->setUpperBound(MAX_DIR_NUM);
       R_FILES->resetPosition(FILE_.fileNum, false);
       R_FILES->setUpperBound(MAX_FILES_NUM);
-      DISPLAY_.files.printPath(&FILE_); 
   
   } else if (mode == MENU) {
     
       R_DIR->resetPosition(ACTION_ID, false);
       R_DIR->setUpperBound(NBR_ACTIONS);
-      DISPLAY_.menu.show(ACTIONS[ACTION_ID].title, ACTIONS[ACTION_ID].action); 
 
   } else if (mode == PLAYLIST) {
 
@@ -26,15 +46,11 @@ void setMode(uint8_t mode) {
       R_DIR->setUpperBound(NBR_PLAYLISTS);
       R_FILES->resetPosition(PLAYLISTS_.getPosition()[1], false);
       R_FILES->setUpperBound(NBR_PLAYLIST_ITEMS);
-      DISPLAY_.playlists.show(); 
-
-  } else if (mode == LOGO) {
-
-      DISPLAY_.display.logo();
 
   }
-  DISPLAY_.show();
+  
   STATE.MODE = mode;
+  refreshDisplay();
 }
 /**********************
 * MESSAGE:
@@ -42,9 +58,8 @@ void setMode(uint8_t mode) {
 void sendMessage(const char* label, const char* message, int DELAY) {
   DEBUG_.print(label, message); 
   DISPLAY_.display.message(message);
-  DISPLAY_.show();
   delay(DELAY);
-  setMode(STATE.MODE);
+  //setMode(STATE.MODE);
 }
 /**********************
 * ROTARIES:
@@ -239,12 +254,12 @@ void onLongPress(ButtonHandler* buttonHandler, int ID) {
   ***********************/
   if (STATE.MODE == PLAYER) {
 
-  DISPLAY_.clear();
       // Long press
       switch (ID) {
         case 0:
           SD_BACKUP.save(MARKERS_FILENAME, &MARKERS, sizeof(MARKERS));
           SD_BACKUP.save(STATE_FILENAME, &STATE, sizeof(STATE));
+          refreshDisplay();
           break;
         case 1:
           //On vérifie que le fichier Sélectionné est bien celui qui joue pour ajouter un marqueur
@@ -277,6 +292,7 @@ void onLongPress(ButtonHandler* buttonHandler, int ID) {
         case 0:
           SD_BACKUP.save(STATE_FILENAME, &STATE, sizeof(STATE));
           SD_BACKUP.save(PLAYLISTS_FILENAME, &PLAYLISTS, sizeof(PLAYLISTS));
+          refreshDisplay();
           break;
         case 5:
           break;
@@ -287,7 +303,6 @@ void onLongPress(ButtonHandler* buttonHandler, int ID) {
   } 
   
   DEBUG_.print("LongPress", ID);
-  DISPLAY_.show();
   
 }
 
@@ -314,9 +329,10 @@ void onRelease(ButtonHandler* buttonHandler, int ID) {
 
       switch (ID) {
         case 0:
-          //DEBUG_.print("dirNum",PLAYLISTS_.getItem()->dirNum);
-          //DEBUG_.print("fileNum",PLAYLISTS_.getItem()->fileNum);
-          if(PLAYLISTS_.selectFile(&FILE_)){
+          DEBUG_.print("dirNum",PLAYLISTS_.getItem()->dirNum);
+          DEBUG_.print("fileNum",PLAYLISTS_.getItem()->fileNum);
+          if(!PLAYLISTS_.currentPositionIsEmpty()){
+            PLAYLISTS_.selectFile(&FILE_);
             AUDIO.startPlayingFile(FILE_.path);
           }
           break;
@@ -463,7 +479,7 @@ void onAfterSDWork() {
 }
 void onBeforeSDReadWrite(const char* fileName, const char* message) {
   INTERRUPTS = false;
-  //sendMessage(fileName, message,MSG_DELAY);
+  sendMessage(fileName, message,0);
   AUDIO.stopPlaying();
   delay(10);
 }

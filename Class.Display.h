@@ -35,7 +35,7 @@
         ecran_->fillRect(0, 52, 128, 32, BLACK); 
         //ecran_->drawFastHLine(0, 52, 128, WHITE);
         drawCentreString(texte, 64, 60);
-        //ecran_->display();
+        ecran_->display();
       }
       void error(const __FlashStringHelper *texte = nullptr) {
 
@@ -429,6 +429,7 @@
         //ecran_->clearDisplay();
         nav();
         playList();
+        ecran_->display();
       }
       void playing(){  
 
@@ -456,7 +457,6 @@
         ecran_->fillRect(10,0, 128-20, 64, BLACK); 
         items();
         mode(); 
-        //ecran_->display();
       }
       void mode(){
 

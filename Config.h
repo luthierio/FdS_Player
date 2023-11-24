@@ -1,7 +1,7 @@
 /**********************
 * DEBUG
 ***********************/
-#define ASF_DEBUG_MODE false
+#define ASF_DEBUG_MODE true
 
 bool SERIAL_ON = ASF_DEBUG_MODE;
 bool SERIAL_WAIT = false; //It true, wait serial to start
@@ -113,7 +113,7 @@ enum CommandIDs { A_PROPOS, SAVE_ALL, MAR_SAVE, PL_SAVE, ST_SAVE, LOAD_ALL, MAR_
 #define BIG_LOOP_INTERVAL   2000
 #define BLINK_INTERVAL      500
 #define MSG_DELAY           500
-#define ERROR_MSG_DELAY     3000
+#define ERROR_MSG_DELAY     2000
 
 #define DEBOUNCE_INTERVAL 200
 #define LONG_PRESS_INTERVAL 500

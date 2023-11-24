@@ -32,15 +32,16 @@ public:
   }
 
   bool save(const char* nomFichier, const void* dataPointer, size_t dataSize, bool silent = false) {
-    sd->open("/");
+    
+    sd->chdir("/");
     if (fileExists(nomFichier) && !createBackup(nomFichier)) {
-      if (errorCallback) errorCallback(nomFichier, "Le fichier existe, mais la création du backup a échoué");
+      if (errorCallback) errorCallback(nomFichier, "Error: Backup Fail");
       return false;
     }
 
     File fichier = sd->open(nomFichier, O_WRITE | O_CREAT | O_TRUNC);
     if (fichier) {
-      if (onBeforeSave && !silent) onBeforeSave(nomFichier, nullptr);  // Appel de la fonction de rappel avant la sauvegarde
+      if (onBeforeSave && !silent) onBeforeSave(nomFichier, "Saving");  // Appel de la fonction de rappel avant la sauvegarde
       if (fichier.write(dataPointer, dataSize) == dataSize) {
         fichier.close();
         if (onAfterSave && !silent) onAfterSave(nomFichier, "OK!");  // Appel de la fonction de rappel après la sauvegarde
@@ -48,7 +49,7 @@ public:
       } else {
         fichier.close();
         restoreBackup(nomFichier);
-        if (errorCallback) errorCallback(nomFichier, "Ecriture impossible");
+        if (errorCallback) errorCallback(nomFichier, "Error writing");
       }
     }
     fichier.close();
@@ -57,23 +58,28 @@ public:
   }
 
   bool load(const char* nomFichier, void* dataPointer, size_t dataSize, bool silent = false) {
+  
+    sd->chdir("/");
     if (fileExists(nomFichier)) {
+    
       File fichier = sd->open(nomFichier, O_RDONLY);
       if (fichier) {
-        if (onBeforeLoad && !silent) onBeforeLoad(nomFichier, nullptr);  // Appel de la fonction de rappel avant le chargement
+        if (onBeforeLoad && !silent) onBeforeLoad(nomFichier, "Loading");  // Appel de la fonction de rappel avant le chargement
         if (fichier.read(dataPointer, dataSize) == dataSize) {
           fichier.close();
           if (onAfterLoad && !silent) onAfterLoad(nomFichier, "OK");  // Appel de la fonction de rappel après le chargement
           return true;
         } else {
-          if (errorCallback) errorCallback(nomFichier, "Erreur de lecture");
+          if (errorCallback) errorCallback(nomFichier, "Error reading");
+          return false;
         }
       }
+      
     } else {
-      if (onAfterLoad && !silent) onAfterLoad(nomFichier, "Rien à charger");  // Appel de la fonction de rappel après le chargement
+      //Nothing to load
+      //if (onAfterLoad && !silent) onAfterLoad(nomFichier, "");  // Appel de la fonction de rappel après le chargement
     }
-
-    return false;
+     return false;
   }
 
 private:
@@ -81,7 +87,7 @@ private:
   SdFat* sd;
 
   bool fileExists(const char* nomFichier) {
-    sd->chdir();
+    sd->chdir("/");
     return sd->exists(nomFichier);
   }
 
@@ -90,7 +96,7 @@ private:
     char nomFichierBackup[MAX_FILE_NAME_LENGTH];
 
     if (strlen(nomFichier) + strlen(suffixeBackup) > MAX_FILE_NAME_LENGTH - 1) {
-      if (errorCallback) errorCallback(nomFichier, "Le nom de fichier avec le suffixe de backup dépasse la limite de taille");
+      if (errorCallback) errorCallback(nomFichier, "Error: filename too long");
       return false;
     }
 
@@ -102,7 +108,7 @@ private:
     if (sd->exists(nomFichierBackup)) {
       return true;
     } else {
-      if (errorCallback) errorCallback(nomFichier, "Erreur lors de la création du backup");
+      if (errorCallback) errorCallback(nomFichier, "Error: no backup");
     }
 
     return false;
@@ -113,7 +119,7 @@ private:
     char nomFichierBackup[MAX_FILE_NAME_LENGTH];
 
     if (strlen(nomFichier) + strlen(suffixeBackup) > MAX_FILE_NAME_LENGTH - 1) {
-      if (errorCallback) errorCallback(nomFichier, "Le nom de fichier avec le suffixe de backup dépasse la limite de taille");
+      if (errorCallback) errorCallback(nomFichier, "Error: filename too long");
       return;
     }
 
