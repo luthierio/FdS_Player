@@ -14,9 +14,9 @@ bool SERIAL_WAIT = true; //It true, wait serial to start
 #define ACCORDAGE   "/.ASF/Accordage.mp3"
 #define BEATSOUND   "/.ASF/Beat.mp3"
 #define BEATSOUND2  "/.ASF/Beat2.mp3"
-#define PLAYLISTS_FILENAME  "/Playlists.bin"
-#define MARKERS_FILENAME    "/Markers.bin"
-#define STATE_FILENAME      "/State.bin"
+#define PLAYLISTS_FILENAME  "/.Playlists.bin"
+#define MARKERS_FILENAME    "/.Markers.bin"
+#define STATE_FILENAME      "/.State.bin"
 
 /**********************
 * FILES
