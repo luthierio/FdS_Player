@@ -6,11 +6,19 @@ void setup() {
   * SERIAL:
   ***********************/
   Serial.begin(115200);
-  if(SERIAL_ON){
+  if(SERIAL_WAIT){
     // Wait for serial port to be opened, remove this line for 'non debug'
     while (!Serial) { delay(1); }  
   }
-
+  DEBUG_.setSerial(SERIAL_ON); // A part les message d'entrée, on désactive le Serial
+  // Pour le CD4051BE:
+  // Place les broches d'adresse en sortie et à LOW
+  pinMode(PIN_ADDR_A, OUTPUT);
+  pinMode(PIN_ADDR_B, OUTPUT); 
+  pinMode(PIN_ADDR_C, OUTPUT); 
+  digitalWrite(PIN_ADDR_A, LOW);
+  digitalWrite(PIN_ADDR_B, LOW);
+  digitalWrite(PIN_ADDR_C, LOW);
   /**********************
   * DISPLAY:
   ***********************/    
@@ -77,7 +85,6 @@ void setup() {
   MUX.begin();
   BUTTONS.setCallbacks(onPress,onRelease,onLongPress,onLongRelease);
   DEBUG_.print(F("✓✓✓ ⋅ Interface ok "));
-  DEBUG_.setSerial(SERIAL_ON); // A part les message d'entrée, on désactive le Serial
   
   // Play a file in the background, REQUIRES interrupts!  
 
