@@ -94,7 +94,8 @@ private:
       return false;
     }
 
-    strcpy(nomFichierBackup, nomFichier);
+    strcpy(nomFichierBackup, ".");
+    strcat(nomFichierBackup, nomFichier);
     strcat(nomFichierBackup, suffixeBackup);
 
     sd->rename(nomFichier, nomFichierBackup);

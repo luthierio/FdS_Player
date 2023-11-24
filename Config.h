@@ -4,7 +4,7 @@
 #define ASF_DEBUG_MODE true
 
 bool SERIAL_ON = ASF_DEBUG_MODE;
-bool SERIAL_WAIT = false; //It true, wait serial to start
+bool SERIAL_WAIT = true; //It true, wait serial to start
 
 /**********************
 * CONFIG CONST
