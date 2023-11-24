@@ -35,7 +35,7 @@
         ecran_->fillRect(0, 52, 128, 32, BLACK); 
         //ecran_->drawFastHLine(0, 52, 128, WHITE);
         drawCentreString(texte, 64, 60);
-        ecran_->display();
+        //ecran_->display();
       }
       void error(const __FlashStringHelper *texte = nullptr) {
 
@@ -54,7 +54,7 @@
       }
       void confirm() {
         ecran_->drawBitmap (0,0, LOGO_128x64, 128,64, 1); 
-        ecran_->display();
+        //ecran_->display();
       }
       void cleanZone(uint8_t x, uint8_t y, uint8_t w, uint8_t h){  
         ecran_->fillRect(x ,y , w, h,  BLACK);
@@ -426,13 +426,13 @@
         state (state){}
 
       void show(){
-        ecran_->clearDisplay();
+        //ecran_->clearDisplay();
         nav();
         playList();
       }
       void playing(){  
 
-        ecran_->fillRect(10+2, SCREEN_HEIGHT/2-2, 4 , 4, BLACK);
+        ecran_->fillRect(10, SCREEN_HEIGHT/2-2, 4 , 4, BLACK);
         PlaylistItem *item =  playlists->getItem(); //Position courante
         //Le fichier qui est sélectionné dans le player est celui ci
         if(state->dirNum == item->dirNum && state->fileNum == item->fileNum ){
@@ -440,7 +440,7 @@
         }
       }
       void nav(){   
-        ecran_->fillRect(0,0, 8, 64, BLACK);
+        ecran_->fillRect(0,0, 10, 64, BLACK);
         int plHeight = 64/playlists->nbr;
         int x = 0;
         for (byte i = 0; i < playlists->nbr; i = i + 1) {  
@@ -450,13 +450,13 @@
               ecran_->fillCircle(x+3, plHeight/2 + i*plHeight, 1, WHITE); 
           }
         }
-        ecran_->display();
+        //ecran_->display();
       }
       void playList(){
         ecran_->fillRect(10,0, 128-20, 64, BLACK); 
         items();
         mode(); 
-        ecran_->display();
+        //ecran_->display();
       }
       void mode(){
 
@@ -536,7 +536,7 @@
       }
       void show(const char* title, const char* action){  
 
-        ecran_->clearDisplay();
+        //ecran_->clearDisplay();
         ecran_->drawFastHLine(0, 24, 128, WHITE);
         drawCentreString(title, 64, 22, &FreeSans9pt7b);
 

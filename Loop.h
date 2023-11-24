@@ -5,11 +5,12 @@
 void smallLoop() {
   uint8_t space4Pitch = 0; // = 22;avec affichage Pitch
 
+
   switch (STATE.MODE) {
     case PLAYER:
 
       DISPLAY_.analogs.gauges(VUSB, VBat,VOLUME, 100, -2, 30, 18);
-      DISPLAY_.display.cleanZone(0, 52, 128, 12 );  
+      DISPLAY_.display.cleanZone(0, 51, 128, 12 );  
 
       if(FILE_.exist() && PITCHER.getStep() != 0){
         space4Pitch = 22;      

@@ -4,7 +4,7 @@
 ***********************/
 void setMode(uint8_t mode) {
   DEBUG_.print("MODE", mode);
-  DISPLAY_.clear();
+  //DISPLAY_.clear();
 
   if (mode == PLAYER) {
 
@@ -42,6 +42,7 @@ void setMode(uint8_t mode) {
 void sendMessage(const char* label, const char* message, int DELAY) {
   DEBUG_.print(label, message); 
   DISPLAY_.display.message(message);
+  DISPLAY_.show();
   delay(DELAY);
   setMode(STATE.MODE);
 }
@@ -238,6 +239,7 @@ void onLongPress(ButtonHandler* buttonHandler, int ID) {
   ***********************/
   if (STATE.MODE == PLAYER) {
 
+  DISPLAY_.clear();
       // Long press
       switch (ID) {
         case 0:
@@ -285,6 +287,7 @@ void onLongPress(ButtonHandler* buttonHandler, int ID) {
   } 
   
   DEBUG_.print("LongPress", ID);
+  DISPLAY_.show();
   
 }
 
