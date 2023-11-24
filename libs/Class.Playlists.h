@@ -51,9 +51,10 @@
       }
 
       // Retourne les deux curseurs de position
-      uint8_t *getPosition() {
+      uint8_t *getPosition() const {
           return position;
       }
+      
       // Retourne les deux curseurs de position
       uint8_t getPlayPosition() {
           return position[1];
