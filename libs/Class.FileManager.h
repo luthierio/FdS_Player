@@ -31,10 +31,9 @@ public:
     onAfterSave = afterSave;
   }
 
-  bool save(const char* nomFichier, const void* dataPointer, size_t dataSize, bool silent = false) {
+  bool save(const char* nomFichier, const void* dataPointer, size_t dataSize, bool silent = false, bool backup = true) {
     
-    sd->chdir("/");
-    if (fileExists(nomFichier) && !createBackup(nomFichier)) {
+    if (sd->exists(nomFichier) && (backup && !createBackup(nomFichier))) {
       if (errorCallback) errorCallback(nomFichier, "Error: Backup Fail");
       return false;
     }
@@ -59,8 +58,7 @@ public:
 
   bool load(const char* nomFichier, void* dataPointer, size_t dataSize, bool silent = false) {
   
-    sd->chdir("/");
-    if (fileExists(nomFichier)) {
+    if (sd->exists(nomFichier)) {
     
       File fichier = sd->open(nomFichier, O_RDONLY);
       if (fichier) {
@@ -77,7 +75,7 @@ public:
       
     } else {
       //Nothing to load
-      //if (onAfterLoad && !silent) onAfterLoad(nomFichier, "");  // Appel de la fonction de rappel après le chargement
+      if (onAfterLoad && !silent) onAfterLoad(nomFichier, "Nothing to load");  // Appel de la fonction de rappel après le chargement
     }
      return false;
   }
@@ -86,10 +84,6 @@ private:
   static const size_t MAX_FILE_NAME_LENGTH = 255;
   SdFat* sd;
 
-  bool fileExists(const char* nomFichier) {
-    sd->chdir("/");
-    return sd->exists(nomFichier);
-  }
 
   bool createBackup(const char* nomFichier) {
     const char* suffixeBackup = ".bkp";

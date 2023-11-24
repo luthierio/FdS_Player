@@ -142,6 +142,7 @@
             && name[1] == prefix[1] ) {        
               return entry;
           }
+          entry.close();
         }    
         return File();  
       } 

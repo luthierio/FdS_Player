@@ -14,9 +14,9 @@ bool SERIAL_WAIT = false; //It true, wait serial to start
 #define ACCORDAGE   "/.ASF/Accordage.mp3"
 #define BEATSOUND   "/.ASF/Beat.mp3"
 #define BEATSOUND2  "/.ASF/Beat2.mp3"
-#define PLAYLISTS_FILENAME  "Playlists.bin"
-#define MARKERS_FILENAME    "Markers.bin"
-#define STATE_FILENAME      "State.bin"
+#define PLAYLISTS_FILENAME  "/Playlists.bin"
+#define MARKERS_FILENAME    "/Markers.bin"
+#define STATE_FILENAME      "/State.bin"
 
 /**********************
 * FILES
@@ -112,7 +112,7 @@ enum CommandIDs { A_PROPOS, SAVE_ALL, MAR_SAVE, PL_SAVE, ST_SAVE, LOAD_ALL, MAR_
 #define SMALL_LOOP_INTERVAL 100
 #define BIG_LOOP_INTERVAL   2000
 #define BLINK_INTERVAL      500
-#define MSG_DELAY           500
+#define MSG_DELAY           100
 #define ERROR_MSG_DELAY     2000
 
 #define DEBOUNCE_INTERVAL 200

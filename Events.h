@@ -257,7 +257,9 @@ void onLongPress(ButtonHandler* buttonHandler, int ID) {
       // Long press
       switch (ID) {
         case 0:
-          SD_BACKUP.save(MARKERS_FILENAME, &MARKERS, sizeof(MARKERS));
+          if(!MARKERS_.isEmpty()){
+            SD_BACKUP.save(MARKERS_FILENAME, &MARKERS, sizeof(MARKERS));
+          }
           SD_BACKUP.save(STATE_FILENAME, &STATE, sizeof(STATE));
           refreshDisplay();
           break;
