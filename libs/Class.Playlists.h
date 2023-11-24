@@ -30,7 +30,7 @@
   class PlaylistManager {
     private:
       static const uint8_t nameSize = 18;
-      uint8_t position[2] = {0, 0};
+      uint8_t position[2] = {0, 0}; //Position de navigation
       // Tableau de références de playlists
       PlaylistItem (*playlists)[NBR_PLAYLIST_ITEMS];
 

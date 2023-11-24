@@ -489,7 +489,7 @@
 
         ecran_->drawFastHLine(10, 14, SCREEN_WIDTH-10*2, WHITE);
         ecran_->drawFastHLine(10, 48, SCREEN_WIDTH-10*2, WHITE);
-
+        
         printTxtNum(position+1, 16, SCREEN_HEIGHT/2+4, &FreeSans9pt7b); 
 
         if(position == 0){
