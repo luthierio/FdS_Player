@@ -43,7 +43,7 @@ public:
       if (onBeforeSave && !silent) onBeforeSave(nomFichier, nullptr);  // Appel de la fonction de rappel avant la sauvegarde
       if (fichier.write(dataPointer, dataSize) == dataSize) {
         fichier.close();
-        if (onAfterSave && !silent) onAfterSave(nomFichier, "Sauvegarde OK!");  // Appel de la fonction de rappel après la sauvegarde
+        if (onAfterSave && !silent) onAfterSave(nomFichier, "OK!");  // Appel de la fonction de rappel après la sauvegarde
         return true;
       } else {
         fichier.close();
@@ -63,7 +63,7 @@ public:
         if (onBeforeLoad && !silent) onBeforeLoad(nomFichier, nullptr);  // Appel de la fonction de rappel avant le chargement
         if (fichier.read(dataPointer, dataSize) == dataSize) {
           fichier.close();
-          if (onAfterLoad && !silent) onAfterLoad(nomFichier, "Chargement OK!");  // Appel de la fonction de rappel après le chargement
+          if (onAfterLoad && !silent) onAfterLoad(nomFichier, "OK");  // Appel de la fonction de rappel après le chargement
           return true;
         } else {
           if (errorCallback) errorCallback(nomFichier, "Erreur de lecture");
