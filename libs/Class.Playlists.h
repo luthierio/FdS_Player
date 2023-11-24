@@ -51,7 +51,7 @@
       }
 
       // Retourne les deux curseurs de position
-      uint8_t *getPosition() const {
+      uint8_t *getPosition() {
           return position;
       }
       
