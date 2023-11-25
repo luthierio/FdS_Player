@@ -7,8 +7,6 @@
 #define VS1053_PARAM_BITRATE 0x1E05
 
 
-//avr pgmspace library for storing the LUT in program flash instead of sram
-#include <avr/pgmspace.h>
 
 /**
  * \brief bitrate lookup table
@@ -20,6 +18,9 @@
  * \note PROGMEM macro forces to Flash space.
  * \warning This consums 190 bytes of flash
  */
+//avr pgmspace library for storing the LUT in program flash instead of sram
+/*
+#include <avr/pgmspace.h>
 static const uint16_t bitrate_table[15][6] PROGMEM = {
                  { 0,   0,  0,  0,  0,  0}, //0000
                  { 32, 32, 32, 32,  8,  8}, //0001
@@ -38,7 +39,7 @@ static const uint16_t bitrate_table[15][6] PROGMEM = {
                  {448,384,320,256,160,160}  //1110
                };
 
-
+*/
 class FdS_Adafruit_VS1053_FilePlayer : public Adafruit_VS1053_FilePlayer {
 public:
   FdS_Adafruit_VS1053_FilePlayer(int8_t rst, int8_t cs, int8_t dcs, int8_t dreq, int8_t cardcs);
@@ -46,7 +47,7 @@ public:
   FdS_Adafruit_VS1053_FilePlayer(int8_t mosi, int8_t miso, int8_t clk, int8_t rst, int8_t cs, int8_t dcs, int8_t dreq, int8_t cardcs);
 
   uint16_t getVS1053BitRate();
-  void getMP3BitRate();
+  //void getMP3BitRate();
   void setPlaySpeed(uint16_t data);
   uint32_t getFilePosition();
   boolean jumpTo(uint32_t startPosition);
@@ -90,11 +91,11 @@ inline uint32_t FdS_Adafruit_VS1053_FilePlayer::getFilePosition() {
   else
     return 0;
 }
+/*
 
 void FdS_Adafruit_VS1053_FilePlayer::getMP3BitRate() {
 //char* fileName
   //look for first MP3 frame (11 1's)
-/*
   bitrate = 0;
   uint8_t temp = 0;
   uint8_t row_num =0;
@@ -146,8 +147,8 @@ void FdS_Adafruit_VS1053_FilePlayer::getMP3BitRate() {
         }
       }
     }
-    */
   }
+    */
 
 
 inline boolean FdS_Adafruit_VS1053_FilePlayer::jumpTo(uint32_t startPosition) {  
