@@ -49,7 +49,6 @@
 * INIT
 ***********************/
 #include "Init.h"
-#include "Utils.h"
 #include "Actions.h"
 /**********************
 * Display
