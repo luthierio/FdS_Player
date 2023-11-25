@@ -7,18 +7,11 @@ void setup() {
   ***********************/
   Serial.begin(115200);
   if(SERIAL_WAIT){
-    // Wait for serial port to be opened, remove this line for 'non debug'
+    // Wait for serial port to be opened
     while (!Serial) { delay(1); }  
   }
   DEBUG_.setSerial(SERIAL_ON); // A part les message d'entrée, on désactive le Serial
-  // Pour le CD4051BE:
-  // Place les broches d'adresse en sortie et à LOW
-  pinMode(PIN_ADDR_A, OUTPUT);
-  pinMode(PIN_ADDR_B, OUTPUT); 
-  pinMode(PIN_ADDR_C, OUTPUT); 
-  digitalWrite(PIN_ADDR_A, LOW);
-  digitalWrite(PIN_ADDR_B, LOW);
-  digitalWrite(PIN_ADDR_C, LOW);
+
   /**********************
   * DISPLAY:
   ***********************/    
@@ -60,9 +53,8 @@ void setup() {
   // Définir les callbacks
   SD_FS.setCallbacks(onSDError, onBeforeSDReadWrite, onAfterSDReadWrite , onBeforeSDReadWrite, onAfterSDReadWrite );
   SD_FS.setBackupEnabled(BACKUP_REQUIRED);
-  
-  DEBUG_.print(F("✓✓✓ ⋅ FILES ok "));
 
+  DEBUG_.print(F("✓✓✓ ⋅ FILES ok "));
 
   FILE_.setDirCallbacks( onBeforeSelectDir, onAfterSelectDir );
   FILE_.setFileCallbacks( onBeforeSelectFile, onAfterSelectFile );
@@ -79,7 +71,7 @@ void setup() {
   ***********************/
 
   for (byte i = 0; i < 3; ++i) {
-    ROTARIES[i].begin(); // Remplacez 2 et 3 par les broches réelles de votre rotary encoder
+    ROTARIES[i].begin(); 
     ROTARIES[i].setChangedHandler(onRotChange);
     ROTARIES[i].setLowerOverflowHandler(onRotUpLimit);
     ROTARIES[i].setUpperOverflowHandler(onRotLowLimit);
@@ -88,8 +80,6 @@ void setup() {
   BUTTONS.setCallbacks(onPress,onRelease,onLongPress,onLongRelease);
   DEBUG_.print(F("✓✓✓ ⋅ Interface ok "));
   
-  // Play a file in the background, REQUIRES interrupts!  
-
   SD_FS.load(MARKERS_FILENAME, &MARKERS, sizeof(MARKERS), SILENT);  
   SD_FS.load(PLAYLISTS_FILENAME, &PLAYLISTS, sizeof(PLAYLISTS), SILENT);
   SD_FS.load(STATE_FILENAME, &STATE, sizeof(STATE), SILENT);
@@ -99,8 +89,8 @@ void setup() {
   DISPLAY_.display.message(CREDITS);
   DISPLAY_.show();
 
+  // Play a file in the background, REQUIRES interrupts!  
   AUDIO.playFullFile(STARTSOUND);  
-
     
   setMode(STATE.MODE);
   
