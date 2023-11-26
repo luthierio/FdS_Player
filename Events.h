@@ -156,11 +156,14 @@ void onPress(ButtonHandler* buttonHandler, int ID) {
             JumpPosition = AUDIO.getFilePosition() - jump > 0? AUDIO.getFilePosition() - jump : 0;  
 
           }else{
-            //on cherche 1/2 seconde en arrière pour sauter au précédent si on est très proche du marker
-            JumpPosition =MARKERS_.getPrevious(AUDIO.getFilePosition()- MP3.getBytePerSecond()/2); 
+            DEBUG_.print("MP3.bitrate", MP3.bitrate);
+            DEBUG_.print("MP3.getBytePerSecond()", MP3.getBytePerSecond()/2);
+            //on cherche 1 seconde en arrière pour sauter au précédent si on est très proche du marker
+            JumpPosition =MARKERS_.getPrevious(AUDIO.getFilePosition()- MP3.getBytePerSecond()); 
           } 
           AUDIO.jumpTo(JumpPosition);
           DEBUG_.print("Jump Position", JumpPosition);
+          DEBUG_.print("Position", AUDIO.getFilePosition());
 
           break;
 
@@ -526,7 +529,7 @@ void onAfterSelectFile(){
   STATE.fileNum = FILE_.fileNum;
   MARKERS_.selectArray();
   MP3.open(FILE_.path); MP3.close();  //Open and close to load bitrate & tags ID3v1
-  
+  if(!MP3.bitrate) MP3.bitrate = DFT_BITRATE;
   if(STATE.MODE == PLAYER){
     DISPLAY_.files.printPath(&FILE_, &MP3);
   }

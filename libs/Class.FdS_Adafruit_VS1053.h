@@ -65,28 +65,7 @@ inline boolean FdS_Adafruit_VS1053_FilePlayer::jumpTo(uint32_t startPosition) {
     return false;
   }
   
-  currentTrack.seek(0);
   currentTrack.seek(startPosition);
-  // Don't let the IRQ get triggered by accident here
-  noInterrupts();
-
-  // As explained in datasheet, set twice 0 in REG_DECODETIME to set time back to 0
-  sciWrite(VS1053_REG_DECODETIME, 0x00);
-  sciWrite(VS1053_REG_DECODETIME, 0x00);
-
-
-  // Wait until it's ready for data
-  while (!readyForData()) {
-    // Handle other tasks or wait
-  }
-
-  // Fill the buffer
-  while (playingMusic && readyForData()) {
-    feedBuffer();
-  }
-
-  // OK going forward, we can use the IRQ
-  interrupts();
 
   return true;
 }

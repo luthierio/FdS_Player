@@ -195,12 +195,18 @@
       void printID3(MP3File *mp3, int x, int y, const GFXfont *font = NULL, uint8_t textSize = 1) {
 
           printTxt(UTF8.convertToASCII(mp3->ID3V1.title), x, y, font, textSize);
+
+          int shift = 0;
           if (strlen(mp3->ID3V1.year) != 0){
             printTxt(mp3->ID3V1.year, x, y + 10, NULL, textSize);
             printTxt("/", x+29, y + 10, NULL, textSize);
-            printTxt(UTF8.convertToASCII(mp3->ID3V1.comment), x+38, y + 10, NULL, textSize);
+            shift = 38;
+          }
+          
+          if (strlen(mp3->ID3V1.comment) != 0){
+            printTxt(UTF8.convertToASCII(mp3->ID3V1.comment), x+shift, y + 10, NULL, textSize);
           }else{
-            printTxt(UTF8.convertToASCII(mp3->ID3V1.comment), x, y + 10, NULL, textSize);
+            printTxt(UTF8.convertToASCII(mp3->ID3V1.album), x+shift, y + 10, NULL, textSize);
           }
       }
       void printFilePath(FilePicker *selectedPath, int x, int y, const GFXfont *font = NULL, uint8_t textSize = 1) {
