@@ -156,8 +156,8 @@ void onPress(ButtonHandler* buttonHandler, int ID) {
             JumpPosition = AUDIO.getFilePosition() - jump > 0? AUDIO.getFilePosition() - jump : 0;  
 
           }else{
-            //on cherche BITRATE / 4 = 2 seconde pour sauter au rpécédent si on est très proche du marker
-            JumpPosition =MARKERS_.getPrevious(AUDIO.getFilePosition()- BITRATE / 4); 
+            //on cherche 1/2 seconde en arrière pour sauter au précédent si on est très proche du marker
+            JumpPosition =MARKERS_.getPrevious(AUDIO.getFilePosition()- MP3.getBytePerSecond()/2); 
           } 
           AUDIO.jumpTo(JumpPosition);
           DEBUG_.print("Jump Position", JumpPosition);

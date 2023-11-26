@@ -98,7 +98,7 @@ enum CommandIDs { A_PROPOS, SAVE_ALL, MAR_SAVE, PL_SAVE, ST_SAVE, LOAD_ALL, MAR_
 /**********************
 * Audio
 ***********************/
-#define BITRATE               64000  //Ce serait mieux de le prendre du fichier mais pour le moment c'est le plus simple
+#define DFT_BITRATE           128  //kbps pas utilisé, mais si problème on se rabatera dessus
 #define SECONDS_PER_JUMP      5
 
 #define NBR_MARKERS           10    //Nombre de marqueurs par 
