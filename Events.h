@@ -6,7 +6,7 @@ void refreshDisplay() {
 
   if (STATE.MODE == PLAYER) {
 
-      DISPLAY_.files.printPath(&FILE_); 
+      DISPLAY_.files.printPath(&FILE_, &MP3); 
   
   } else if (STATE.MODE == MENU) {
 
@@ -149,8 +149,14 @@ void onPress(ButtonHandler* buttonHandler, int ID) {
         case 2:         
 
           DEBUG_.print("MARKERS_.isEmpty()", MARKERS_.isEmpty());
+
           if(MARKERS_.isEmpty()){
-            JumpPosition = (AUDIO.getFilePosition() >= SECONDS_PER_JUMP * (BITRATE / 8)) ? (AUDIO.getFilePosition() - SECONDS_PER_JUMP * (BITRATE / 8)) : 0;   
+
+            DEBUG_.print("Position", AUDIO.getFilePosition());
+            DEBUG_.print("MP3 bps", MP3.getBytePerSecond());
+            DEBUG_.print("NEW", (AUDIO.getFilePosition() - MP3.getBytePerSecond()*SECONDS_PER_JUMP) );
+
+            //JumpPosition = (AUDIO.getFilePosition() >= SECONDS_PER_JUMP * (BITRATE / 8)) ? (AUDIO.getFilePosition() - SECONDS_PER_JUMP * (BITRATE / 8)) : 0;   
           }else{
             //on cherche BITRATE / 4 = 2 seconde pour sauter au rpécédent si on est très proche du marker
             JumpPosition =MARKERS_.getPrevious(AUDIO.getFilePosition()- BITRATE / 4); 
@@ -511,7 +517,7 @@ void onAfterSelectDir(){
   MARKERS_.selectArray();
 
   if(STATE.MODE == PLAYER){
-    DISPLAY_.files.printPath(&FILE_);
+    DISPLAY_.files.printPath(&FILE_, &MP3);
   }
 
   DEBUG_.print("SelectDir",FILE_.dirNum,FILE_.path);  
@@ -522,9 +528,11 @@ void onAfterSelectFile(){
   onAfterSDWork();
   STATE.fileNum = FILE_.fileNum;
   MARKERS_.selectArray();
+  MP3.open(FILE_.path);
+  MP3.close();
 
   if(STATE.MODE == PLAYER){
-    DISPLAY_.files.printPath(&FILE_);
+    DISPLAY_.files.printPath(&FILE_, &MP3);
   }
   
   DEBUG_.print("SelectFile",FILE_.fileNum,FILE_.path);  

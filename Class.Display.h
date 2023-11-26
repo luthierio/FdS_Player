@@ -5,6 +5,9 @@
   #include <Adafruit_GFX.h>
   #include <Adafruit_SSD1306.h>
 
+  #include "libs/Class.UTF8Converter.h"
+  UTF8Converter UTF8;
+
   /**********************
   * MAIN Class:
   ***********************/
@@ -150,7 +153,7 @@
         Display(ecran),
         filePicker (filePicker){}
 
-      void printPath(FilePicker *selectedPath) {
+      void printPath(FilePicker *selectedPath, MP3File *mp3) {
         
         //On efface la zone   
         ecran_->fillRect(0, 0, 100, 16, BLACK); 
@@ -171,7 +174,11 @@
           if (!selectedPath->exist()) {
             printTxtNum(selectedPath->fileNum, 48, 48, &FreeSans18pt7b);             
           }else{
-            printFilePath(selectedPath, 0, 32, &FreeSerif9pt7b);
+            if(mp3->hasID3V1){
+              printID3(mp3, 0, 32, &FreeSerif9pt7b);
+            }else{
+              printFilePath(selectedPath, 0, 32, &FreeSerif9pt7b);
+            }
           }
 
         } 
@@ -185,6 +192,16 @@
 
       }
       
+      void printID3(MP3File *mp3, int x, int y, const GFXfont *font = NULL, uint8_t textSize = 1) {
+
+          printTxt(UTF8.convertToASCII(mp3->ID3V1.title), x, y, font, textSize);
+          if(mp3->ID3V1.year != 0){
+            printTxt(mp3->ID3V1.year, x, y + 10, NULL, textSize);
+            printTxt(UTF8.convertToASCII(mp3->ID3V1.album), x+30, y + 10, NULL, textSize);
+          }else{
+            printTxt(UTF8.convertToASCII(mp3->ID3V1.album), x, y + 10, NULL, textSize);
+          }
+      }
       void printFilePath(FilePicker *selectedPath, int x, int y, const GFXfont *font = NULL, uint8_t textSize = 1) {
 
           char displayedFile[255]; // Assurez-vous que la taille est suffisamment grande

@@ -17,6 +17,8 @@ Pitcher PITCHER = Pitcher(&AUDIO);
 FilePicker FILE_(&SD);
 FileManager SD_FS(&SD);
 
+MP3File MP3;
+
 Metronome METRONOME_(&AUDIO, BEATSOUND, BEATSOUND2); // BPM = 120, 4 beats per bar, with specific beat files
 
 uint8_t VOLUME = 10;          // Defaut volume

@@ -8,9 +8,12 @@
 
   #include <SdFat.h>
 
-  // Constantes pour la longueur des noms de fichier et du chemin
-  const int MAX_FILENAME_LENGTH = 255;
-  const int MAX_PATH_LENGTH = 560;
+#ifndef MAX_FILENAME_LENGTH
+  #define  MAX_FILENAME_LENGTH 255
+#endif
+#ifndef MAX_PATH_LENGTH
+  #define MAX_PATH_LENGTH 560
+#endif
 
   class FilePicker {
     private:
