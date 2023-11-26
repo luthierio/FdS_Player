@@ -523,20 +523,16 @@ void onAfterSelectDir(){
 }
 void onAfterSelectFile(){
 
-  onAfterSDWork();
   STATE.fileNum = FILE_.fileNum;
   MARKERS_.selectArray();
-  MP3.open(FILE_.path);
-  MP3.close();  
-  DEBUG_.print("bitrate",MP3.bitrate);
-
-  DEBUG_.print("Year",MP3.ID3V1.year);  
-
+  MP3.open(FILE_.path); MP3.close();  //Open and close to load bitrate & tags ID3v1
+  
   if(STATE.MODE == PLAYER){
     DISPLAY_.files.printPath(&FILE_, &MP3);
   }
   
   DEBUG_.print("SelectFile",FILE_.fileNum,FILE_.path);  
+  onAfterSDWork();
 
 }
 
