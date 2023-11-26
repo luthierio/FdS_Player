@@ -90,7 +90,7 @@ public:
     }
 
     uint32_t getBytePerSecond() {
-        return bitrate / 8;
+        return bitrate*1000 / 8; //kbps -> byte per second
     }
 
     uint16_t readFrameHeader() {

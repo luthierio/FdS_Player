@@ -148,15 +148,13 @@ void onPress(ButtonHandler* buttonHandler, int ID) {
 
         case 2:         
 
-          DEBUG_.print("MARKERS_.isEmpty()", MARKERS_.isEmpty());
+          DEBUG_.print("Position", AUDIO.getFilePosition());
 
           if(MARKERS_.isEmpty()){
 
-            DEBUG_.print("Position", AUDIO.getFilePosition());
-            DEBUG_.print("MP3 bps", MP3.getBytePerSecond());
-            DEBUG_.print("NEW", (AUDIO.getFilePosition() - MP3.getBytePerSecond()*SECONDS_PER_JUMP) );
+            uint32_t jump = MP3.getBytePerSecond()*SECONDS_PER_JUMP;
+            JumpPosition = AUDIO.getFilePosition() - jump > 0? AUDIO.getFilePosition() - jump : 0;  
 
-            //JumpPosition = (AUDIO.getFilePosition() >= SECONDS_PER_JUMP * (BITRATE / 8)) ? (AUDIO.getFilePosition() - SECONDS_PER_JUMP * (BITRATE / 8)) : 0;   
           }else{
             //on cherche BITRATE / 4 = 2 seconde pour sauter au rpécédent si on est très proche du marker
             JumpPosition =MARKERS_.getPrevious(AUDIO.getFilePosition()- BITRATE / 4); 
@@ -530,6 +528,7 @@ void onAfterSelectFile(){
   MARKERS_.selectArray();
   MP3.open(FILE_.path);
   MP3.close();  
+  DEBUG_.print("bitrate",MP3.bitrate);
 
   DEBUG_.print("Year",MP3.ID3V1.year);  
 

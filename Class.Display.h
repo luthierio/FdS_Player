@@ -188,16 +188,17 @@
       void printDirPath(FilePicker *selectedPath, int x, int y, const GFXfont *font = NULL, uint8_t textSize = 1){
         
           ecran_->drawBitmap (x, y, folderIcon8, 8,8,WHITE);
-          printTxt(selectedPath->dirname+3, x+12, y);
+          printTxt(UTF8.convertToASCII(selectedPath->dirname+3), x+12, y);
 
       }
       
       void printID3(MP3File *mp3, int x, int y, const GFXfont *font = NULL, uint8_t textSize = 1) {
 
           printTxt(UTF8.convertToASCII(mp3->ID3V1.title), x, y, font, textSize);
-          if(mp3->ID3V1.year != "/0"){
+          if (strlen(mp3->ID3V1.year) != 0){
             printTxt(mp3->ID3V1.year, x, y + 10, NULL, textSize);
-            printTxt(UTF8.convertToASCII(mp3->ID3V1.album), x+30, y + 10, NULL, textSize);
+            printTxt(" | ", x, y + 10, NULL, textSize);
+            printTxt(UTF8.convertToASCII(mp3->ID3V1.album), x+34, y + 10, NULL, textSize);
           }else{
             printTxt(UTF8.convertToASCII(mp3->ID3V1.album), x, y + 10, NULL, textSize);
           }
@@ -215,8 +216,8 @@
             getBracketContent(selectedPath->filename, fileInfos, sizeof(fileInfos));
           }
 
-          printTxt(displayedFile, x, y, font, textSize);
-          printTxt(fileInfos, x, y + 10, NULL, textSize);
+          printTxt(UTF8.convertToASCII(displayedFile), x, y, font, textSize);
+          printTxt(UTF8.convertToASCII(fileInfos), x, y + 10, NULL, textSize);
           
       }
 
