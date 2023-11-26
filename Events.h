@@ -529,7 +529,9 @@ void onAfterSelectFile(){
   STATE.fileNum = FILE_.fileNum;
   MARKERS_.selectArray();
   MP3.open(FILE_.path);
-  MP3.close();
+  MP3.close();  
+
+  DEBUG_.print("Year",MP3.ID3V1.year);  
 
   if(STATE.MODE == PLAYER){
     DISPLAY_.files.printPath(&FILE_, &MP3);

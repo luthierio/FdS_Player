@@ -38,10 +38,6 @@ public:
     void open(const char *fileName) {
         isMP3 = isMP3File(fileName);
         File::open(fileName);
-        getFileInfos();
-    }
-
-    void getFileInfos() {
 
         if (isMP3) {
             readFrameHeader();
@@ -51,6 +47,7 @@ public:
             getID3V1(ID3V1);
         }
     }
+
     bool checkID3V1() {
         // Check if the last 128 bytes contain "TAG"
         seekEnd(-128);

@@ -1,7 +1,7 @@
 /**********************
 * DEBUG
 ***********************/
-#define ASF_DEBUG_MODE false
+#define ASF_DEBUG_MODE true
 
 bool SERIAL_ON = ASF_DEBUG_MODE;
 bool SERIAL_WAIT = false; //It true, wait serial to start
@@ -107,7 +107,7 @@ enum CommandIDs { A_PROPOS, SAVE_ALL, MAR_SAVE, PL_SAVE, ST_SAVE, LOAD_ALL, MAR_
 #define MAX_VOLUME            0      // Un petit nombre signifie un volume fort
 #define MIN_VOLUME            100    // Au dela de ce nombre 255 (Volume OFF) est envoyé.
 
-#define NBR_PLAYLISTS        8    //Nombre de tableaux de marqueurs pour le boitier
+#define NBR_PLAYLISTS        6    //Nombre de tableaux de marqueurs pour le boitier
 #define NBR_PLAYLIST_ITEMS  20    //Nombre de marqueurs par fichier
 
 /**********************

@@ -195,7 +195,7 @@
       void printID3(MP3File *mp3, int x, int y, const GFXfont *font = NULL, uint8_t textSize = 1) {
 
           printTxt(UTF8.convertToASCII(mp3->ID3V1.title), x, y, font, textSize);
-          if(mp3->ID3V1.year != 0){
+          if(mp3->ID3V1.year != "/0"){
             printTxt(mp3->ID3V1.year, x, y + 10, NULL, textSize);
             printTxt(UTF8.convertToASCII(mp3->ID3V1.album), x+30, y + 10, NULL, textSize);
           }else{
