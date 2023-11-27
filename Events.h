@@ -40,9 +40,9 @@ void setMode(uint8_t mode) {
   } else if (mode == PLAYLIST) {
 
       R_DIR->resetPosition(PLAYLISTS_.getPlayListPosition(), false);
-      R_DIR->setUpperBound(NBR_PLAYLISTS);
+      R_DIR->setUpperBound(NBR_PLAYLISTS-1);
       R_FILES->resetPosition(PLAYLISTS_.getPlayPosition(), false);
-      R_FILES->setUpperBound(NBR_PLAYLIST_ITEMS);
+      R_FILES->setUpperBound(NBR_PLAYLIST_ITEMS-1);
       R_DIR->setCanLoop(false);
       R_FILES->setCanLoop(false);
 

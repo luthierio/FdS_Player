@@ -91,6 +91,8 @@
               }
           }else if (onError != nullptr) {
               onError(NULL, "Wrong playlist index");
+              Serial.println(index);
+              Serial.println(NBR_PLAYLISTS);
           }
       }
 
@@ -205,6 +207,10 @@
             
           }  
         }      
+        //On réinitialise les positions
+        setPlaylistPosition(0);
+        setPlayPosition(0);
+        onConfirm("Playlists m3u", "Chargement OK!");
       }
 
 
