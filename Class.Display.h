@@ -40,6 +40,12 @@
         drawCentreString(texte, 64, 60);
         ecran_->display();
       }
+      void message(const __FlashStringHelper *texte= nullptr) {
+        ecran_->fillRect(0, 52, 128, 32, BLACK); 
+        //ecran_->drawFastHLine(0, 52, 128, WHITE);
+        drawCentreString(texte, 64, 60);
+        ecran_->display();
+      }
       void error(const __FlashStringHelper *texte = nullptr) {
 
         ecran_->clearDisplay();

@@ -101,8 +101,8 @@ enum CommandIDs { A_PROPOS, SAVE_ALL, MAR_SAVE, PL_SAVE, ST_SAVE, LOAD_ALL, MAR_
 #define DFT_BITRATE           128  //kbps pas utilisé, mais si problème on se rabatera dessus
 #define SECONDS_PER_JUMP      5
 
-#define NBR_MARKERS           10    //Nombre de marqueurs par 
-#define NBR_MARKER_ARRAYS     30    //Nombre de tableaux de marqueurs pour le boitier
+#define NBR_MARKERS           8    //Nombre de marqueurs par 
+#define NBR_MARKER_ARRAYS     50    //Nombre de tableaux de marqueurs pour le boitier
 
 #define MAX_VOLUME            0      // Un petit nombre signifie un volume fort
 #define MIN_VOLUME            100    // Au dela de ce nombre 255 (Volume OFF) est envoyé.

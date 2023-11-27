@@ -11,7 +11,7 @@ public:
         onBeforeSave(nullptr), onAfterSave(nullptr) {}
 
   // Définition du type de fonction de rappel
-  typedef void (*CallbackFunction)(const char* fileName, const char* message);
+  typedef void (*CallbackFunction)(const char* fileName, const __FlashStringHelper* message);
 
   // Ajout de cinq fonctions de rappel
   CallbackFunction errorCallback;
@@ -39,21 +39,21 @@ public:
   bool save(const char* nomFichier, const void* dataPointer, size_t dataSize, bool silent = false) {
     
     if (backupEnabled && sd->exists(nomFichier) && !createBackup(nomFichier) ) {
-      if (errorCallback) errorCallback(nomFichier, "Error: Backup Fail");
+      if (errorCallback) errorCallback(nomFichier, F("Error: Backup Fail"));
       return false;
     }
 
     File fichier = sd->open(nomFichier, O_WRITE | O_CREAT | O_TRUNC);
     if (fichier) {
-      if (onBeforeSave && !silent) onBeforeSave(nomFichier, "Saving");  // Appel de la fonction de rappel avant la sauvegarde
+      if (onBeforeSave && !silent) onBeforeSave(nomFichier, F("Saving"));  // Appel de la fonction de rappel avant la sauvegarde
       if (fichier.write(dataPointer, dataSize) == dataSize) {
         fichier.close();
-        if (onAfterSave && !silent) onAfterSave(nomFichier, "OK!");  // Appel de la fonction de rappel après la sauvegarde
+        if (onAfterSave && !silent) onAfterSave(nomFichier,F("OK!"));  // Appel de la fonction de rappel après la sauvegarde
         return true;
       } else {
         fichier.close();
         restoreBackup(nomFichier);
-        if (errorCallback) errorCallback(nomFichier, "Error writing");
+        if (errorCallback) errorCallback(nomFichier,F("Error writing"));
       }
     }
     fichier.close();
@@ -67,20 +67,20 @@ public:
     
       File fichier = sd->open(nomFichier, O_RDONLY);
       if (fichier) {
-        if (onBeforeLoad && !silent) onBeforeLoad(nomFichier, "Loading");  // Appel de la fonction de rappel avant le chargement
+        if (onBeforeLoad && !silent) onBeforeLoad(nomFichier,F("Loading"));  // Appel de la fonction de rappel avant le chargement
         if (fichier.read(dataPointer, dataSize) == dataSize) {
           fichier.close();
-          if (onAfterLoad && !silent) onAfterLoad(nomFichier, "OK");  // Appel de la fonction de rappel après le chargement
+          if (onAfterLoad && !silent) onAfterLoad(nomFichier, F("OK"));  // Appel de la fonction de rappel après le chargement
           return true;
         } else {
-          if (errorCallback) errorCallback(nomFichier, "Error reading");
+          if (errorCallback) errorCallback(nomFichier, F("Error reading"));
           return false;
         }
       }
       
     } else {
       //Nothing to load
-      if (onAfterLoad && !silent) onAfterLoad(nomFichier, "Nothing to load");  // Appel de la fonction de rappel après le chargement
+      if (onAfterLoad && !silent) onAfterLoad(nomFichier, F("Nothing to load"));  // Appel de la fonction de rappel après le chargement
     }
      return false;
   }
@@ -95,7 +95,7 @@ private:
     char nomFichierBackup[MAX_FILE_NAME_LENGTH];
 
     if (strlen(nomFichier) + strlen(suffixeBackup) > MAX_FILE_NAME_LENGTH - 1) {
-      if (errorCallback) errorCallback(nomFichier, "Error: filename too long");
+      if (errorCallback) errorCallback(nomFichier, F("Error: filename too long"));
       return false;
     }
 
@@ -107,7 +107,7 @@ private:
     if (sd->exists(nomFichierBackup)) {
       return true;
     } else {
-      if (errorCallback) errorCallback(nomFichier, "Error: no backup");
+      if (errorCallback) errorCallback(nomFichier, F("Error: no backup"));
     }
 
     return false;
@@ -118,7 +118,7 @@ private:
     char nomFichierBackup[MAX_FILE_NAME_LENGTH];
 
     if (strlen(nomFichier) + strlen(suffixeBackup) > MAX_FILE_NAME_LENGTH - 1) {
-      if (errorCallback) errorCallback(nomFichier, "Error: filename too long");
+      if (errorCallback) errorCallback(nomFichier,F("Error: filename too long"));
       return;
     }
 

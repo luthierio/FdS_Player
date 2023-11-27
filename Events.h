@@ -25,7 +25,7 @@ void refreshDisplay() {
 
 }
 void setMode(uint8_t mode) {
-  DEBUG_.print("MODE", mode);
+  DEBUG_.print(F("MODE"), mode);
   //DISPLAY_.clear();
 
   if (mode == PLAYER) {
@@ -62,6 +62,24 @@ void setMode(uint8_t mode) {
 * MESSAGE:
 ***********************/
 void sendMessage(const char* label, const char* message, int DELAY) {
+  DEBUG_.print(label, message); 
+  DISPLAY_.display.message(message);
+  delay(DELAY);
+  //setMode(STATE.MODE);
+}
+void sendMessage(const char* label, const __FlashStringHelper* message, int DELAY) {
+  DEBUG_.print(label, message); 
+  DISPLAY_.display.message(message);
+  delay(DELAY);
+  //setMode(STATE.MODE);
+}
+void sendMessage(const __FlashStringHelper* label, const char* message, int DELAY) {
+  DEBUG_.print(label, message); 
+  DISPLAY_.display.message(message);
+  delay(DELAY);
+  //setMode(STATE.MODE);
+}
+void sendMessage(const __FlashStringHelper* label, const __FlashStringHelper* message, int DELAY) {
   DEBUG_.print(label, message); 
   DISPLAY_.display.message(message);
   delay(DELAY);
@@ -145,16 +163,12 @@ void onPress(ButtonHandler* buttonHandler, int ID) {
         case 1:
           if (AUDIO.playingMusic) {
             AUDIO.pausePlaying(true);
-            DEBUG_.print("Paused");
           } else {
             AUDIO.pausePlaying(false);
-            DEBUG_.print("Resumed");
           }
           break;
 
         case 2:         
-
-          DEBUG_.print("Position", AUDIO.getFilePosition());
 
           if(MARKERS_.isEmpty()){
 
@@ -162,14 +176,10 @@ void onPress(ButtonHandler* buttonHandler, int ID) {
             JumpPosition = AUDIO.getFilePosition() - jump > 0? AUDIO.getFilePosition() - jump : 0;  
 
           }else{
-            DEBUG_.print("MP3.bitrate", MP3.bitrate);
-            DEBUG_.print("MP3.getBytePerSecond()", MP3.getBytePerSecond()/2);
             //on cherche 1 seconde en arrière pour sauter au précédent si on est très proche du marker
             JumpPosition =MARKERS_.getPrevious(AUDIO.getFilePosition()- MP3.getBytePerSecond()); 
           } 
           AUDIO.jumpTo(JumpPosition);
-          DEBUG_.print("Jump Position", JumpPosition);
-          DEBUG_.print("Position", AUDIO.getFilePosition());
 
           break;
 
@@ -180,13 +190,11 @@ void onPress(ButtonHandler* buttonHandler, int ID) {
         case 4:
           if(STATE.playMode < REPEATONE){STATE.playMode++;}        
           else{STATE.playMode = ONEPLAY;}
-          DEBUG_.print("playMode", STATE.playMode);
           break;
 
         case 5:
           PITCHER.switchSign();
           PITCHER.reset();
-          DEBUG_.print("PITCHER", PITCHER.getSign());
           break;
 
         default:
@@ -205,10 +213,8 @@ void onPress(ButtonHandler* buttonHandler, int ID) {
         case 1:
           if (AUDIO.playingMusic) {
             AUDIO.pausePlaying(true);
-            DEBUG_.print("Paused");
           } else {
             AUDIO.pausePlaying(false);
-            DEBUG_.print("Resumed");
           }
           break;
         case 2:
@@ -221,7 +227,6 @@ void onPress(ButtonHandler* buttonHandler, int ID) {
           if(STATE.playlistMode < REPEATONE){STATE.playlistMode++;}        
           else{STATE.playlistMode = ONEPLAY;}
           DISPLAY_.playlists.playList(); 
-          DEBUG_.print("playlistMode", STATE.playlistMode);
           break;
         case 5:
           PLAYLISTS_.addCurrentFile(&FILE_);
@@ -257,8 +262,8 @@ void onPress(ButtonHandler* buttonHandler, int ID) {
       }
 
   }
-  DEBUG_.print("MODE", STATE.MODE);
-  DEBUG_.print("Pressed", ID);
+  DEBUG_.print(F("MODE"), STATE.MODE);
+  DEBUG_.print(F("Pressed"), ID);
   delay(10);
 }
 void onLongPress(ButtonHandler* buttonHandler, int ID) {
@@ -332,7 +337,7 @@ void onRelease(ButtonHandler* buttonHandler, int ID) {
   if (STATE.MODE == PLAYER) {
       switch (ID) {
         case 0:
-          DEBUG_.print("Playing", FILE_.path);
+          DEBUG_.print(F("Playing"), FILE_.path);
           AUDIO.startPlayingFile(FILE_.path);
           break;
         default:
@@ -346,8 +351,6 @@ void onRelease(ButtonHandler* buttonHandler, int ID) {
 
       switch (ID) {
         case 0:
-          DEBUG_.print("dirNum",PLAYLISTS_.current->dirNum);
-          DEBUG_.print("fileNum",PLAYLISTS_.current->fileNum);
           if(!PLAYLISTS_.currentPositionIsEmpty()){
             FILE_.select(PLAYLISTS_.current->dirNum, PLAYLISTS_.current->fileNum);
             AUDIO.startPlayingFile(FILE_.path);
@@ -358,10 +361,10 @@ void onRelease(ButtonHandler* buttonHandler, int ID) {
       }
 
   }
-  DEBUG_.print("Release", ID);
+  DEBUG_.print(F("Release"), ID);
 }
 void onLongRelease(ButtonHandler* buttonHandler, int ID) {
-  DEBUG_.print("LongRelease", ID);
+  DEBUG_.print(F("LongRelease"), ID);
 }
 
 /**********************
@@ -386,7 +389,7 @@ void autoPlay(){
       if(STATE.playMode == AUTO && FILE_.fileNum == MAX_FILES_NUM-1){    
         FILE_.selectFile(0);
         SHOULD_PLAY_NEXT = false;
-        DEBUG_.print("FIN AutoPlay");
+        DEBUG_.print(F("FIN AutoPlay"));
 
       //Il faudrait essayer d'en jouer une autre
       }else if(!AUDIO.playingMusic && !AUDIO.currentTrack){  
@@ -413,7 +416,7 @@ void autoPlay(){
       if(STATE.playlistMode == AUTO && PLAYLISTS_.getPlayPosition() == NBR_PLAYLIST_ITEMS-1){    
         PLAYLISTS_.setPlayPosition(0);
         SHOULD_PLAY_NEXT = false;
-        DEBUG_.print("FIN AutoPlay");
+        DEBUG_.print(F("FIN AutoPlay"));
 
       //Il faudrait essayer d'en jouer une autre
       }else if(!AUDIO.playingMusic && !AUDIO.currentTrack){  
@@ -495,18 +498,18 @@ void onAfterSDWork() {
     MUST_RESUME = false;
   }
 }
-void onBeforeSDReadWrite(const char* fileName, const char* message) {
+void onBeforeSDReadWrite(const char* fileName, const __FlashStringHelper* message) {
   INTERRUPTS = false;
   sendMessage(fileName, message,0);
   AUDIO.stopPlaying();
   delay(10);
 }
-void onAfterSDReadWrite(const char* fileName, const char* message) {
+void onAfterSDReadWrite(const char* fileName, const __FlashStringHelper* message) {
   onAfterSDWork();
   sendMessage(fileName, message,MSG_DELAY);
   INTERRUPTS = true;
 }
-void onSDError(const char* fileName, const char* message) {
+void onSDError(const char* fileName, const __FlashStringHelper* message) {
   onAfterSDWork();
   sendMessage(fileName, message,ERROR_MSG_DELAY);
   INTERRUPTS = true;
@@ -557,10 +560,10 @@ void onPlayListSetPosition(uint8_t position[2]){
   DISPLAY_.playlists.nav(); 
   DISPLAY_.playlists.playList(); 
 }
-void onPlayListError(const char* label = "Playlists", const char* message = "ERROR"){
+void onPlayListError(const char* label, const __FlashStringHelper* message){
   sendMessage(label, message,ERROR_MSG_DELAY);
 }
-void onPlayListConfirm(const char* label = "Playlists", const char* message = "OK"){
+void onPlayListConfirm(const char* label, const __FlashStringHelper* message){
   sendMessage(label, message,MSG_DELAY);
 }
 /**********************

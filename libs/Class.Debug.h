@@ -37,6 +37,14 @@ public:
       serialPtr->println(value);
     }
   }
+  
+  void print(const __FlashStringHelper* label, const char* value) {
+    if (enable) {
+      serialPtr->print(label);
+      serialPtr->print(": ");
+      serialPtr->println(value);
+    }
+  }
 
   void print(const __FlashStringHelper* label, int value) {
     if (enable) {
