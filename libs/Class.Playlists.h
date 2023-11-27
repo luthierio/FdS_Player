@@ -151,7 +151,7 @@ public:
   }
   // Sauve le fichier du filePicker dans la position
   void loadM3U(FilePicker *filePicker) {
-    
+
     for (uint8_t i = 0; i < NBR_PLAYLISTS; ++i) {
 
       File file = filePicker->getByNum(filePicker->SD->open("/"), i, FILE_ONLY, ".m3u");
@@ -167,6 +167,7 @@ public:
       setPlaylistPosition(i);
 
       while ((n = file.fgets(line, sizeof(line))) > 0) {
+        Serial.println( "Free Ram :" + String(FreeRam(), DEC) + " bytes");
 
         if (line[0] != '#') {
 

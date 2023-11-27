@@ -59,9 +59,9 @@ void doAction(int ID){
     case DEBUG_ON:
       SERIAL_ON = !SERIAL_ON;
       if(SERIAL_ON){
-        DEBUG_.setSerial(true);
+        DEBUG_.setEnabled(true);
       }else{
-        DEBUG_.setSerial(false);
+        DEBUG_.setEnabled(false);
       }
       DEBUG_.print(F("SERIAL_ON"),SERIAL_ON);
       break;

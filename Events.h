@@ -315,7 +315,7 @@ void onLongPress(ButtonHandler* buttonHandler, int ID) {
           SD_FS.save(PLAYLISTS_FILENAME, &PLAYLISTS, sizeof(PLAYLISTS));
           refreshDisplay();
           break;
-        case 5:
+        case 5:        
           PLAYLISTS_.loadM3U(&FILE_);
           break;
         default:
@@ -548,6 +548,7 @@ void onAfterSelectFile(){
   
   DEBUG_.print(F("SelectFile"),FILE_.fileNum,FILE_.path);  
   onAfterSDWork();
+
 
 }
 

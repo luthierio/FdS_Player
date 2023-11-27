@@ -95,7 +95,7 @@ class Pitcher {
     int8_t Sign = -1; //-1 = speed, 1 = pitch
 };
 
-const signed int Pitcher::PITCH_TONE_TABLE[PITCH_STEPS] PROGMEM = {
+const signed int Pitcher::PITCH_TONE_TABLE[PITCH_STEPS]  = {
     12274, //-5 Down five semitones
     13004, //-4 Down four semitones
     13777, //-3 Down three semitones
@@ -109,7 +109,7 @@ const signed int Pitcher::PITCH_TONE_TABLE[PITCH_STEPS] PROGMEM = {
     21869, //+5 Up five semitones
 };
 #define PLUGIN_PITCHSHIFTER_SIZE 1373
-const unsigned short Pitcher::pluginPitchShifter[PLUGIN_PITCHSHIFTER_SIZE] PROGMEM = { /* Compressed plugin */
+const unsigned short Pitcher::pluginPitchShifter[PLUGIN_PITCHSHIFTER_SIZE]  = { /* Compressed plugin */
     0x0007, 0x0001, 0x8050, 0x0006, 0x0006, 0x2800, 0xaac0, 0x0000, /*    0 */
     0x0024, 0x2800, 0x70c0, 0x0007, 0x0001, 0x8010, 0x0006, 0x0006, /*    8 */
     0x2a08, 0x21ce, 0x2a00, 0x14ce, 0x2a00, 0x2f0e, 0x0007, 0x0001, /*   10 */

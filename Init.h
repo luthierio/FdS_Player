@@ -1,5 +1,5 @@
 
-Debug DEBUG_;
+Debug DEBUG_(&Serial, SERIAL_ON, RAM_DEBUG_ON);
 byte INTERRUPTS = true; // IF false, buttons etc desactivated
 /**********************
 * FAT Files

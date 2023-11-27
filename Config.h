@@ -1,10 +1,11 @@
 /**********************
 * DEBUG
 ***********************/
-#define ASF_DEBUG_MODE false
+#define ASF_DEBUG_MODE true
 
 bool SERIAL_ON = ASF_DEBUG_MODE;
-bool SERIAL_WAIT = false; //It true, wait serial to start
+bool RAM_DEBUG_ON = ASF_DEBUG_MODE;
+bool SERIAL_WAIT = ASF_DEBUG_MODE; //It true, wait serial to start
 
 /**********************
 * CONFIG CONST
@@ -30,6 +31,9 @@ bool SERIAL_WAIT = false; //It true, wait serial to start
 #define MAX_DIR_NUM 99 // OLED display width, in pixels
 #define MIN_FILES_NUM 0 // OLED display width, in pixels
 #define MAX_FILES_NUM 99 // OLED display width, in pixels
+#define MAX_FILENAME_LENGTH 150
+#define MAX_DIRNAME_LENGTH 100
+#define MAX_PATH_LENGTH 256
 
 /**********************
 * SCREEN
@@ -107,7 +111,7 @@ enum CommandIDs { A_PROPOS, SAVE_ALL, MAR_SAVE, PL_SAVE, ST_SAVE, LOAD_ALL, MAR_
 #define MAX_VOLUME            0      // Un petit nombre signifie un volume fort
 #define MIN_VOLUME            100    // Au dela de ce nombre 255 (Volume OFF) est envoyé.
 
-#define NBR_PLAYLISTS         6    //Nombre de tableaux de marqueurs pour le boitier
+#define NBR_PLAYLISTS         5    //Nombre de tableaux de marqueurs pour le boitier
 #define NBR_PLAYLIST_ITEMS    30    //Nombre de marqueurs par fichier
 
 /**********************

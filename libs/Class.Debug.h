@@ -2,23 +2,29 @@ class Debug {
 private:
   Serial_* serialPtr = &Serial;
   bool enable;
+  bool ramDebug;
 public:
   
-  Debug(Serial_* serialPtr = &Serial, bool enabled = true) : serialPtr(serialPtr), enable(enabled) {}
+  Debug(Serial_* serialPtr = &Serial, bool enabled = true, bool ramDebug = true) : serialPtr(serialPtr), enable(enabled) , ramDebug(ramDebug){}
 
-  void setSerial(bool enabled) {
+  void setEnabled(bool enabled) {
     this->enable = enabled;
+  }
+  void printRam() {
+    serialPtr->println( "Free Ram :" + String(FreeRam(), DEC) + " bytes");
   }
   
   void print(const char* value) {
     if (enable) {
       serialPtr->println(value);
+      if (ramDebug) printRam();
     }
   }
 
   void print(const __FlashStringHelper* value) {
     if (enable) {
       serialPtr->println(value);
+      if (ramDebug) printRam();
     }
   }
 
@@ -27,6 +33,7 @@ public:
       serialPtr->print(label);
       serialPtr->print(F(": "));
       serialPtr->println(value);
+      if (ramDebug) printRam();
     }
   }
 
@@ -35,6 +42,7 @@ public:
       serialPtr->print(label);
       serialPtr->print(F(": "));
       serialPtr->println(value);
+      if (ramDebug) printRam();
     }
   }
   
@@ -43,6 +51,7 @@ public:
       serialPtr->print(label);
       serialPtr->print(F(": "));
       serialPtr->println(value);
+      if (ramDebug) printRam();
     }
   }
 
@@ -51,6 +60,7 @@ public:
       serialPtr->print(label);
       serialPtr->print(F(": "));
       serialPtr->println(value);
+      if (ramDebug) printRam();
     }
   }
 
@@ -59,6 +69,7 @@ public:
       serialPtr->print(label);
       serialPtr->print(F(": "));
       serialPtr->println(value, 4);  // Display the float value with 4 decimals
+      if (ramDebug) printRam();
     }
   }
 
@@ -67,6 +78,7 @@ public:
       serialPtr->print(label);
       serialPtr->print(F(": "));
       serialPtr->println(value, 4);  // Display the float value with 4 decimals
+      if (ramDebug) printRam();
     }
   }
 
@@ -75,6 +87,7 @@ public:
       serialPtr->print(label);
       serialPtr->print(F(": "));
       serialPtr->println(value);
+      if (ramDebug) printRam();
     }
   }
 
@@ -83,6 +96,7 @@ public:
       serialPtr->print(label);
       serialPtr->print(F(": "));
       serialPtr->println(value);
+      if (ramDebug) printRam();
     }
   }
 
@@ -91,6 +105,7 @@ public:
       serialPtr->print(label);
       serialPtr->print(F(": "));
       serialPtr->println(value);
+      if (ramDebug) printRam();
     }
   }
 
@@ -101,6 +116,7 @@ public:
       serialPtr->print(id);
       serialPtr->print(F("): "));
       serialPtr->println(value);
+      if (ramDebug) printRam();
     }
   }
 
@@ -111,6 +127,7 @@ public:
       serialPtr->print(id);
       serialPtr->print(F("): "));
       serialPtr->println(value, 4);  // Display the float value with 4 decimals
+      if (ramDebug) printRam();
     }
   }
 
@@ -121,6 +138,7 @@ public:
       serialPtr->print(id);
       serialPtr->print(F("): "));
       serialPtr->println(value);
+      if (ramDebug) printRam();
     }
   }
   void print(const char* label, const char* id, const char* value) {
@@ -130,6 +148,7 @@ public:
       serialPtr->print(id);
       serialPtr->print(F("): "));
       serialPtr->println(value);
+      if (ramDebug) printRam();
     }
   }
 
@@ -140,6 +159,7 @@ public:
       serialPtr->print(id);
       serialPtr->print(F("): "));
       serialPtr->println(value);
+      if (ramDebug) printRam();
     }
   }
 
@@ -150,6 +170,7 @@ public:
       serialPtr->print(id);
       serialPtr->print(F("): "));
       serialPtr->println(value, 4);  // Display the float value with 4 decimals
+      if (ramDebug) printRam();
     }
   }
 
@@ -160,6 +181,7 @@ public:
       serialPtr->print(id);
       serialPtr->print(F("): "));
       serialPtr->println(value);
+      if (ramDebug) printRam();
     }
   }
 
@@ -170,6 +192,7 @@ public:
       serialPtr->print(id);
       serialPtr->print(F("): "));
       serialPtr->println(value);
+      if (ramDebug) printRam();
     }
   }
 };

@@ -25,3 +25,14 @@ struct t_state{
   uint8_t BeatsUp = 0;
 };
 t_state STATE;
+
+/**********************
+* STATE:
+***********************/
+
+extern "C" char *sbrk(int i);
+
+int FreeRam () {
+  char stack_dummy = 0;
+  return &stack_dummy - sbrk(0);
+}

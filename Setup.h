@@ -10,8 +10,6 @@ void setup() {
     // Wait for serial port to be opened
     while (!Serial) { delay(1); }  
   }
-  DEBUG_.setSerial(SERIAL_ON); // A part les message d'entrée, on désactive le Serial
-
   /**********************
   * DISPLAY:
   ***********************/    
@@ -94,5 +92,6 @@ void setup() {
   PLAYLISTS_.setPosition( STATE.playlistPosition, SILENT ); 
     
   setMode(STATE.MODE);
+  DEBUG_.print(F("Free Ram :") ,FreeRam());
   
 };
