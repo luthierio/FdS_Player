@@ -37,7 +37,7 @@ public:
 
     void open(const char *fileName) {
         isMP3 = isMP3File(fileName);
-        File::open(fileName);
+        File::open(fileName, O_RDONLY);
 
         if (isMP3) {
             readFrameHeader();

@@ -212,6 +212,7 @@ void onPress(ButtonHandler* buttonHandler, int ID) {
           }
           break;
         case 2:
+          setMode(MENU);
           break;
         case 3:
           setMode(PLAYER);
@@ -310,6 +311,7 @@ void onLongPress(ButtonHandler* buttonHandler, int ID) {
           refreshDisplay();
           break;
         case 5:
+          PLAYLISTS_.loadM3U(&FILE_);
           break;
         default:
           break;

@@ -125,6 +125,39 @@
 
       }
 
+      bool getNumsFromPath(const char* link, int8_t& dirNum, int8_t& fileNum) {
+        // Extraire le dirNum (deux premiers caractères)
+        char dirNumStr[3];
+        strncpy(dirNumStr, link, 2);
+        dirNumStr[2] = '\0';
+        
+        // Vérifier si les caractères extraits sont des chiffres
+        if (isdigit(dirNumStr[0]) && isdigit(dirNumStr[1])) {
+          dirNum = atoi(dirNumStr);
+        } else {
+          dirNum = -1;  // Valeur par défaut en cas d'erreur
+          return false;
+        }
+
+        // Trouver la première occurrence de '/'
+        const char* firstSlash = strchr(link, '/');
+
+        // Extraire le fileNum (deux caractères après la première occurrence de '/')
+        char fileNumStr[3];
+        strncpy(fileNumStr, firstSlash + 1, 2);
+        fileNumStr[2] = '\0';
+
+        // Vérifier si les caractères extraits sont des chiffres
+        if (isdigit(fileNumStr[0]) && isdigit(fileNumStr[1])) {
+          fileNum = atoi(fileNumStr);
+        } else {          
+          fileNum = -1;  // Valeur par défaut en cas d'erreur
+          return false;
+        }        
+        return true;
+      }
+
+
       File getByNum(File root, uint8_t num) {
         while(true) {
 

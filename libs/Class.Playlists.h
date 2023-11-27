@@ -134,7 +134,6 @@
           }
       }
 
-
       //Sauve le fichier du filePicker dans la position
       void addCurrentFile(FilePicker *filePicker) {
           if (filePicker->exist()) {
@@ -144,6 +143,38 @@
               strncpy(current->fileName, filePicker->filename, nameSize);
           }
       }
+      //Sauve le fichier du filePicker dans la position
+      void loadM3U(FilePicker *filePicker) {
+
+        SdFile file;
+        if (!file.open("0.m3u", O_READ) && onError != nullptr) onError("Open .m3u failed");
+
+        // Maximum line length plus space for zero byte.
+        const size_t LINE_DIM = 560;
+        char line[LINE_DIM];
+        size_t n;
+        int playPosition = 0;
+        int8_t dirNum = -1;
+        int8_t fileNum = -1;
+        while ((n = file.fgets(line, sizeof(line))) > 0) {
+            // Print line number.
+            if(line[0] != '#' && playPosition < NBR_PLAYLIST_ITEMS){
+              if(filePicker->getNumsFromPath(line, dirNum, fileNum)){
+                filePicker->select(dirNum,fileNum);
+                if(filePicker->exist()){
+                  setPlayPosition(playPosition);
+                  addCurrentFile(filePicker);
+                  playPosition++;
+                }else if(onError != nullptr){
+                  onError("La référence n'existe pas");
+                }
+              }else if(onError != nullptr){
+                onError("Max items reached");
+              }
+            }
+        }        
+      }
+
 
   };
 
