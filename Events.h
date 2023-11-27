@@ -39,9 +39,9 @@ void setMode(uint8_t mode) {
   
   } else if (mode == PLAYLIST) {
 
-      R_DIR->resetPosition(PLAYLISTS_.getPosition()[0], false);
+      R_DIR->resetPosition(PLAYLISTS_.getPlayListPosition(), false);
       R_DIR->setUpperBound(NBR_PLAYLISTS);
-      R_FILES->resetPosition(PLAYLISTS_.getPosition()[1], false);
+      R_FILES->resetPosition(PLAYLISTS_.getPlayPosition(), false);
       R_FILES->setUpperBound(NBR_PLAYLIST_ITEMS);
       R_DIR->setCanLoop(false);
       R_FILES->setCanLoop(false);
@@ -97,7 +97,7 @@ void onRotChange(Rotary &rotary) {
   } else if (STATE.MODE == PLAYLIST) {
 
       if(&rotary == R_DIR) {
-        PLAYLISTS_.setPosition(currentPosition); 
+        PLAYLISTS_.setPlaylistPosition(currentPosition); 
       }
       if(&rotary == R_FILES) {
         PLAYLISTS_.setPlayPosition(currentPosition);
@@ -344,10 +344,10 @@ void onRelease(ButtonHandler* buttonHandler, int ID) {
 
       switch (ID) {
         case 0:
-          DEBUG_.print("dirNum",PLAYLISTS_.getItem()->dirNum);
-          DEBUG_.print("fileNum",PLAYLISTS_.getItem()->fileNum);
+          DEBUG_.print("dirNum",PLAYLISTS_.current->dirNum);
+          DEBUG_.print("fileNum",PLAYLISTS_.current->fileNum);
           if(!PLAYLISTS_.currentPositionIsEmpty()){
-            PLAYLISTS_.selectFile(&FILE_);
+            FILE_.select(PLAYLISTS_.current->dirNum, PLAYLISTS_.current->fileNum);
             AUDIO.startPlayingFile(FILE_.path);
           }
           break;
@@ -429,7 +429,8 @@ void autoPlay(){
             SHOULD_PLAY_NEXT = false;
             break;
         }        
-        if(!PLAYLISTS_.currentPositionIsEmpty() && PLAYLISTS_.selectFile(&FILE_)){
+        if(!PLAYLISTS_.currentPositionIsEmpty()){
+          FILE_.select(PLAYLISTS_.current->dirNum, PLAYLISTS_.current->fileNum);
           AUDIO.startPlayingFile(FILE_.path); 
         }
       }      
@@ -548,11 +549,14 @@ void onAfterSelectFile(){
 /**********************
 * PLAYLISTS:
 ***********************/
-void onSetPosition(uint8_t position[2]){
+void onPlayListSetPosition(uint8_t position[2]){
   STATE.playlistPosition[0] = position[0];
   STATE.playlistPosition[1] = position[1];
   DISPLAY_.playlists.nav(); 
   DISPLAY_.playlists.playList(); 
+}
+void onPlayListError(const char* message){
+  sendMessage("Playlists", message,ERROR_MSG_DELAY);
 }
 /**********************
 * MARKERS:

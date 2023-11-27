@@ -43,7 +43,7 @@ void setup() {
   * FILES:
   ***********************/
   if (!SD.begin(CARDCS,SPI_SPEED)) {
-    DISPLAY_.display.error(F("Pas de carte SD"));
+    DISPLAY_.display.error(F("SD Card Failed"));
     DEBUG_.print(F("××× ⋅ SD failed, or not present"));
     while (1);  // don't do anything more
   }else{
@@ -59,7 +59,7 @@ void setup() {
   FILE_.setDirCallbacks( onBeforeSelectDir, onAfterSelectDir );
   FILE_.setFileCallbacks( onBeforeSelectFile, onAfterSelectFile );
 
-  PLAYLISTS_.setCallbacks( onSetPosition );
+  PLAYLISTS_.setCallbacks( onPlayListSetPosition, onPlayListError );
   MARKERS_.setCallbacks( onMarkerAdd );
 
   SLEEP_WATCH.setCallbacks(onSleep, onWakeUp);

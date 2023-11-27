@@ -33,45 +33,63 @@
       uint8_t position[2] = {0, 0}; //Position de navigation
       // Tableau de références de playlists
       PlaylistItem (*playlists)[NBR_PLAYLIST_ITEMS];
-
       // Tableau pour suivre le nombre d'éléments dans chaque playlist
       int playlistItemCount[NBR_PLAYLISTS] = {0};
 
+      //Défini la playlist
+      void updateCurrentItem() {
+          if (0 <= position[0] < NBR_PLAYLISTS && 0 <= position[1] < NBR_PLAYLIST_ITEMS) {
+            current = &playlists[position[0]][position[1]];
+          }else{
+            current = &emptyItem;
+            if (onError != nullptr) {
+              onError("wrong position");
+            }
+          }
+      }
+
     public:
+      PlaylistItem emptyItem;
+      PlaylistItem *current = &emptyItem;
       static const uint8_t nbr = NBR_PLAYLISTS;
       static const uint8_t size = NBR_PLAYLIST_ITEMS;
       // Define event function pointers
       void (*onSetPosition)(uint8_t position[2]) = nullptr;
+      void (*onError)(const char* errorMessage) = nullptr;  // Nouveau callback pour les erreurs
 
       PlaylistManager(PlaylistItem (*playlists)[NBR_PLAYLIST_ITEMS]) : playlists(playlists) {}
 
       // Set callback functions
-      void setCallbacks(void (*setPositionCallback)(uint8_t[2])) {
+      void setCallbacks(void (*setPositionCallback)(uint8_t[2]), void (*onErrorCallback)(const char*)) {
           onSetPosition = setPositionCallback;
+          onError = onErrorCallback;  // Définir le callback onError
       }
 
-      // Retourne les deux curseurs de position
-      uint8_t *getPosition() {
-          return position;
-      }
       
+      // Retourne les deux curseurs de position
+      uint8_t getPlayListPosition() {
+          return position[0];
+      }
       // Retourne les deux curseurs de position
       uint8_t getPlayPosition() {
           return position[1];
       }
+
       bool currentPositionIsEmpty(){   
-          PlaylistItem *current = &playlists[position[0]][position[1]];  
           return current->isEmpty();
       }
 
       //Défini la playlist
-      void setPosition(uint8_t index, bool silent = false) {
+      void setPlaylistPosition(uint8_t index, bool silent = false) {
           if (0 <= index && index < NBR_PLAYLISTS) {
               position[0] = index;
+              updateCurrentItem();
               // Trigger the onSetPosition event
               if (!silent && onSetPosition != nullptr) {
                   onSetPosition(position);
               }
+          }else if (onError != nullptr) {
+              onError("Wrong playlist index");
           }
       }
 
@@ -79,11 +97,27 @@
       void setPlayPosition(uint8_t index, bool silent = false) {
           if (0 <= index && index < NBR_PLAYLIST_ITEMS) {
               position[1] = index;
+              updateCurrentItem();
               // Trigger the onSetPlayPosition event
               if (!silent && onSetPosition != nullptr) {
                   onSetPosition(position);
               }
+          }else if (onError != nullptr) {
+              onError("Wrong item index");
           }
+      }
+
+      PlaylistItem *getItem() {
+          return current;
+      }
+
+      PlaylistItem *getItem(uint8_t index) {
+          if (0 <= index < NBR_PLAYLIST_ITEMS) {
+            return &playlists[position[0]][index];
+          }else if (onError != nullptr) {
+              onError("Wrong item index");
+          }
+          return &emptyItem;
       }
 
       //Défini les deux curseurs de position
@@ -95,30 +129,14 @@
               if (!silent && onSetPosition != nullptr) {
                   onSetPosition(position);
               }
+          } else if (onError != nullptr) {
+                onError("Wrong playlist or item index");
           }
       }
 
-      //Sélection le fichier via FilePicker à partir de la position courante
-      bool selectFile(FilePicker *filePicker) {
-          PlaylistItem *current = &playlists[position[0]][position[1]];
-          if (!current->isEmpty()) {
-              if(current->dirNum == filePicker->dirNum && current->fileNum == filePicker->fileNum){
-                //On est déja sur le bon fichier
-                return true;
-              }
-              
-              filePicker->select(current->dirNum, current->fileNum);
-              // Ajoutez le reste de votre logique pour sélectionner le fichier
-              if (filePicker->exist()) {
-                return true;
-              }
-          }
-          return false;
-      }
 
       //Sauve le fichier du filePicker dans la position
       void addCurrentFile(FilePicker *filePicker) {
-          PlaylistItem *current = &playlists[position[0]][position[1]];
           if (filePicker->exist()) {
               current->dirNum = filePicker->dirNum;
               current->fileNum = filePicker->fileNum;
@@ -127,25 +145,6 @@
           }
       }
 
-      PlaylistItem *getItem() {
-          return &playlists[position[0]][position[1]];
-      }
-
-      PlaylistItem *getItem(uint8_t index) {
-          return &playlists[position[0]][index];
-      }
-
-      PlaylistItem *getPlaylist() {
-          return &playlists[position[0]][0];
-      }
-
-      PlaylistItem *getPlaylist(uint8_t index) {
-          if (0 <= index && index < NBR_PLAYLISTS) {
-              return &playlists[index][0];
-          } else {
-              return nullptr;
-          }
-      }
   };
 
 #endif

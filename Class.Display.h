@@ -202,7 +202,7 @@
             printTxt("/", x+29, y + 10, NULL, textSize);
             shift = 38;
           }
-          
+
           if (strlen(mp3->ID3V1.comment) != 0){
             printTxt(UTF8.convertToASCII(mp3->ID3V1.comment), x+shift, y + 10, NULL, textSize);
           }else{
@@ -458,9 +458,8 @@
       void playing(){  
 
         ecran_->fillRect(10, SCREEN_HEIGHT/2-2, 4 , 4, BLACK);
-        PlaylistItem *item =  playlists->getItem(); //Position courante
         //Le fichier qui est sélectionné dans le player est celui ci
-        if(state->dirNum == item->dirNum && state->fileNum == item->fileNum ){
+        if(state->dirNum == playlists->current->dirNum && state->fileNum == playlists->current->fileNum ){
             ecran_->fillTriangle( 10, SCREEN_HEIGHT/2-2 , 10, SCREEN_HEIGHT/2+2, 10+2,SCREEN_HEIGHT/2, WHITE);      // Triangles forward
         }
       }
@@ -469,7 +468,7 @@
         int plHeight = 64/playlists->nbr;
         int x = 0;
         for (byte i = 0; i < playlists->nbr; i = i + 1) {  
-          if(playlists->getPosition()[0] == i){
+          if(playlists->getPlayListPosition() == i){
               ecran_->fillCircle(x+3, plHeight/2 + i*plHeight, 3, WHITE); 
           }else{
               ecran_->fillCircle(x+3, plHeight/2 + i*plHeight, 1, WHITE); 
@@ -499,7 +498,7 @@
        
 
 
-        uint8_t position = playlists->getPosition()[1];
+        uint8_t position = playlists->getPlayPosition();
 
 
         PlaylistItem *item =  playlists->getItem(); //Position courante
