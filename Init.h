@@ -49,9 +49,9 @@ ButtonHandler BUTTONS(6, DEBOUNCE_INTERVAL, LONG_PRESS_INTERVAL, LONG_RELEASE_IN
 * Rotary Encoders
 ***********************/
 Rotary ROTARIES[3] = {
-  Rotary( ROT_F_PIN[0], ROT_F_PIN[1], 1 , MIN_FILES_NUM, MAX_FILES_NUM),
-  Rotary( ROT_D_PIN[0], ROT_D_PIN[1], 1 , MIN_DIR_NUM, MAX_DIR_NUM),
-  Rotary( ROT_P_PIN[0], ROT_P_PIN[1], 1 ,-5, 5, 5 ),
+  Rotary( ROT_F_PIN[0], ROT_F_PIN[1], true , MIN_FILES_NUM, MAX_FILES_NUM),
+  Rotary( ROT_D_PIN[0], ROT_D_PIN[1], true , MIN_DIR_NUM, MAX_DIR_NUM),
+  Rotary( ROT_P_PIN[0], ROT_P_PIN[1], false ,-5, 5, 5 ),
 };
 Rotary* R_FILES = &ROTARIES[0];
 Rotary* R_DIR   = &ROTARIES[1];

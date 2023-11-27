@@ -34,18 +34,24 @@ void setMode(uint8_t mode) {
       R_DIR->setUpperBound(MAX_DIR_NUM);
       R_FILES->resetPosition(FILE_.fileNum, false);
       R_FILES->setUpperBound(MAX_FILES_NUM);
+      R_DIR->setCanLoop(true);
+      R_FILES->setCanLoop(true);
   
-  } else if (mode == MENU) {
-    
-      R_DIR->resetPosition(ACTION_ID, false);
-      R_DIR->setUpperBound(NBR_ACTIONS);
-
   } else if (mode == PLAYLIST) {
 
       R_DIR->resetPosition(PLAYLISTS_.getPosition()[0], false);
       R_DIR->setUpperBound(NBR_PLAYLISTS);
       R_FILES->resetPosition(PLAYLISTS_.getPosition()[1], false);
       R_FILES->setUpperBound(NBR_PLAYLIST_ITEMS);
+      R_DIR->setCanLoop(false);
+      R_FILES->setCanLoop(false);
+
+  } else if (mode == MENU) {
+    
+      R_DIR->resetPosition(ACTION_ID, false);
+      R_DIR->setUpperBound(NBR_ACTIONS);
+      R_DIR->setCanLoop(true);
+      R_FILES->setCanLoop(true);
 
   }
   
