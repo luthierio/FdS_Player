@@ -4,8 +4,8 @@
 #define ASF_DEBUG_MODE true
 
 bool SERIAL_ON = ASF_DEBUG_MODE;
-bool RAM_DEBUG_ON = ASF_DEBUG_MODE;
-bool SERIAL_WAIT = ASF_DEBUG_MODE; //It true, wait serial to start
+bool RAM_DEBUG_ON = false;
+bool SERIAL_WAIT = false; //It true, wait serial to start
 
 /**********************
 * CONFIG CONST
@@ -114,7 +114,7 @@ enum CommandIDs { A_PROPOS, SAVE_ALL, MAR_SAVE, PL_SAVE, ST_SAVE, LOAD_ALL, MAR_
 #define NBR_PLAYLISTS         5    //Nombre de tableaux de marqueurs pour le boitier
 #define NBR_PLAYLIST_ITEMS    30    //Nombre de marqueurs par fichier
 
-/**********************
+/********************** 
 * UX
 ***********************/
 #define SLEEP_INTERVAL      10000

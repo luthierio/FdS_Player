@@ -88,10 +88,10 @@ void setup() {
   // Play a file in the background, REQUIRES interrupts!  
   AUDIO.playFullFile(STARTSOUND);
   
-  FILE_.select(STATE.dirNum, STATE.fileNum); // Initialisation selon carte  
   PLAYLISTS_.setPosition( STATE.playlistPosition, SILENT ); 
+  FILE_.select(STATE.dirNum, STATE.fileNum); // Initialisation selon carte  
+  DEBUG_.printRam();
     
   setMode(STATE.MODE);
-  DEBUG_.print(F("Free Ram :") ,FreeRam());
   
 };
