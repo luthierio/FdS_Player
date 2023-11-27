@@ -43,7 +43,7 @@
           }else{
             current = &emptyItem;
             if (onError != nullptr) {
-              onError("wrong position");
+              onError(NULL, "wrong position");
             }
           }
       }
@@ -55,16 +55,17 @@
       static const uint8_t size = NBR_PLAYLIST_ITEMS;
       // Define event function pointers
       void (*onSetPosition)(uint8_t position[2]) = nullptr;
-      void (*onError)(const char* errorMessage) = nullptr;  // Nouveau callback pour les erreurs
+      void (*onError)(const char* label, const char* message) = nullptr;  // Nouveau callback pour les erreurs
+      void (*onConfirm)(const char* label, const char* message) = nullptr;  // Nouveau callback pour les erreurs
 
       PlaylistManager(PlaylistItem (*playlists)[NBR_PLAYLIST_ITEMS]) : playlists(playlists) {}
 
       // Set callback functions
-      void setCallbacks(void (*setPositionCallback)(uint8_t[2]), void (*onErrorCallback)(const char*)) {
+      void setCallbacks(void (*onConfirmCallback)(const char*, const char*), void (*onErrorCallback)(const char*, const char*), void (*setPositionCallback)(uint8_t[2])) {
+          onConfirm = onConfirmCallback;  // Définir le callback pour la confirmation
+          onError = onErrorCallback;  // Définir le callback pour les erreurs
           onSetPosition = setPositionCallback;
-          onError = onErrorCallback;  // Définir le callback onError
       }
-
       
       // Retourne les deux curseurs de position
       uint8_t getPlayListPosition() {
@@ -89,7 +90,7 @@
                   onSetPosition(position);
               }
           }else if (onError != nullptr) {
-              onError("Wrong playlist index");
+              onError(NULL, "Wrong playlist index");
           }
       }
 
@@ -103,7 +104,7 @@
                   onSetPosition(position);
               }
           }else if (onError != nullptr) {
-              onError("Wrong item index");
+              onError(NULL, "Wrong item index");
           }
       }
 
@@ -115,7 +116,7 @@
           if (0 <= index < NBR_PLAYLIST_ITEMS) {
             return &playlists[position[0]][index];
           }else if (onError != nullptr) {
-              onError("Wrong item index");
+              onError(NULL, "Wrong item index");
           }
           return &emptyItem;
       }
@@ -130,7 +131,7 @@
                   onSetPosition(position);
               }
           } else if (onError != nullptr) {
-                onError("Wrong playlist or item index");
+                onError(NULL, "Wrong playlist or item index");
           }
       }
 
@@ -146,33 +147,64 @@
       //Sauve le fichier du filePicker dans la position
       void loadM3U(FilePicker *filePicker) {
 
-        SdFile file;
-        if (!file.open("0.m3u", O_READ) && onError != nullptr) onError("Open .m3u failed");
+        for (uint8_t i = 0; i < NBR_PLAYLISTS; ++i) {
 
-        // Maximum line length plus space for zero byte.
-        const size_t LINE_DIM = 560;
-        char line[LINE_DIM];
-        size_t n;
-        int playPosition = 0;
-        int8_t dirNum = -1;
-        int8_t fileNum = -1;
-        while ((n = file.fgets(line, sizeof(line))) > 0) {
-            // Print line number.
-            if(line[0] != '#' && playPosition < NBR_PLAYLIST_ITEMS){
-              if(filePicker->getNumsFromPath(line, dirNum, fileNum)){
-                filePicker->select(dirNum,fileNum);
-                if(filePicker->exist()){
-                  setPlayPosition(playPosition);
-                  addCurrentFile(filePicker);
-                  playPosition++;
-                }else if(onError != nullptr){
-                  onError("La référence n'existe pas");
+          File file = filePicker->getByNum(filePicker->SD->open("/"), i, FILE_ONLY, ".m3u");
+
+          if(!file){
+            continue;
+          }
+          
+          if(onConfirm != nullptr){
+            char name[100];
+            file.getName(name, sizeof(name));
+            onConfirm(NULL, name);
+          }
+          
+          char line[560]; // Maximum line length plus space for zero byte.
+          size_t n;
+          uint8_t playPosition = 0;
+          
+          setPlaylistPosition(i);
+
+          while ((n = file.fgets(line, sizeof(line))) > 0) {
+            
+            if(line[0] != '#'){
+
+              if(playPosition < NBR_PLAYLIST_ITEMS){
+
+                int8_t dirNum = -1;
+                int8_t fileNum = -1;
+
+                if(filePicker->getNumsFromPath(line, dirNum, fileNum)){
+
+                  filePicker->select(dirNum,fileNum);
+
+                  if(filePicker->exist()){
+
+                    setPlayPosition(playPosition);
+                    addCurrentFile(filePicker);
+                    playPosition++;
+                    continue;
+
+                  }else if(onError != nullptr){
+                    onError(NULL, "La référence n'existe pas");
+                  }
+
                 }
-              }else if(onError != nullptr){
-                onError("Max items reached");
-              }
+
+              }else{
+
+                if(onError != nullptr){
+                  onError(NULL, "Max items reached");
+                }
+                break;
+
+              } 
             }
-        }        
+            
+          }  
+        }      
       }
 
 

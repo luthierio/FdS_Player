@@ -59,7 +59,7 @@ void setup() {
   FILE_.setDirCallbacks( onBeforeSelectDir, onAfterSelectDir );
   FILE_.setFileCallbacks( onBeforeSelectFile, onAfterSelectFile );
 
-  PLAYLISTS_.setCallbacks( onPlayListSetPosition, onPlayListError );
+  PLAYLISTS_.setCallbacks( onPlayListConfirm, onPlayListError, onPlayListSetPosition );
   MARKERS_.setCallbacks( onMarkerAdd );
 
   SLEEP_WATCH.setCallbacks(onSleep, onWakeUp);

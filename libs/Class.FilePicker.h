@@ -15,11 +15,17 @@
   #define MAX_PATH_LENGTH 560
 #endif
 
+  enum FileType {
+      FILE_ONLY,
+      DIR_ONLY,
+      FILE_AND_DIR
+  };
+
   class FilePicker {
     private:
-      SdFat* SD;
       File DIR;
     public:
+      SdFat* SD;
       File FILE; 
       int dirNum;
       int fileNum;  
@@ -71,7 +77,7 @@
           }
 
           this->dirNum = num;      
-          this->DIR = getByNum(this->SD->open("/"), num);
+          this->DIR = getByNum(this->SD->open("/"), num, DIR_ONLY);
           selectFile(this->fileNum, silent);
           updatePath();
 
@@ -92,7 +98,7 @@
           }
 
           this->fileNum = num;   
-          this->FILE = getByNum(this->DIR, num);
+          this->FILE = getByNum(this->DIR, num, FILE_ONLY);
           updatePath();
 
           if (!silent && onAfterSelectFile) {
@@ -157,31 +163,51 @@
         return true;
       }
 
+      File getByNum(File root, uint8_t num, FileType fileType, const char* fileExtension = nullptr) {
+          
+          while (true) {
+              File entry = root.openNextFile(O_RDONLY);
 
-      File getByNum(File root, uint8_t num) {
-        while(true) {
+              if (!entry) {
+                  return File();
+                  break;
+              }
 
-          File entry =  root.openNextFile(O_RDONLY);
+              char prefix[3]; // Ajout d'un élément pour le caractère nul '\0'
+              snprintf(prefix, sizeof(prefix), "%02d", num);
 
-          if (! entry) {
-            return File();
-            break;
+              char name[100];
+              entry.getName(name, sizeof(name));
+
+              if (name[0] == prefix[0] && name[1] == prefix[1]) {
+                  if ((fileType == FILE_ONLY && entry.isDirectory()) ||
+                      (fileType == DIR_ONLY && !entry.isDirectory())) {
+                      // Si le type de fichier ne correspond pas à ce qui est demandé, on ignore cette entrée
+                      entry.close();
+                      continue;
+                  }
+
+                  if (fileType == FILE_ONLY && fileExtension != nullptr) {
+                      // Si une extension est spécifiée et que le fichier ne se termine pas par cette extension, on ignore cette entrée
+                      size_t entryNameLen = strlen(name);
+                      size_t extensionLen = strlen(fileExtension);
+                      
+                      if (entryNameLen >= extensionLen) {
+                          const char* entryExtension = name + entryNameLen - extensionLen;
+                          if (strcmp(entryExtension, fileExtension) != 0) {
+                              entry.close();
+                              continue;
+                          }
+                      }
+                  }
+                  return entry;
+              }
+              entry.close();
           }
+          return File();
+      }
 
-          char prefix[2];
-          sprintf(prefix, "%02d", num );  
 
-          char name[100]; 
-          entry.getName(name, 100);
-
-          if ( name[0] == prefix[0]
-            && name[1] == prefix[1] ) {        
-              return entry;
-          }
-          entry.close();
-        }    
-        return File();  
-      } 
       void print(File dir, int numTabs, Serial_* Serial) {
         while(true) {
 

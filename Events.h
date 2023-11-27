@@ -557,8 +557,11 @@ void onPlayListSetPosition(uint8_t position[2]){
   DISPLAY_.playlists.nav(); 
   DISPLAY_.playlists.playList(); 
 }
-void onPlayListError(const char* message){
-  sendMessage("Playlists", message,ERROR_MSG_DELAY);
+void onPlayListError(const char* label = "Playlists", const char* message = "ERROR"){
+  sendMessage(label, message,ERROR_MSG_DELAY);
+}
+void onPlayListConfirm(const char* label = "Playlists", const char* message = "OK"){
+  sendMessage(label, message,MSG_DELAY);
 }
 /**********************
 * MARKERS:

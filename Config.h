@@ -9,11 +9,11 @@ bool SERIAL_WAIT = false; //It true, wait serial to start
 /**********************
 * CONFIG CONST
 ***********************/
-#define CREDITS     "V5.0-2023 S.Daron"
-#define STARTSOUND  "/.ASF/Start.mp3"
-#define ACCORDAGE   "/.ASF/Accordage.mp3"
-#define BEATSOUND   "/.ASF/Beat.mp3"
-#define BEATSOUND2  "/.ASF/Beat2.mp3"
+#define CREDITS             "V5.0-2023 S.Daron"
+#define STARTSOUND          "/.ASF/Start.mp3"
+#define ACCORDAGE           "/.ASF/Accordage.mp3"
+#define BEATSOUND           "/.ASF/Beat.mp3"
+#define BEATSOUND2          "/.ASF/Beat2.mp3"
 #define PLAYLISTS_FILENAME  "/.Playlists.bin"
 #define MARKERS_FILENAME    "/.Markers.bin"
 #define STATE_FILENAME      "/.State.bin"
