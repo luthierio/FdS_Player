@@ -1,7 +1,7 @@
 /**********************
 * DEBUG
 ***********************/
-#define ASF_DEBUG_MODE true
+#define ASF_DEBUG_MODE false
 
 bool SERIAL_ON = ASF_DEBUG_MODE;
 bool SERIAL_WAIT = false; //It true, wait serial to start
