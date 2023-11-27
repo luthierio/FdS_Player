@@ -11,6 +11,9 @@
 #ifndef MAX_FILENAME_LENGTH
   #define  MAX_FILENAME_LENGTH 255
 #endif
+#ifndef MAX_DIRNAME_LENGTH
+  #define  MAX_DIRNAME_LENGTH 255
+#endif
 #ifndef MAX_PATH_LENGTH
   #define MAX_PATH_LENGTH 560
 #endif
@@ -225,14 +228,14 @@
           entry.getName(filename, 100);
 
           if (entry.isDirectory()) {
-            Serial->print("📁 ");
+            Serial->print(F("📁 "));
             Serial->print(filename);
-            Serial->println("/");
+            Serial->println(F("/"));
             this->print(entry, numTabs+1,Serial);
           } else {
             Serial->print(filename);
             // files have sizes, directories do not
-            Serial->print("\t\t");
+            Serial->print(F("\t\t"));
             Serial->println(entry.size(), DEC);
           }
           entry.close();

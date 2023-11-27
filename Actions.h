@@ -4,7 +4,7 @@
 ***********************/
   
 void doAction(int ID){ 
-  DEBUG_.print("ACTION ", ID);
+  DEBUG_.print(F("ACTION "), ID);
   
   SLEEP_WATCH.wakeUp();
   AUDIO.stopPlaying();

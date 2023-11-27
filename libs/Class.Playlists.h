@@ -160,13 +160,7 @@ public:
         continue;
       }
 
-      if (onConfirm != nullptr) {
-        char name[100];
-        file.getName(name, sizeof(name));
-        onConfirm(name, F(" founded"));
-      }
-
-      char line[256]; // Maximum line length plus space for zero byte.
+      char line[560]; // Maximum line length plus space for zero byte.
       size_t n;
       uint8_t playPosition = 0;
 
@@ -206,6 +200,7 @@ public:
           }
         }
       }
+      file.close();
     }
     // On réinitialise les positions
     setPlaylistPosition(0);

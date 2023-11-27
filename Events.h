@@ -127,7 +127,7 @@ void onRotChange(Rotary &rotary) {
   ***********************/
   } else if (STATE.MODE == MENU) {
 
-      DEBUG_.print("ROT",currentPosition);  
+      DEBUG_.print(F("ROT"),currentPosition);  
       if(&rotary == R_DIR) {
         ACTION_ID = currentPosition;
         DISPLAY_.menu.show(ACTIONS[ACTION_ID].title, ACTIONS[ACTION_ID].action); 
@@ -324,7 +324,7 @@ void onLongPress(ButtonHandler* buttonHandler, int ID) {
 
   } 
   
-  DEBUG_.print("LongPress", ID);
+  DEBUG_.print(F("LongPress"), ID);
   
 }
 
@@ -450,11 +450,11 @@ void autoPlay(){
 ***********************/
 void onSleep(){
   SCREEN_.ssd1306_command(SSD1306_DISPLAYOFF);
-  DEBUG_.print("Sleeping");
+  DEBUG_.print(F("Sleeping"));
 }
 void onWakeUp(){
   SCREEN_.ssd1306_command(SSD1306_DISPLAYON);
-  DEBUG_.print("Wakeup");
+  DEBUG_.print(F("Wakeup"));
 }
 
 /**********************
@@ -533,7 +533,7 @@ void onAfterSelectDir(){
     DISPLAY_.files.printPath(&FILE_, &MP3);
   }
 
-  DEBUG_.print("SelectDir",FILE_.dirNum,FILE_.path);  
+  DEBUG_.print(F("SelectDir"),FILE_.dirNum,FILE_.path);  
 
 }
 void onAfterSelectFile(){
@@ -546,7 +546,7 @@ void onAfterSelectFile(){
     DISPLAY_.files.printPath(&FILE_, &MP3);
   }
   
-  DEBUG_.print("SelectFile",FILE_.fileNum,FILE_.path);  
+  DEBUG_.print(F("SelectFile"),FILE_.fileNum,FILE_.path);  
   onAfterSDWork();
 
 }

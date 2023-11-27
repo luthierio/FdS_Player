@@ -92,7 +92,18 @@
 
         int16_t  x1, y1;
         uint16_t w, h;
+        
+        ecran_->setFont(font);
+        ecran_->setTextColor(color);
+        ecran_->setTextSize(tailleTexte);
+        ecran_->setCursor(x, y);
+        ecran_->print(texte);
+      }
 
+      void printTxt(const __FlashStringHelper *texte, uint8_t x = 0, uint8_t y = 0, const GFXfont *font = NULL, uint8_t tailleTexte = 1, bool color = WHITE) {
+
+        int16_t  x1, y1;
+        uint16_t w, h;
         
         ecran_->setFont(font);
         ecran_->setTextColor(color);
@@ -170,7 +181,7 @@
 
           ecran_->drawBitmap (2, 32, folderIcon16, 16, 16 ,WHITE);
           printTxtNum(selectedPath->dirNum, 30, 48, &FreeSans12pt7b); 
-          printTxt("/", 64, 48, &FreeSans12pt7b); 
+          printTxt(F("/"), 64, 48, &FreeSans12pt7b); 
           printTxtNum(selectedPath->fileNum, 80, 48, &FreeSans12pt7b); 
 
         }else{
@@ -205,7 +216,7 @@
           int shift = 0;
           if (strlen(mp3->ID3V1.year) != 0){
             printTxt(mp3->ID3V1.year, x, y + 10, NULL, textSize);
-            printTxt("/", x+29, y + 10, NULL, textSize);
+            printTxt(F("/"), x+29, y + 10, NULL, textSize);
             shift = 38;
           }
 
@@ -583,20 +594,6 @@
         } else {
             ecran_->drawBitmap(128/2-8, 34+2, heart, 16, 12, 1);
         }
-
-        /*} else if(id == DEBUG){
-          
-          ecran_->setCursor(128/2-10,34+12);  // positionne oui/non   
-          if(ASF_DEBUG_MODE){
-            ecran_->drawBitmap (128/2-20-8,    34+2, isOn, 16,12, 1); 
-            ecran_->print("Oui");   
-          }else{
-            ecran_->drawBitmap (128/2-20-8,    34+2, isOff, 16,12, 1);
-            ecran_->print("Non");   
-          }
-        */
-        //ecran_->setFont();
-        //drawCentreString(message, 64, 56);   
       }
   private:
   };
