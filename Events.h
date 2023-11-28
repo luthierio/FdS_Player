@@ -10,7 +10,7 @@ void refreshDisplay() {
   
   } else if (STATE.MODE == MENU) {
 
-      DISPLAY_.menu.show(ACTIONS[ACTION_ID].title, ACTIONS[ACTION_ID].action); 
+      DISPLAY_.menu.show(ACTION, CONFIRM); 
 
   } else if (STATE.MODE == PLAYLIST) {
 
@@ -26,7 +26,6 @@ void refreshDisplay() {
 }
 void setMode(uint8_t mode) {
   DEBUG_.print(F("MODE"), mode);
-  //DISPLAY_.clear();
 
   if (mode == PLAYER) {
 
@@ -47,16 +46,20 @@ void setMode(uint8_t mode) {
       R_FILES->setCanLoop(false);
 
   } else if (mode == MENU) {
-    
-      R_DIR->resetPosition(ACTION_ID, false);
-      R_DIR->setUpperBound(NBR_ACTIONS);
-      R_DIR->setCanLoop(true);
+      R_DIR->resetPosition(CONFIRM);
+      R_FILES->setLowerBound(0);
+      R_FILES->setUpperBound(1);
       R_FILES->setCanLoop(true);
-
   }
   
   STATE.MODE = mode;
   refreshDisplay();
+}
+//Define action and context
+void setAction(uint8_t actionID) {
+  ACTION = actionID;
+  CONTEXT = STATE.MODE;
+  setMode(MENU);
 }
 /**********************
 * MESSAGE:
@@ -127,13 +130,8 @@ void onRotChange(Rotary &rotary) {
   * MENU:
   ***********************/
   } else if (STATE.MODE == MENU) {
-
-      DEBUG_.print(F("ROT"),currentPosition);  
-      if(&rotary == R_DIR) {
-        ACTION_ID = currentPosition;
-        DISPLAY_.menu.show(ACTIONS[ACTION_ID].title, ACTIONS[ACTION_ID].action); 
-      } 
-
+    CONFIRM = !CONFIRM;
+    DISPLAY_.menu.show(ACTION, CONFIRM); 
   }  
 }
 
@@ -145,8 +143,10 @@ void onRotLowLimit(Rotary &rotary) {
 /**********************
 * BUTTONS:
 ***********************/
+bool CONTINUE; // A chaque action, pour tester si l'on doit continuer a agir
 void onPress(ButtonHandler* buttonHandler, int ID) {
 
+  CONTINUE = true;
   SHOULD_PLAY_NEXT = false;
   SLEEP_WATCH.wakeUp();
   int JumpPosition;
@@ -230,8 +230,7 @@ void onPress(ButtonHandler* buttonHandler, int ID) {
           DISPLAY_.playlists.playList(); 
           break;
         case 5:
-          PLAYLISTS_.addCurrentFile(&FILE_);
-          DISPLAY_.playlists.playList(); 
+          //Add selected file on Release
           break;
         default:
           break;
@@ -248,124 +247,134 @@ void onPress(ButtonHandler* buttonHandler, int ID) {
   * ACTION:
   ***********************/
   } else if (STATE.MODE == MENU) {
+    //Tout les boutons lancent l'action si nécessaire puis retournent au contexte
+    if(CONFIRM){
+      doAction(ACTION);
+    }
 
-      switch (ID) {
-        case 0:
-        case 1:
-        case 2:
-          doAction(ACTIONS[ACTION_ID].id);
-          break;
-        case 4:
-          setMode(PLAYER);
-          break;
-        default:
-          break;
-      }
-
+    DEBUG_.print(F("CONTEXT"), CONTEXT);
+    setMode(CONTEXT);
+    CONTINUE = false;
   }
+
   DEBUG_.print(F("MODE"), STATE.MODE);
   DEBUG_.print(F("Pressed"), ID);
   delay(10);
 }
 void onLongPress(ButtonHandler* buttonHandler, int ID) {
 
-  /**********************
-  * PLAYER:
-  ***********************/
-  if (STATE.MODE == PLAYER) {
+  if (CONTINUE) {
 
-      // Long press
-      switch (ID) {
-        case 0:
-          if(!MARKERS_.isEmpty()){
-            SD_FS.save(MARKERS_FILENAME, &MARKERS, sizeof(MARKERS));
-          }
-          SD_FS.save(STATE_FILENAME, &STATE, sizeof(STATE));
-          refreshDisplay();
-          break;
-        case 1:
-          //On vérifie que le fichier Sélectionné est bien celui qui joue pour ajouter un marqueur
-          if(AUDIO.getFilePosition() && AUDIO.currentTrack.size() == FILE_.getSize()){
-            MARKERS_.addMarker(AUDIO.getFilePosition());
-            AUDIO.pausePlaying(false);
-          }
-          break;
+    /**********************
+    * PLAYER:
+    ***********************/
+    if (STATE.MODE == PLAYER) {
 
-        case 2:
-          if(AUDIO.getFilePosition() && AUDIO.currentTrack.size() == FILE_.getSize()){
-            MARKERS_.deletePrevious(AUDIO.getFilePosition());
-          }
-          break;
+        // Long press
+        switch (ID) {
+          case 0:
+            if(!MARKERS_.isEmpty()){
+              SD_FS.save(MARKERS_FILENAME, &MARKERS, sizeof(MARKERS));
+            }
+            SD_FS.save(STATE_FILENAME, &STATE, sizeof(STATE));
+            refreshDisplay();
+            break;
+          case 1:
+            //On vérifie que le fichier Sélectionné est bien celui qui joue pour ajouter un marqueur
+            if(AUDIO.getFilePosition() && AUDIO.currentTrack.size() == FILE_.getSize()){
+              MARKERS_.addMarker(AUDIO.getFilePosition());
+              AUDIO.pausePlaying(false);
+            }
+            break;
 
-        case 5:
-          setMode(MENU);
-          break;
-        default:
-          break;
-      }
+          case 2:
+            if(AUDIO.getFilePosition() && AUDIO.currentTrack.size() == FILE_.getSize()){
+              MARKERS_.deletePrevious(AUDIO.getFilePosition());
+            }
+            break;
 
-  /**********************
-  * PLAYLIST:
-  ***********************/
-  } else if (STATE.MODE == PLAYLIST) {
+          case 5:
+            setMode(MENU);
+            break;
+          default:
+            break;
+        }
 
-      // Long press
-      switch (ID) {
-        case 0:
-          SD_FS.save(STATE_FILENAME, &STATE, sizeof(STATE));
-          SD_FS.save(PLAYLISTS_FILENAME, &PLAYLISTS, sizeof(PLAYLISTS));
-          refreshDisplay();
-          break;
-        case 5:        
-          PLAYLISTS_.loadM3U(&FILE_);
-          break;
-        default:
-          break;
-      }
+    /**********************
+    * PLAYLIST:
+    ***********************/
+    } else if (STATE.MODE == PLAYLIST) {
 
-  } 
+        // Long press
+        switch (ID) {
+          case 0:
+            SD_FS.save(STATE_FILENAME, &STATE, sizeof(STATE));
+            SD_FS.save(PLAYLISTS_FILENAME, &PLAYLISTS, sizeof(PLAYLISTS));
+            refreshDisplay();
+            break;
+          case 5:        
+            setAction(PL_IMPORT);
+            CONTINUE = false;
+            
+            break;
+          default:
+            break;
+        }
+
+    } 
+    
+    DEBUG_.print(F("LongPress"), ID);
   
-  DEBUG_.print(F("LongPress"), ID);
-  
+  }  
 }
 
 
 void onRelease(ButtonHandler* buttonHandler, int ID) {
 
-  /**********************
-  * PLAYER:
-  ***********************/
-  if (STATE.MODE == PLAYER) {
-      switch (ID) {
-        case 0:
-          DEBUG_.print(F("Playing"), FILE_.path);
-          AUDIO.startPlayingFile(FILE_.path);
-          break;
-        default:
-          break;
-      }
+  if (CONTINUE) {
 
-  /**********************
-  * PLAYLIST:
-  ***********************/
-  } else if (STATE.MODE == PLAYLIST) {
-
-      switch (ID) {
-        case 0:
-          if(!PLAYLISTS_.currentPositionIsEmpty()){
-            FILE_.select(PLAYLISTS_.current->dirNum, PLAYLISTS_.current->fileNum);
+    /**********************
+    * PLAYER:
+    ***********************/
+    if (STATE.MODE == PLAYER) {
+        switch (ID) {
+          case 0:
+            DEBUG_.print(F("Playing"), FILE_.path);
             AUDIO.startPlayingFile(FILE_.path);
-          }
-          break;
-        default:
-          break;
-      }
+            break;
+          default:
+            break;
+        }
+
+    /**********************
+    * PLAYLIST:
+    ***********************/
+    } else if (STATE.MODE == PLAYLIST) {
+
+        switch (ID) {
+          case 0:
+            if(!PLAYLISTS_.currentPositionIsEmpty()){
+              FILE_.select(PLAYLISTS_.current->dirNum, PLAYLISTS_.current->fileNum);
+              AUDIO.startPlayingFile(FILE_.path);
+            }
+            break;
+          case 5:
+            //Add selected file on Release
+            PLAYLISTS_.addCurrentFile(&FILE_);
+            DISPLAY_.playlists.playList(); 
+          default:
+            break;
+        }
+
+    }
+    DEBUG_.print(F("Release"), ID);
 
   }
-  DEBUG_.print(F("Release"), ID);
 }
 void onLongRelease(ButtonHandler* buttonHandler, int ID) {
-  DEBUG_.print(F("LongRelease"), ID);
+  if (CONTINUE) {
+    DEBUG_.print(F("LongRelease"), ID);
+  }
 }
 
 /**********************
@@ -529,7 +538,7 @@ void onAfterSelectDir(){
   STATE.dirNum = FILE_.dirNum;
   DEBUG_.print(F("SelectDir"),FILE_.dirNum,FILE_.path);    
   onAfterSDWork();
-  
+
 }
 void onAfterSelectFile(){
 

@@ -96,7 +96,6 @@ const byte ROT_P_PIN[2] = {1 , 0 };
 /**********************
 * Modes
 ***********************/
-enum CommandIDs { A_PROPOS, SAVE_ALL, MAR_SAVE, PL_SAVE, ST_SAVE, LOAD_ALL, MAR_LOAD, ST_LOAD, PL_LOAD, PL_EXPOR, DEBUG_ON, ACCORD};
 //enum pitchStyle { STEP,     RATIO };// Entier déguisé en string :-)
 
 /**********************
@@ -131,4 +130,5 @@ enum CommandIDs { A_PROPOS, SAVE_ALL, MAR_SAVE, PL_SAVE, ST_SAVE, LOAD_ALL, MAR_
 /**********************
 * DISPLAY
 ***********************/
+enum CommandIDs { A_PROPOS, SAVE_ALL, MAR_SAVE, PL_SAVE, ST_SAVE, LOAD_ALL, MAR_LOAD, ST_LOAD, PL_LOAD, PL_IMPORT, PL_EXPOR, DEBUG_ON, ACCORD};
 

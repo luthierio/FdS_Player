@@ -89,28 +89,33 @@ char  activeSoundPath[512];
 ***********************/
 
 
+
+/*
 struct Command {
   CommandIDs id;
   const __FlashStringHelper* title;
   const __FlashStringHelper* action;
 };
-
 Command ACTIONS[] = {
   { A_PROPOS, F("A propos"),   F("Credits") },
   { SAVE_ALL, F("ASF"),        F("Sauver")  },
   { ST_SAVE,  F("Statut"),     F("Sauver")  },
   { MAR_SAVE, F("Marqueurs"),  F("Sauver")  },
-  //{ PL_SAVE,  F("Playlists"),  F("Sauver")  },
+  { PL_SAVE,  F("Playlists"),  F("Sauver")  },
   { LOAD_ALL, F("ASF"),        F("Charger") },
   { ST_LOAD,  F("Statut"),     F("Charger") },
   { MAR_LOAD, F("Marqueurs"),  F("Charger") },
-  //{ PL_LOAD,  F("Playlists"),  F("Charger") },
-  //{ PL_EXPOR, F("Playlists"),  F("Export M3U")},
+  { PL_LOAD,  F("Playlists"),  F("Charger") },
+  { PL_IMPORT, F("Playlists"),  F("Import M3U")},
+  { PL_EXPOR, F("Playlists"),  F("Export M3U")},
   { DEBUG_ON, F("Debug"),      F("Commuter")},
   { ACCORD,   F("Accordage"),  F("Ecouter") },
 };
-uint8_t ACTION_ID = 0;
 const size_t NBR_ACTIONS = sizeof(ACTIONS) / sizeof(ACTIONS[0]) - 1;
+*/
+uint8_t ACTION;
+uint8_t CONTEXT;
+bool CONFIRM = true;
 
 /**********************
 * DISPLAY:

@@ -10,6 +10,10 @@ void doAction(int ID){
   AUDIO.stopPlaying();
   
   switch (ID) {
+    case PL_IMPORT:
+      PLAYLISTS_.loadM3U(&FILE_);
+      break;
+    /*
     case ACCORD:
       // statements
       AUDIO.playFullFile(ACCORDAGE);    
@@ -56,6 +60,7 @@ void doAction(int ID){
       // export m3u
       // actionResult = exportPlaylists();
       break;
+      
     case DEBUG_ON:
       SERIAL_ON = !SERIAL_ON;
       if(SERIAL_ON){
@@ -65,6 +70,7 @@ void doAction(int ID){
       }
       DEBUG_.print(F("SERIAL_ON"),SERIAL_ON);
       break;
+    */
     default:
       // statements
       break;
