@@ -23,7 +23,7 @@ class Pitcher {
       delay(10);
       reset();
     }
-    
+
     void reset() {
       setValue(16384);
     }
@@ -33,7 +33,7 @@ class Pitcher {
           setValue(getSign() * PITCH_TONE_TABLE[pitchStep]);
       }
     }
-    void setPitchStep(uint8_t step, bool direction) {
+    void setPitch(uint8_t step, bool direction) {
       pitchStep = step;
       pitchDirection = direction;
       update();

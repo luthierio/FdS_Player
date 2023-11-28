@@ -5,7 +5,7 @@
 
 void afterStartPlaying(){
 
-  PITCHER.setPitchStep(DATA_MANAGER.getPitchStep(), DATA_MANAGER.getPitchDirection());
+  PITCHER.setPitch(DATA_MANAGER.getPitchStep(), DATA_MANAGER.getPitchDirection());
   DEBUG_.print(F("DIRECTION"), DATA_MANAGER.getPitchDirection());
   DEBUG_.print(F("SIGN"), PITCHER.getSign());
 
@@ -579,7 +579,7 @@ void onAddFileMarker(uint32_t position){
 void onSetFilePitch(uint8_t step, bool direction){
 
   if(FILE_.isPlaying(&AUDIO) ) {
-    PITCHER.setPitchStep(DATA_MANAGER.getPitchStep(), DATA_MANAGER.getPitchDirection());
+    PITCHER.setPitch(DATA_MANAGER.getPitchStep(), DATA_MANAGER.getPitchDirection());
   }
   DISPLAY_.pitcher.print(128-PITCH_WIDTH + 2  , 52 , 10 , 10 );     
 
