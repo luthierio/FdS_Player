@@ -12,6 +12,8 @@
   struct markerArray {
       int8_t dirNum = -1;
       int8_t fileNum = -1;
+      uint8_t pitchStep = 5;
+      uint8_t pitchMode = OFF;
       Array<uint32_t, NBR_MARKERS> markers;
       void clear() {
           // Remettez vos membres de structure à leurs valeurs par défaut ici
