@@ -303,11 +303,11 @@
 
   class PlayingDisplay : public Display {
   public:
-      PlayingDisplay(Adafruit_SSD1306 *ecran, FdS_Adafruit_VS1053_FilePlayer *player, FilePicker *filePicker, t_state *state, audioDataManager *markers) : 
+      PlayingDisplay(Adafruit_SSD1306 *ecran, FdS_Adafruit_VS1053_FilePlayer *player, FilePicker *filePicker, t_state *state, audioDataManager *datas) : 
         Display(ecran),
         Player (player),
         filePicker (filePicker),
-        markers (markers),
+        datas (datas),
         state (state){}
 
       void playMode(uint8_t x, uint8_t y){   
@@ -349,9 +349,9 @@
 
         //marqueurs
         if(disPlayMarkers && pickedSize){
-          uint32_t* markersArray = markers->getMarkers();
+          uint32_t* markersArray = datas->getMarkers();
 
-          for (byte i = 0; i < markers->getCount(); i = ++i) {  
+          for (byte i = 0; i < datas->getMarkerCount(); i = ++i) {  
 
             float relativeMarkerPosition = (float)markersArray[i]/(float)pickedSize;       
             float markerPosition[] = {x1+delta_X*relativeMarkerPosition,y1+delta_Y*relativeMarkerPosition};
@@ -384,7 +384,7 @@
   private:
     FdS_Adafruit_VS1053_FilePlayer *Player;
     FilePicker *filePicker;
-    audioDataManager *markers;
+    audioDataManager *datas;
     t_state *state;
   };
   /**********************
@@ -393,8 +393,9 @@
 
   class PitcherDisplay : public Display {
   public:
-      PitcherDisplay(Adafruit_SSD1306 *ecran, Pitcher *pitcher) : 
+      PitcherDisplay(Adafruit_SSD1306 *ecran, Pitcher *pitcher, audioDataManager *datas) : 
         Display(ecran),
+        datas (datas),
         pitcher (pitcher){}
 
       void show(){  
@@ -407,17 +408,17 @@
       }
       void printSymbol(uint8_t x, uint8_t y, uint8_t w, uint8_t h){  
         
-        if(pitcher->getSign() < 0){   
-          
+        if(datas->getPitchDirection()){   
+          //Pitch mode SPeed
             ecran_->drawLine    ( x     , y+2   , x     , y+h-2 , WHITE );   // Ligne V 1
             ecran_->drawLine    ( x     , y+h/2 , x+w   , y+h/2 , WHITE );   // Ligne H
             ecran_->drawLine    ( x+w   , y+2   , x+w   , y+h-2 , WHITE );   // Ligne V 2 
           
-          if(pitcher->getStep() > 0){   //TODO pitcher.getRatio() > 100
+          if(pitcher->getStep() < 5){   //TODO pitcher.getRatio() > 100
             
             ecran_->fillTriangle( x     , y+2   , x     , y+h-2 , x+w   , y+h/2 , WHITE);
             
-          }else if(pitcher->getStep() < 0){
+          }else if(datas->getPitchStep() > 5){
             
             ecran_->fillTriangle(x+w   , y+2   , x+w    , y+h-2 , x     , y+h/2 , WHITE);
             
@@ -428,11 +429,11 @@
           ecran_->drawLine      ( x+w/2 , y     , x+w/2 , y+h   , WHITE );   // Ligne V
           ecran_->drawLine      ( x+2   , y+h   , x+w-2 , y+h   , WHITE );   // Ligne H 2     
           
-          if(pitcher->getStep() > 0){  
+          if(datas->getPitchStep() > 5){  
             
             ecran_->fillTriangle( x+2   , y+h   , x+w-2 , y+h , x+w/2 , y , WHITE);
             
-          }else if(pitcher->getStep() < 0){
+          }else if(datas->getPitchStep() < 5){
             
             ecran_->fillTriangle( x+2   , y     , x+w-2 , y   , x+w/2 , y+h-2 , WHITE);
             
@@ -449,11 +450,12 @@
         ecran_->setFont();
         ecran_->setTextSize(1);
         
-        ecran_->print(abs(pitcher->getStep()));
+        ecran_->print(abs(datas->getPitchStep()-5));
         
       }
   private:
     Pitcher *pitcher;
+    audioDataManager *datas;
   };
   /**********************
   * PLAYLISTS:
@@ -625,11 +627,11 @@
       PitcherDisplay pitcher;
       PlaylistsDisplay playlists;
       MenuDisplay menu;
-      DisplayController(Adafruit_SSD1306 *ecran, FdS_Adafruit_VS1053_FilePlayer *player, FilePicker *filePicker, Pitcher *pitcher, PlaylistManager *playlists, t_state *state, audioDataManager *markers) :
+      DisplayController(Adafruit_SSD1306 *ecran, FdS_Adafruit_VS1053_FilePlayer *player, FilePicker *filePicker, Pitcher *pitcher, PlaylistManager *playlists, t_state *state, audioDataManager *datas) :
           display(ecran),
           files(ecran,filePicker),
-          playing(ecran,player,filePicker,state, markers),
-          pitcher(ecran,pitcher),
+          playing(ecran,player,filePicker,state, datas),
+          pitcher(ecran,pitcher, datas),
           playlists(ecran,playlists,state),
           menu(ecran) ,
           analogs(ecran) {

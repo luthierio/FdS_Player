@@ -58,7 +58,7 @@ void setup() {
   FILE_.setFileCallbacks( onBeforeSelectFile, onAfterSelectFile );
 
   PLAYLISTS_.setCallbacks( onPlayListConfirm, onPlayListError, onPlayListSetPosition, onPlayListSetPlayPosition );
-  DATA_MANAGER.setCallbacks( onMarkerAdd );
+  DATA_MANAGER.setCallbacks( onAddFileMarker, onSetFilePitch );
 
   SLEEP_WATCH.setCallbacks(onSleep, onWakeUp);
   SLEEP_WATCH.wakeUp();
@@ -89,8 +89,8 @@ void setup() {
   AUDIO.playFullFile(STARTSOUND);
   
   FILE_.select(STATE.dirNum, STATE.fileNum); // Initialisation selon carte  
-
   PLAYLISTS_.setPlaylistPosition( STATE.playlistPosition); 
+
   DEBUG_.print(F("✓✓✓ ⋅ Position "), STATE.playlistPosition[0]);
   DEBUG_.print(F("✓✓✓ ⋅ Playing "), STATE.playlistPosition[1]);
   DEBUG_.printRam();

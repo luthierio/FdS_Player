@@ -63,6 +63,7 @@ bool SERIAL_WAIT = false; //It true, wait serial to start
 
 #define MIN_PITCH_STEP      0   
 #define MAX_PITCH_STEP      10  
+#define DFT_PITCH_STEP      5  
 #define MIN_PITCH_RATIO        70  
 #define MAX_PITCH_RATIO        134
 #define MIN_PITCH_TEMPO_RATIO  50  
@@ -110,7 +111,7 @@ const byte ROT_P_PIN[2] = {1 , 0 };
 #define MAX_VOLUME            0      // Un petit nombre signifie un volume fort
 #define MIN_VOLUME            100    // Au dela de ce nombre 255 (Volume OFF) est envoyé.
 
-#define NBR_PLAYLISTS         6    //Nombre de tableaux de marqueurs pour le boitier
+#define NBR_PLAYLISTS         8    //Nombre de tableaux de marqueurs pour le boitier
 #define NBR_PLAYLIST_ITEMS    50    //Nombre de marqueurs par fichier
 
 /********************** 
@@ -130,5 +131,6 @@ const byte ROT_P_PIN[2] = {1 , 0 };
 /**********************
 * DISPLAY
 ***********************/
+#define PITCH_WIDTH 22
 enum CommandIDs { A_PROPOS, SAVE_ALL, MAR_SAVE, PL_SAVE, ST_SAVE, LOAD_ALL, MAR_LOAD, ST_LOAD, PL_LOAD, PL_IMPORT, PL_EXPOR, DEBUG_ON, ACCORD};
 

@@ -16,9 +16,6 @@ struct t_state{
   uint8_t fileNum = 0;
   uint8_t playlistPosition[2] = {0,0}; //Placement du curseur dans les playlist pour autoplay
   uint8_t playlistMode = AUTO;
-  uint8_t pitchStep = 5;
-  uint8_t pitchMode = OFF;
-  uint8_t pitchRatio = 100;// En pourcentage, le ratio de pitch/tempo souhaité
   boolean beatOn = false;
   uint8_t BPM = 100;
   uint8_t Beats = 2;

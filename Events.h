@@ -1,5 +1,13 @@
 
 /**********************
+* AUDIO:
+***********************/
+
+void onPlay(){
+  PITCHER.setPitchStep(DATA_MANAGER.getPitchStep());
+  PITCHER.setDirection(DATA_MANAGER.getPitchDirection());
+}
+/**********************
 * MODE:
 ***********************/
 void refreshDisplay() {
@@ -110,7 +118,7 @@ void onRotChange(Rotary &rotary) {
         FILE_.selectFile(currentPosition);
       }
       if(&rotary == R_PITCH) {
-        PITCHER.setPitchStep(currentPosition);
+        DATA_MANAGER.setPitchStep(currentPosition);
       }   
 
   /**********************
@@ -171,7 +179,7 @@ void onPress(ButtonHandler* buttonHandler, int ID) {
 
         case 2:         
 
-          if(DATA_MANAGER.isEmpty()){
+          if(DATA_MANAGER.markersIsEmpty()){
 
             uint32_t jump = MP3.getBytePerSecond()*SECONDS_PER_JUMP;
             JumpPosition = AUDIO.getFilePosition() - jump > 0? AUDIO.getFilePosition() - jump : 0;  
@@ -194,8 +202,8 @@ void onPress(ButtonHandler* buttonHandler, int ID) {
           break;
 
         case 5:
-          PITCHER.switchSign();
-          PITCHER.reset();
+          DATA_MANAGER.switchPitchDirection();
+          DATA_MANAGER.setPitchStep(DFT_PITCH_STEP);
           break;
 
         default:
@@ -273,7 +281,7 @@ void onLongPress(ButtonHandler* buttonHandler, int ID) {
         // Long press
         switch (ID) {
           case 0:
-            if(!DATA_MANAGER.isEmpty()){
+            if(!DATA_MANAGER.hasData()){
               SD_FS.save(DATA_FILENAME, &DATAS, sizeof(DATAS));
             }
             SD_FS.save(STATE_FILENAME, &STATE, sizeof(STATE));
@@ -340,6 +348,7 @@ void onRelease(ButtonHandler* buttonHandler, int ID) {
         switch (ID) {
           case 0:
             DEBUG_.print(F("Playing"), FILE_.path);
+            onPlay();
             AUDIO.startPlayingFile(FILE_.path);
             break;
           default:
@@ -355,6 +364,7 @@ void onRelease(ButtonHandler* buttonHandler, int ID) {
           case 0:
             if(!PLAYLISTS_.currentPositionIsEmpty()){
               FILE_.select(PLAYLISTS_.currentPlaylist->currentItem->dirNum, PLAYLISTS_.currentPlaylist->currentItem->fileNum);
+              onPlay();
               AUDIO.startPlayingFile(FILE_.path);
             }
             break;
@@ -417,6 +427,7 @@ void autoPlay(){
             SHOULD_PLAY_NEXT = false;
             break;
         }
+        onPlay();
         AUDIO.startPlayingFile(FILE_.path); 
       }
     //PLAYLIST AUTOPLAY
@@ -446,6 +457,7 @@ void autoPlay(){
         }        
         if(!PLAYLISTS_.currentPositionIsEmpty()){
           FILE_.select(PLAYLISTS_.currentPlaylist->currentItem->dirNum, PLAYLISTS_.currentPlaylist->currentItem->fileNum);
+          onPlay();
           AUDIO.startPlayingFile(FILE_.path); 
         }
       }      
@@ -454,6 +466,7 @@ void autoPlay(){
   }
 
 }
+
 
 /**********************
 * SLEEP:
@@ -545,6 +558,7 @@ void onAfterSelectFile(){
   STATE.fileNum = FILE_.fileNum;
   DATA_MANAGER.select();
   MP3.open(FILE_.path); MP3.close();  //Open and close to load bitrate & tags ID3v1
+
   if(!MP3.bitrate) MP3.bitrate = DFT_BITRATE;
   if(STATE.MODE == PLAYER){
     DISPLAY_.files.printPath(&FILE_, &MP3);
@@ -552,7 +566,17 @@ void onAfterSelectFile(){
   
   DEBUG_.print(F("SelectFile"),FILE_.fileNum,FILE_.path);  
   onAfterSDWork();
+}
+/**********************
+* DATAS:
+***********************/
+void onAddFileMarker(uint32_t position){
+}
+void onSetFilePitch(uint8_t step, bool direction){
 
+  PITCHER.setPitchStep(step);
+  PITCHER.setDirection(direction);
+  DISPLAY_.pitcher.print(128-PITCH_WIDTH + 2  , 52 , 10 , 10 );     
 
 }
 
@@ -577,9 +601,4 @@ void onPlayListError(const char* label, const __FlashStringHelper* message){
 }
 void onPlayListConfirm(const char* label, const __FlashStringHelper* message){
   sendMessage(label, message,MSG_DELAY);
-}
-/**********************
-* DATAS:
-***********************/
-void onMarkerAdd(uint32_t position){
 }

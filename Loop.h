@@ -3,7 +3,6 @@
 * LOOP
 ***********************/
 void smallLoop() {
-  uint8_t space4Pitch = 0; // = 22;avec affichage Pitch
 
 
   switch (STATE.MODE) {
@@ -12,14 +11,13 @@ void smallLoop() {
       DISPLAY_.analogs.gauges(VUSB, VBat,VOLUME, 100, -2, 30, 18);
       DISPLAY_.display.cleanZone(0, 51, 128, 12 );  
 
-      if(FILE_.exist() && PITCHER.getStep() != 0){
-        space4Pitch = 22;      
-        DISPLAY_.pitcher.print(128-space4Pitch + 2  , 52 , 10 , 10 );     
-      }
-
-      if(FILE_.exist()){
-        DISPLAY_.playing.progressBar(3, 57, 125-space4Pitch, 57, true);
-        DISPLAY_.playing.playMode(125-space4Pitch, 57); 
+      if(FILE_.exist() && DATA_MANAGER.getPitchStep() != 5){
+        DISPLAY_.pitcher.print(128-PITCH_WIDTH + 2  , 52 , 10 , 10 ); 
+        DISPLAY_.playing.progressBar(3, 57, 125-PITCH_WIDTH, 57, true);
+        DISPLAY_.playing.playMode(125-PITCH_WIDTH, 57);     
+      }else if(FILE_.exist()){
+        DISPLAY_.playing.progressBar(3, 57, 125, 57, true);
+        DISPLAY_.playing.playMode(125, 57); 
       }  
 
       break;

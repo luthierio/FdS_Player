@@ -33,10 +33,9 @@ class Pitcher {
       //this->VS1053->sciWrite(VS1053_SCI_AICTRL0,  16384);
     }
 
-    void setPitchStep(int8_t pitchStep) {
-      pitchStep = Sign*pitchStep+5; //PitchStep goes from 
+    void setPitchStep(uint8_t pitchStep) {
       if (0 <= pitchStep && pitchStep < PITCH_STEPS) {
-          setValue(Sign * PITCH_TONE_TABLE[pitchStep]);
+          setValue(getSign() * PITCH_TONE_TABLE[pitchStep]);
       }
     }
     /*
@@ -50,20 +49,19 @@ class Pitcher {
     signed int getValue() {
       return AICTRL0;
     }
-    signed int getSign() {
-      return Sign;
+    signed int getDirection() {
+      return pitchDirection;
     }
-    void setSign(int8_t sign) {
-      Sign = sign;
+    void setDirection(bool direction) {
+        pitchDirection = direction;
     }
-    void switchSign() {
-      Sign = -1*Sign;
-      
+    void switchDirection() {
+      pitchDirection = !pitchDirection;      
     }
-    signed int getStep() {      
+    uint8_t getStep() {    
       for (int i = 0; i < PITCH_STEPS; ++i) {
-          if (PITCH_TONE_TABLE[i] == Sign * AICTRL0) {
-              return Sign*(i-5); // Retourne l'indice lorsque la valeur est trouvée
+          if (PITCH_TONE_TABLE[i] == getSign() * AICTRL0) {
+              return i; // Retourne l'indice lorsque la valeur est trouvée
           }
       }
       return 0; // Retourne -1 si la valeur n'est pas trouvée
@@ -92,7 +90,10 @@ class Pitcher {
   private:
     Adafruit_VS1053_FilePlayer *VS1053;
     signed int AICTRL0 = 16384;
-    int8_t Sign = -1; //-1 = speed, 1 = pitch
+    bool pitchDirection = true; //true = speed, false = pitch
+    signed int getSign() {
+      return pitchDirection ? -1 : 1;
+    }
 };
 
 const signed int Pitcher::PITCH_TONE_TABLE[PITCH_STEPS]  = {

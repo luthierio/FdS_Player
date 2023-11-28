@@ -12,8 +12,8 @@
   struct audioData {
       int8_t dirNum = -1;
       int8_t fileNum = -1;
-      uint8_t pitchStep = 5;
-      uint8_t pitchMode = OFF;
+      uint8_t pitchStep = 0;
+      bool pitchDirection = true;
       Array<uint32_t, NBR_MARKERS> markers;
       void clear() {
           // Remettez vos membres de structure à leurs valeurs par défaut ici
@@ -43,24 +43,61 @@
       FilePicker *filePicker;
       // Define event function pointers
       void (*onAdd)(uint32_t position) = nullptr;
+      void (*onSetPitch)(uint8_t step, bool direction) = nullptr;
 
       audioDataManager(FilePicker *filePicker, audioData* data, size_t size) : filePicker(filePicker), audioDatas(data), size(size) {}
 
       // Set callback functions
-      void setCallbacks(void (*onAddCallback)(uint32_t)) {
+      void setCallbacks(
+            void (*onAddCallback)(uint32_t),
+            void (*onSetPichCallback)(uint8_t, bool)
+          ) {
           onAdd = onAddCallback;
+          onSetPitch = onSetPichCallback;
       }
       
+      audioData *getActive(){
+        return active;
+      }
       void select(){
         active = getFileData();
       }
 
+      void setPitchStep(uint8_t pitchStep){
+        activate();
+        active->pitchStep = pitchStep;
+        if (onSetPitch != nullptr) {
+            onSetPitch(active->pitchStep,active->pitchDirection);
+        }
+      }
+      uint8_t getPitchStep(){
+        return active->pitchStep;
+      }
 
-      bool isEmpty() const {
+      uint8_t getPitchDirection(){
+        return active->pitchDirection;
+      }
+
+      void setPitchDirection(bool direction){
+        activate();
+        active->pitchDirection = direction;
+        if (onSetPitch != nullptr) {
+            onSetPitch(active->pitchStep,active->pitchDirection);
+        }
+      }
+      void switchPitchDirection(){
+        setPitchDirection(!active->pitchDirection);
+      }
+
+
+      bool hasData() const {
+          return (active == nullptr) ? true : false;
+      }
+      bool markersIsEmpty() const {
           return (active == nullptr) ? true : active->markers.isEmpty();
       }
 
-      uint32_t getCount() const {
+      uint32_t getMarkerCount() const {
           return (active == nullptr) ? 0 : active->markers.count;
       }
 
@@ -69,6 +106,16 @@
       }
 
       void addMarker(uint32_t position) {
+          activate();
+
+          active->markers.push(position);
+
+          if (onAdd != nullptr) {
+              onAdd(position);
+          }
+      }
+      void activate() {
+
           if (active == nullptr || active->isUnset()) {
               active = getFileData();
               if (active == nullptr) {
@@ -77,12 +124,6 @@
               }
               active->dirNum = filePicker->dirNum;
               active->fileNum = filePicker->fileNum;
-          }
-
-          active->markers.push(position);
-
-          if (onAdd != nullptr) {
-              onAdd(position);
           }
       }
       
