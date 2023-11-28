@@ -3,11 +3,11 @@
 * AUDIO:
 ***********************/
 
-void onPlay(){
-  Serial.println(DATA_MANAGER.getPitchStep());
-  Serial.println(DATA_MANAGER.getPitchDirection());
+void beforeStartPlaying(){
+  delay(10);
   PITCHER.setPitchStep(DATA_MANAGER.getPitchStep());
   PITCHER.setDirection(DATA_MANAGER.getPitchDirection());
+  delay(10);
 }
 /**********************
 * MODE:
@@ -350,7 +350,7 @@ void onRelease(ButtonHandler* buttonHandler, int ID) {
         switch (ID) {
           case 0:
             DEBUG_.print(F("Playing"), FILE_.path);
-            onPlay();
+            beforeStartPlaying();
             AUDIO.startPlayingFile(FILE_.path);
             break;
           default:
@@ -366,7 +366,7 @@ void onRelease(ButtonHandler* buttonHandler, int ID) {
           case 0:
             if(!PLAYLISTS_.currentPositionIsEmpty()){
               FILE_.select(PLAYLISTS_.currentPlaylist->currentItem->dirNum, PLAYLISTS_.currentPlaylist->currentItem->fileNum);
-              onPlay();
+              beforeStartPlaying();
               AUDIO.startPlayingFile(FILE_.path);
             }
             break;
@@ -429,7 +429,7 @@ void autoPlay(){
             SHOULD_PLAY_NEXT = false;
             break;
         }
-        onPlay();
+        beforeStartPlaying();
         AUDIO.startPlayingFile(FILE_.path); 
       }
     //PLAYLIST AUTOPLAY
@@ -459,7 +459,7 @@ void autoPlay(){
         }        
         if(!PLAYLISTS_.currentPositionIsEmpty()){
           FILE_.select(PLAYLISTS_.currentPlaylist->currentItem->dirNum, PLAYLISTS_.currentPlaylist->currentItem->fileNum);
-          onPlay();
+          beforeStartPlaying();
           AUDIO.startPlayingFile(FILE_.path); 
         }
       }      
