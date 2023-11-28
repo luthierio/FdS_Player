@@ -11,12 +11,31 @@
 #ifndef MAX_FILENAME_LENGTH
   #define  MAX_FILENAME_LENGTH 255
 #endif
+
 #ifndef MAX_DIRNAME_LENGTH
   #define  MAX_DIRNAME_LENGTH 255
 #endif
+
 #ifndef MAX_PATH_LENGTH
   #define MAX_PATH_LENGTH 560
 #endif
+
+#ifndef MIN_DIR_NUM
+  #define MIN_DIR_NUM 0 // OLED display width, in pixels
+#endif
+
+#ifndef MAX_DIR_NUM
+  #define MAX_DIR_NUM 99 // OLED display width, in pixels
+#endif
+
+#ifndef MIN_DIR_NUM
+  #define MIN_DIR_NUM 0 // OLED display width, in pixels
+#endif
+
+#ifndef MAX_FILES_NUM
+  #define MAX_FILES_NUM 99 // OLED display width, in pixels
+#endif
+
 
   enum FileType {
       FILE_ONLY,
@@ -30,8 +49,8 @@
     public:
       SdFat* SD;
       File FILE; 
-      int dirNum;
-      int fileNum;  
+      int8_t dirNum;
+      int8_t fileNum;  
       char dirname[MAX_FILENAME_LENGTH]; 
       char filename[MAX_FILENAME_LENGTH];  
       char path[MAX_PATH_LENGTH];
@@ -62,38 +81,31 @@
       }
 
       void select(uint8_t dirNum, uint8_t fileNum, bool silent = false){      
-        if(dirNum < 100 && fileNum < 100){
+        if(dirNum <= MAX_DIR_NUM && fileNum <= MAX_FILES_NUM){
           selectDir(dirNum,silent);
           selectFile(fileNum,silent);
         }  
       }
-      
-      void update(){
-        selectDir(this->dirNum);
-        selectFile(this->fileNum);
-      }
-        
+              
       void selectDir(uint8_t num, bool silent = false){   
 
           if (!silent && onBeforeSelectDir) {
             onBeforeSelectDir(); // Appel de la fonction de rappel avant la sélection
           }
-
+          resetFile();
           this->dirNum = num;      
           this->DIR = getByNum(this->SD->open("/"), num, DIR_ONLY);
-          selectFile(this->fileNum, silent);
           updatePath();
 
           if (!silent && onAfterSelectDir) {
             onAfterSelectDir(); // Appel de la fonction de rappel après la sélection
           }
-      }   
-      byte dirExist(){
-        return this->dirname[0] != '\0';
-      }   
-      byte exist(){
-        return this->filename[0] != '\0';
-      }   
+      }  
+      
+      void resetFile(){
+        this->fileNum = -1;     
+        this->FILE = File();
+      }
       void selectFile(uint8_t num, bool silent = false){ 
 
           if (!silent && onBeforeSelectFile) {
@@ -107,14 +119,28 @@
           if (!silent && onAfterSelectFile) {
             onAfterSelectFile(); // Appel de la fonction de rappel après la sélection
           }
-      }  
+      }   
+
+      byte dirExist(){
+        return this->dirname[0] != '\0';
+      }   
+      byte exist(){
+        return this->filename[0] != '\0';
+      }   
       
       uint32_t getSize(){   
         return FILE.size();
       }   
-      void updatePath(){
-        memset(this->path, 0, MAX_PATH_LENGTH);
+      void resetPath(){
 
+        memset(this->dirname, 0, MAX_DIRNAME_LENGTH);
+        memset(this->filename, 0, MAX_FILENAME_LENGTH);
+        memset(this->path, 0, MAX_PATH_LENGTH);
+      }
+      void updatePath(){
+
+        resetPath();
+        
         if(this->DIR.isDir()){
           
           this->DIR.getName(this->dirname, MAX_FILENAME_LENGTH);
@@ -124,14 +150,9 @@
 
           if(this->FILE.getName(this->filename, MAX_FILENAME_LENGTH) != 0){  
             strcat (this->path,this->filename);
-          }else{   
-            memset(this->filename, 0, MAX_FILENAME_LENGTH);
           }
-        }else{
-          memset(this->dirname, 0, MAX_FILENAME_LENGTH);
-          memset(this->filename, 0, MAX_FILENAME_LENGTH);
+          
         }
-
       }
 
       bool getNumsFromPath(const char* link, int8_t& dirNum, int8_t& fileNum) {

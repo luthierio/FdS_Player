@@ -1,3 +1,11 @@
+
+extern "C" char *sbrk(int i);
+
+int freeRam () {
+  char stack_dummy = 0;
+  return &stack_dummy - sbrk(0);
+}
+
 class Debug {
 private:
   Serial_* serialPtr = &Serial;
@@ -10,8 +18,9 @@ public:
   void setEnabled(bool enabled) {
     this->enable = enabled;
   }
-  void printRam() {
-    serialPtr->println( "Free Ram :" + String(FreeRam(), DEC) + " bytes");
+  void printRam() {    
+    serialPtr->print(F("RAM left: "));
+    serialPtr->println(freeRam());
   }
   
   void print(const char* value) {

@@ -101,6 +101,7 @@ void onRotChange(Rotary &rotary) {
 
       if(&rotary == R_DIR) {
         FILE_.selectDir(currentPosition);
+        FILE_.selectFile(STATE.fileNum); //onAfterSDWork();
       }
       if(&rotary == R_FILES) {
         FILE_.selectFile(currentPosition);
@@ -525,15 +526,8 @@ void onBeforeSelectFile(){
 }
 void onAfterSelectDir(){
 
-  onAfterSDWork();
   STATE.dirNum = FILE_.dirNum;
-  MARKERS_.selectArray();
-
-  if(STATE.MODE == PLAYER){
-    DISPLAY_.files.printPath(&FILE_, &MP3);
-  }
-
-  DEBUG_.print(F("SelectDir"),FILE_.dirNum,FILE_.path);  
+  DEBUG_.print(F("SelectDir"),FILE_.dirNum,FILE_.path);    
 
 }
 void onAfterSelectFile(){

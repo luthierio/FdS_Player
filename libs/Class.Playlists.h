@@ -167,7 +167,6 @@ public:
       setPlaylistPosition(i);
 
       while ((n = file.fgets(line, sizeof(line))) > 0) {
-        Serial.println( "Free Ram :" + String(FreeRam(), DEC) + " bytes");
 
         if (line[0] != '#') {
 
