@@ -528,7 +528,8 @@ void onAfterSelectDir(){
 
   STATE.dirNum = FILE_.dirNum;
   DEBUG_.print(F("SelectDir"),FILE_.dirNum,FILE_.path);    
-
+  onAfterSDWork();
+  
 }
 void onAfterSelectFile(){
 

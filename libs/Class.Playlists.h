@@ -149,7 +149,7 @@ public:
       strncpy(current->fileName, filePicker->filename, nameSize);
     }
   }
-  // Sauve le fichier du filePicker dans la position
+  // charge le contenu de fichiers playlist par numéro: 00 nom de ma playlist.m3u -> playlist 0
   void loadM3U(FilePicker *filePicker) {
 
     for (uint8_t i = 0; i < NBR_PLAYLISTS; ++i) {
