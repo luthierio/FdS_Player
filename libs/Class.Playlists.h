@@ -78,19 +78,24 @@ public:
 
   uint8_t playlistPosition = 0; // Corrected variable name from position to playlistPosition
   // Define event function pointers
-  void (*onSetPosition)(uint8_t position[2]) = nullptr;
+  void (*onSetPosition)(uint8_t position) = nullptr;
+  void (*onSetPlayPosition)(uint8_t position) = nullptr;
   void (*onError)(const char *label, const __FlashStringHelper *message) = nullptr; // Nouveau callback pour les erreurs
   void (*onConfirm)(const char *label, const __FlashStringHelper *message) = nullptr; // Nouveau callback pour les erreurs
 
   PlaylistManager(Playlist* playlists, size_t size) : playlists(playlists) {}
 
   // Set callback functions
-  void setCallbacks(void (*onConfirmCallback)(const char *, const __FlashStringHelper *),
+  void setCallbacks(
+                    void (*onConfirmCallback)(const char *, const __FlashStringHelper *),
                     void (*onErrorCallback)(const char *, const __FlashStringHelper *),
-                    void (*setPositionCallback)(uint8_t[2])) {
+                    void (*setPositionCallback)(uint8_t),
+                    void (*setPlayPositionCallback)(uint8_t) 
+                  ){
     onConfirm = onConfirmCallback; // Définir le callback pour la confirmation
     onError = onErrorCallback;     // Définir le callback pour les erreurs
     onSetPosition = setPositionCallback;
+    onSetPlayPosition = setPlayPositionCallback;
   }
 
   Playlist& getPlaylist(int index) {
@@ -102,7 +107,7 @@ public:
 
   // Définit la position dans la playlist
   void setPlaylistPosition(uint8_t index[2], bool silent = false) {
-    setPosition(index[0],true);
+    setPosition(index[0],silent);
     setPlayPosition(index[1],silent);
   }
   // Définit la playlist
@@ -111,7 +116,7 @@ public:
       playlistPosition = index; // Corrected variable name from position to playlistPosition
       currentPlaylist = &playlists[playlistPosition]; // Corrected variable name from Playlist to playlists
       if (!silent && onSetPosition != nullptr) {
-        onSetPosition(position);
+        onSetPosition(index);
       }
     }
   }
@@ -134,7 +139,7 @@ public:
   void setPlayPosition(uint8_t index, bool silent = false) {
     currentPlaylist->setPosition(index);
     if (!silent && onSetPosition != nullptr) {
-      onSetPosition(position);
+        onSetPlayPosition(index);
     }
   }
 

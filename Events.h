@@ -559,11 +559,18 @@ void onAfterSelectFile(){
 /**********************
 * PLAYLISTS:
 ***********************/
-void onPlayListSetPosition(uint8_t position[2]){
-  STATE.playlistPosition[0] = position[0];
-  STATE.playlistPosition[1] = position[1];
+void onPlayListPositionUpdate(){
   DISPLAY_.playlists.nav(); 
   DISPLAY_.playlists.playList(); 
+
+}
+void onPlayListSetPosition(uint8_t position){
+  STATE.playlistPosition[0] = position;
+  onPlayListPositionUpdate();
+}
+void onPlayListSetPlayPosition(uint8_t position){
+  STATE.playlistPosition[1] = position;
+  onPlayListPositionUpdate();
 }
 void onPlayListError(const char* label, const __FlashStringHelper* message){
   sendMessage(label, message,ERROR_MSG_DELAY);
