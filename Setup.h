@@ -58,7 +58,7 @@ void setup() {
   FILE_.setFileCallbacks( onBeforeSelectFile, onAfterSelectFile );
 
   PLAYLISTS_.setCallbacks( onPlayListConfirm, onPlayListError, onPlayListSetPosition );
-  MARKERS_.setCallbacks( onMarkerAdd );
+  DATA_MANAGER.setCallbacks( onMarkerAdd );
 
   SLEEP_WATCH.setCallbacks(onSleep, onWakeUp);
   SLEEP_WATCH.wakeUp();
@@ -78,7 +78,7 @@ void setup() {
   BUTTONS.setCallbacks(onPress,onRelease,onLongPress,onLongRelease);
   DEBUG_.print(F("✓✓✓ ⋅ Interface ok "));
   
-  SD_FS.load(MARKERS_FILENAME, &MARKERS, sizeof(MARKERS), SILENT);  
+  SD_FS.load(DATA_FILENAME, &DATAS, sizeof(DATAS), SILENT);  
   SD_FS.load(PLAYLISTS_FILENAME, &PLAYLISTS, sizeof(PLAYLISTS), SILENT);
   SD_FS.load(STATE_FILENAME, &STATE, sizeof(STATE), SILENT);
 
@@ -88,8 +88,8 @@ void setup() {
   // Play a file in the background, REQUIRES interrupts!  
   AUDIO.playFullFile(STARTSOUND);
   
-  PLAYLISTS_.setPosition( STATE.playlistPosition, SILENT ); 
   FILE_.select(STATE.dirNum, STATE.fileNum); // Initialisation selon carte  
+  PLAYLISTS_.setPlaylistPosition( STATE.playlistPosition); 
   DEBUG_.printRam();
     
   setMode(STATE.MODE);

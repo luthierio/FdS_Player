@@ -38,7 +38,7 @@ void setMode(uint8_t mode) {
   
   } else if (mode == PLAYLIST) {
 
-      R_DIR->resetPosition(PLAYLISTS_.getPlayListPosition(), false);
+      R_DIR->resetPosition(PLAYLISTS_.getPosition(), false);
       R_DIR->setUpperBound(NBR_PLAYLISTS-1);
       R_FILES->resetPosition(PLAYLISTS_.getPlayPosition(), false);
       R_FILES->setUpperBound(NBR_PLAYLIST_ITEMS-1);
@@ -119,7 +119,7 @@ void onRotChange(Rotary &rotary) {
   } else if (STATE.MODE == PLAYLIST) {
 
       if(&rotary == R_DIR) {
-        PLAYLISTS_.setPlaylistPosition(currentPosition); 
+        PLAYLISTS_.setPosition(currentPosition); 
       }
       if(&rotary == R_FILES) {
         PLAYLISTS_.setPlayPosition(currentPosition);
@@ -171,14 +171,14 @@ void onPress(ButtonHandler* buttonHandler, int ID) {
 
         case 2:         
 
-          if(MARKERS_.isEmpty()){
+          if(DATA_MANAGER.isEmpty()){
 
             uint32_t jump = MP3.getBytePerSecond()*SECONDS_PER_JUMP;
             JumpPosition = AUDIO.getFilePosition() - jump > 0? AUDIO.getFilePosition() - jump : 0;  
 
           }else{
             //on cherche 1 seconde en arrière pour sauter au précédent si on est très proche du marker
-            JumpPosition =MARKERS_.getPrevious(AUDIO.getFilePosition()- MP3.getBytePerSecond()); 
+            JumpPosition =DATA_MANAGER.getPrevious(AUDIO.getFilePosition()- MP3.getBytePerSecond()); 
           } 
           AUDIO.jumpTo(JumpPosition);
 
@@ -273,8 +273,8 @@ void onLongPress(ButtonHandler* buttonHandler, int ID) {
         // Long press
         switch (ID) {
           case 0:
-            if(!MARKERS_.isEmpty()){
-              SD_FS.save(MARKERS_FILENAME, &MARKERS, sizeof(MARKERS));
+            if(!DATA_MANAGER.isEmpty()){
+              SD_FS.save(DATA_FILENAME, &DATAS, sizeof(DATAS));
             }
             SD_FS.save(STATE_FILENAME, &STATE, sizeof(STATE));
             refreshDisplay();
@@ -282,14 +282,14 @@ void onLongPress(ButtonHandler* buttonHandler, int ID) {
           case 1:
             //On vérifie que le fichier Sélectionné est bien celui qui joue pour ajouter un marqueur
             if(AUDIO.getFilePosition() && AUDIO.currentTrack.size() == FILE_.getSize()){
-              MARKERS_.addMarker(AUDIO.getFilePosition());
+              DATA_MANAGER.addMarker(AUDIO.getFilePosition());
               AUDIO.pausePlaying(false);
             }
             break;
 
           case 2:
             if(AUDIO.getFilePosition() && AUDIO.currentTrack.size() == FILE_.getSize()){
-              MARKERS_.deletePrevious(AUDIO.getFilePosition());
+              DATA_MANAGER.deletePrevious(AUDIO.getFilePosition());
             }
             break;
 
@@ -354,7 +354,7 @@ void onRelease(ButtonHandler* buttonHandler, int ID) {
         switch (ID) {
           case 0:
             if(!PLAYLISTS_.currentPositionIsEmpty()){
-              FILE_.select(PLAYLISTS_.current->dirNum, PLAYLISTS_.current->fileNum);
+              FILE_.select(PLAYLISTS_.currentPlaylist->currentItem->dirNum, PLAYLISTS_.currentPlaylist->currentItem->fileNum);
               AUDIO.startPlayingFile(FILE_.path);
             }
             break;
@@ -424,7 +424,7 @@ void autoPlay(){
 
       //Fin du répertoire dans la lecture en
       if(STATE.playlistMode == AUTO && PLAYLISTS_.getPlayPosition() == NBR_PLAYLIST_ITEMS-1){    
-        PLAYLISTS_.setPlayPosition(0);
+        PLAYLISTS_.setPosition(0);
         SHOULD_PLAY_NEXT = false;
         DEBUG_.print(F("FIN AutoPlay"));
 
@@ -445,7 +445,7 @@ void autoPlay(){
             break;
         }        
         if(!PLAYLISTS_.currentPositionIsEmpty()){
-          FILE_.select(PLAYLISTS_.current->dirNum, PLAYLISTS_.current->fileNum);
+          FILE_.select(PLAYLISTS_.currentPlaylist->currentItem->dirNum, PLAYLISTS_.currentPlaylist->currentItem->fileNum);
           AUDIO.startPlayingFile(FILE_.path); 
         }
       }      
@@ -543,7 +543,7 @@ void onAfterSelectDir(){
 void onAfterSelectFile(){
 
   STATE.fileNum = FILE_.fileNum;
-  MARKERS_.selectArray();
+  DATA_MANAGER.select();
   MP3.open(FILE_.path); MP3.close();  //Open and close to load bitrate & tags ID3v1
   if(!MP3.bitrate) MP3.bitrate = DFT_BITRATE;
   if(STATE.MODE == PLAYER){
@@ -572,7 +572,7 @@ void onPlayListConfirm(const char* label, const __FlashStringHelper* message){
   sendMessage(label, message,MSG_DELAY);
 }
 /**********************
-* MARKERS:
+* DATAS:
 ***********************/
 void onMarkerAdd(uint32_t position){
 }

@@ -303,7 +303,7 @@
 
   class PlayingDisplay : public Display {
   public:
-      PlayingDisplay(Adafruit_SSD1306 *ecran, FdS_Adafruit_VS1053_FilePlayer *player, FilePicker *filePicker, t_state *state, MarkersManager *markers) : 
+      PlayingDisplay(Adafruit_SSD1306 *ecran, FdS_Adafruit_VS1053_FilePlayer *player, FilePicker *filePicker, t_state *state, audioDataManager *markers) : 
         Display(ecran),
         Player (player),
         filePicker (filePicker),
@@ -384,7 +384,7 @@
   private:
     FdS_Adafruit_VS1053_FilePlayer *Player;
     FilePicker *filePicker;
-    MarkersManager *markers;
+    audioDataManager *markers;
     t_state *state;
   };
   /**********************
@@ -476,16 +476,16 @@
 
         ecran_->fillRect(10, SCREEN_HEIGHT/2-2, 4 , 4, BLACK);
         //Le fichier qui est sélectionné dans le player est celui ci
-        if(state->dirNum == playlists->current->dirNum && state->fileNum == playlists->current->fileNum ){
+        if(state->dirNum == playlists->currentPlaylist->currentItem->dirNum && state->fileNum == playlists->currentPlaylist->currentItem->fileNum ){
             ecran_->fillTriangle( 10, SCREEN_HEIGHT/2-2 , 10, SCREEN_HEIGHT/2+2, 10+2,SCREEN_HEIGHT/2, WHITE);      // Triangles forward
         }
       }
       void nav(){   
         ecran_->fillRect(0,0, 10, 64, BLACK);
-        int plHeight = 64/playlists->nbr;
+        int plHeight = 64/playlists->size;
         int x = 0;
-        for (byte i = 0; i < playlists->nbr; i = i + 1) {  
-          if(playlists->getPlayListPosition() == i){
+        for (byte i = 0; i < playlists->size; i = i + 1) {  
+          if(playlists->getPosition() == i){
               ecran_->fillCircle(x+3, plHeight/2 + i*plHeight, 3, WHITE); 
           }else{
               ecran_->fillCircle(x+3, plHeight/2 + i*plHeight, 1, WHITE); 
@@ -518,14 +518,14 @@
         uint8_t position = playlists->getPlayPosition();
 
 
-        PlaylistItem *item =  playlists->getItem(); //Position courante
-        PlaylistItem *prevItem =  playlists->getItem(position-1);
-        PlaylistItem *nextItem =  playlists->getItem(position+1);
+        PlaylistItem item =  playlists->currentPlaylist->getItem(); //Position courante
+        PlaylistItem prevItem =  playlists->currentPlaylist->getItem(position-1);
+        PlaylistItem nextItem =  playlists->currentPlaylist->getItem(position+1);
 
-        basename(item->fileName);
+        basename(item.fileName);
 
-        printTxt(item->dirName, 10+34,18, NULL, 0);
-        printTxt(item->fileName+3, 10+34, 40, &FreeSerif9pt7b);
+        printTxt(item.dirName, 10+34,18, NULL, 0);
+        printTxt(item.fileName+3, 10+34, 40, &FreeSerif9pt7b);
 
         ecran_->drawFastHLine(10, 14, SCREEN_WIDTH-10*2, WHITE);
         ecran_->drawFastHLine(10, 48, SCREEN_WIDTH-10*2, WHITE);
@@ -536,21 +536,21 @@
 
           fillVHatch(12,  0, SCREEN_WIDTH-10*2, 14);
           
-        }else if(prevItem != nullptr){          
+        }else if(!prevItem.isEmpty()){          
 
-          basename(prevItem->fileName);
-          printTxt(prevItem->fileName+3, 10+34,2, NULL, 0);
+          basename(prevItem.fileName);
+          printTxt(prevItem.fileName+3, 10+34,2, NULL, 0);
 
         }
 
-        if(position+1 == playlists->size ){
+        if(position+1 == playlists->currentPlaylist->size ){
 
           fillVHatch(12, 48, SCREEN_WIDTH-10*2, 14);
 
-        }else if(nextItem != nullptr){     
+        }else if(!nextItem.isEmpty()){     
 
-          basename(nextItem->fileName);
-          printTxt(nextItem->fileName+3, 10+34,54, NULL, 0);
+          basename(nextItem.fileName);
+          printTxt(nextItem.fileName+3, 10+34,54, NULL, 0);
 
         }
 
@@ -625,7 +625,7 @@
       PitcherDisplay pitcher;
       PlaylistsDisplay playlists;
       MenuDisplay menu;
-      DisplayController(Adafruit_SSD1306 *ecran, FdS_Adafruit_VS1053_FilePlayer *player, FilePicker *filePicker, Pitcher *pitcher, PlaylistManager *playlists, t_state *state, MarkersManager *markers) :
+      DisplayController(Adafruit_SSD1306 *ecran, FdS_Adafruit_VS1053_FilePlayer *player, FilePicker *filePicker, Pitcher *pitcher, PlaylistManager *playlists, t_state *state, audioDataManager *markers) :
           display(ecran),
           files(ecran,filePicker),
           playing(ecran,player,filePicker,state, markers),

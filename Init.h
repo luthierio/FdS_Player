@@ -24,13 +24,14 @@ Metronome METRONOME_(&AUDIO, BEATSOUND, BEATSOUND2); // BPM = 120, 4 beats per b
 uint8_t VOLUME = 10;          // Defaut volume
 
 /**********************
-* MARKERS & PLAYLISTS
+* DATAS & PLAYLISTS
 ***********************/
-PlaylistItem PLAYLISTS[NBR_PLAYLISTS][NBR_PLAYLIST_ITEMS];
-PlaylistManager PLAYLISTS_(PLAYLISTS);
+//PlaylistItem PLAYLISTS[NBR_PLAYLISTS][NBR_PLAYLIST_ITEMS];
+Playlist PLAYLISTS[NBR_PLAYLISTS];
+PlaylistManager PLAYLISTS_(PLAYLISTS,NBR_PLAYLISTS);
 
-markerArray MARKERS[NBR_MARKER_ARRAYS][NBR_MARKERS];
-MarkersManager MARKERS_(&FILE_, MARKERS);
+audioData DATAS[NBR_AUDIO_DATA];
+audioDataManager DATA_MANAGER(&FILE_, DATAS, NBR_AUDIO_DATA);
 
 /**********************
 * SCREEN
@@ -121,6 +122,6 @@ bool CONFIRM = true;
 * DISPLAY:
 ***********************/
 #define SILENT true
-DisplayController DISPLAY_(&SCREEN_,&AUDIO, &FILE_, &PITCHER, &PLAYLISTS_, &STATE, &MARKERS_);
+DisplayController DISPLAY_(&SCREEN_,&AUDIO, &FILE_, &PITCHER, &PLAYLISTS_, &STATE, &DATA_MANAGER);
 
 

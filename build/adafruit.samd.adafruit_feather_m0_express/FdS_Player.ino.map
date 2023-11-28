@@ -3077,9 +3077,9 @@ LOAD /home/laron/.arduino15/packages/adafruit/tools/arm-none-eabi-gcc/9-2019q4/b
  .text._ZN15PlaylistManager7loadM3UEP10FilePicker
                 0x0000000000002f88      0x168 /tmp/arduino/sketches/0B9604B8FE3AA07AD283FEBD6937CD8F/sketch/FdS_Player.ino.cpp.o
                 0x0000000000002f88                PlaylistManager::loadM3U(FilePicker*)
- .text._ZN14MarkersManager12getFileArrayEv
+ .text._ZN14audioDataManager12getFileDataEv
                 0x00000000000030f0       0x4e /tmp/arduino/sketches/0B9604B8FE3AA07AD283FEBD6937CD8F/sketch/FdS_Player.ino.cpp.o
-                0x00000000000030f0                MarkersManager::getFileArray()
+                0x00000000000030f0                audioDataManager::getFileData()
  *fill*         0x000000000000313e        0x2 
  .text._ZN7Display11printTxtNumEihhPK7GFXfonthb
                 0x0000000000003140       0x50 /tmp/arduino/sketches/0B9604B8FE3AA07AD283FEBD6937CD8F/sketch/FdS_Player.ino.cpp.o
@@ -3211,9 +3211,9 @@ LOAD /home/laron/.arduino15/packages/adafruit/tools/arm-none-eabi-gcc/9-2019q4/b
                 0x0000000000004fcc       0xc4 /tmp/arduino/sketches/0B9604B8FE3AA07AD283FEBD6937CD8F/sketch/FdS_Player.ino.cpp.o
  .text._ZSt6__sortIPmN9__gnu_cxx5__ops15_Iter_less_iterEEvT_S4_T0_.isra.0
                 0x0000000000005090       0x48 /tmp/arduino/sketches/0B9604B8FE3AA07AD283FEBD6937CD8F/sketch/FdS_Player.ino.cpp.o
- .text._ZN14MarkersManager9addMarkerEm
+ .text._ZN14audioDataManager9addMarkerEm
                 0x00000000000050d8       0xbe /tmp/arduino/sketches/0B9604B8FE3AA07AD283FEBD6937CD8F/sketch/FdS_Player.ino.cpp.o
-                0x00000000000050d8                MarkersManager::addMarker(unsigned long)
+                0x00000000000050d8                audioDataManager::addMarker(unsigned long)
  *fill*         0x0000000000005196        0x2 
  .text._Z11onLongPressP13ButtonHandleri
                 0x0000000000005198      0x1bc /tmp/arduino/sketches/0B9604B8FE3AA07AD283FEBD6937CD8F/sketch/FdS_Player.ino.cpp.o
@@ -5074,10 +5074,10 @@ LOAD /home/laron/.arduino15/packages/adafruit/tools/arm-none-eabi-gcc/9-2019q4/b
                 0x0000000020001d5c                DISPLAY_
  .bss.FILE_     0x0000000020001d98      0x4b4 /tmp/arduino/sketches/0B9604B8FE3AA07AD283FEBD6937CD8F/sketch/FdS_Player.ino.cpp.o
                 0x0000000020001d98                FILE_
- .bss.MARKERS   0x000000002000224c     0x3e80 /tmp/arduino/sketches/0B9604B8FE3AA07AD283FEBD6937CD8F/sketch/FdS_Player.ino.cpp.o
-                0x000000002000224c                MARKERS
- .bss.MARKERS_  0x00000000200060cc       0x10 /tmp/arduino/sketches/0B9604B8FE3AA07AD283FEBD6937CD8F/sketch/FdS_Player.ino.cpp.o
-                0x00000000200060cc                MARKERS_
+ .bss.DATAS   0x000000002000224c     0x3e80 /tmp/arduino/sketches/0B9604B8FE3AA07AD283FEBD6937CD8F/sketch/FdS_Player.ino.cpp.o
+                0x000000002000224c                DATAS
+ .bss.DATA_MANAGER  0x00000000200060cc       0x10 /tmp/arduino/sketches/0B9604B8FE3AA07AD283FEBD6937CD8F/sketch/FdS_Player.ino.cpp.o
+                0x00000000200060cc                DATA_MANAGER
  .bss.METRONOME_
                 0x00000000200060dc       0x1c /tmp/arduino/sketches/0B9604B8FE3AA07AD283FEBD6937CD8F/sketch/FdS_Player.ino.cpp.o
                 0x00000000200060dc                METRONOME_
@@ -7038,8 +7038,8 @@ GFXcanvas8::~GFXcanvas8()                         /tmp/arduino/sketches/0B9604B8
 HardFault_Handler                                 /tmp/arduino/sketches/0B9604B8FE3AA07AD283FEBD6937CD8F/../../cores/6f0683724203daedfaf4dd084bd3eada/core.a(cortex_handlers.c.o)
 I2S_Handler                                       /tmp/arduino/sketches/0B9604B8FE3AA07AD283FEBD6937CD8F/../../cores/6f0683724203daedfaf4dd084bd3eada/core.a(cortex_handlers.c.o)
 INTERRUPTS                                        /tmp/arduino/sketches/0B9604B8FE3AA07AD283FEBD6937CD8F/sketch/FdS_Player.ino.cpp.o
-MARKERS                                           /tmp/arduino/sketches/0B9604B8FE3AA07AD283FEBD6937CD8F/sketch/FdS_Player.ino.cpp.o
-MARKERS_                                          /tmp/arduino/sketches/0B9604B8FE3AA07AD283FEBD6937CD8F/sketch/FdS_Player.ino.cpp.o
+DATAS                                           /tmp/arduino/sketches/0B9604B8FE3AA07AD283FEBD6937CD8F/sketch/FdS_Player.ino.cpp.o
+DATA_MANAGER                                          /tmp/arduino/sketches/0B9604B8FE3AA07AD283FEBD6937CD8F/sketch/FdS_Player.ino.cpp.o
 METRONOME_                                        /tmp/arduino/sketches/0B9604B8FE3AA07AD283FEBD6937CD8F/sketch/FdS_Player.ino.cpp.o
 MP3                                               /tmp/arduino/sketches/0B9604B8FE3AA07AD283FEBD6937CD8F/sketch/FdS_Player.ino.cpp.o
 MP3File::bitrate_table                            /tmp/arduino/sketches/0B9604B8FE3AA07AD283FEBD6937CD8F/sketch/FdS_Player.ino.cpp.o
@@ -7047,8 +7047,8 @@ MP3File::getID3V1(ID3v1Info&)                     /tmp/arduino/sketches/0B9604B8
 MP3File::open(char const*)                        /tmp/arduino/sketches/0B9604B8FE3AA07AD283FEBD6937CD8F/sketch/FdS_Player.ino.cpp.o
 MUST_RESUME                                       /tmp/arduino/sketches/0B9604B8FE3AA07AD283FEBD6937CD8F/sketch/FdS_Player.ino.cpp.o
 MUX                                               /tmp/arduino/sketches/0B9604B8FE3AA07AD283FEBD6937CD8F/sketch/FdS_Player.ino.cpp.o
-MarkersManager::addMarker(unsigned long)          /tmp/arduino/sketches/0B9604B8FE3AA07AD283FEBD6937CD8F/sketch/FdS_Player.ino.cpp.o
-MarkersManager::getFileArray()                    /tmp/arduino/sketches/0B9604B8FE3AA07AD283FEBD6937CD8F/sketch/FdS_Player.ino.cpp.o
+audioDataManager::addMarker(unsigned long)          /tmp/arduino/sketches/0B9604B8FE3AA07AD283FEBD6937CD8F/sketch/FdS_Player.ino.cpp.o
+audioDataManager::getFileData()                    /tmp/arduino/sketches/0B9604B8FE3AA07AD283FEBD6937CD8F/sketch/FdS_Player.ino.cpp.o
 MenuDisplay::show(char const*, char const*)       /tmp/arduino/sketches/0B9604B8FE3AA07AD283FEBD6937CD8F/sketch/FdS_Player.ino.cpp.o
 Multiplex::setAddress(unsigned char)              /tmp/arduino/sketches/0B9604B8FE3AA07AD283FEBD6937CD8F/sketch/FdS_Player.ino.cpp.o
 Multiplex::value(unsigned char)                   /tmp/arduino/sketches/0B9604B8FE3AA07AD283FEBD6937CD8F/sketch/FdS_Player.ino.cpp.o

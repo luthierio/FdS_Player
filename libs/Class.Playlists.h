@@ -28,38 +28,61 @@ struct PlaylistItem {
   }
 };
 
+struct Playlist {
+  PlaylistItem emptyItem;
+  PlaylistItem *currentItem = &emptyItem;
+  static const uint8_t size = NBR_PLAYLIST_ITEMS; // Corrected size to NBR_PLAYLISTS
+  PlaylistItem items[NBR_PLAYLIST_ITEMS];
+  uint8_t position = 0;
+
+  PlaylistItem& getItem() { 
+        return items[position];
+  }
+  PlaylistItem& getItem(int index) { // Corrected function name from getItems to getItem
+      if (index >= 0 && index < size) {
+        return items[index];
+      }
+      return emptyItem;
+  }
+
+  PlaylistItem& getCurrent() {
+      return *currentItem; // Corrected variable name from current to currentItem
+  }
+
+  // Retourne la position
+  uint8_t getPosition() {
+    return position;
+  }
+
+  // Définit la position
+  void setPosition(int index) {
+    if (index >= 0 && index < size) {
+      position = index;
+      currentItem = &items[index]; // Corrected variable name from current to currentItem
+    }
+  }
+};
+
 class PlaylistManager {
 private:
   static const uint8_t nameSize = 18;
   uint8_t position[2] = {0, 0}; // Position de navigation
   // Tableau de références de playlists
-  PlaylistItem (*playlists)[NBR_PLAYLIST_ITEMS];
-  // Tableau pour suivre le nombre d'éléments dans chaque playlist
-  int playlistItemCount[NBR_PLAYLISTS] = {0};
 
-  // Définit la playlist
-  void updateCurrentItem() {
-    if (0 <= position[0] < NBR_PLAYLISTS && 0 <= position[1] < NBR_PLAYLIST_ITEMS) {
-      current = &playlists[position[0]][position[1]];
-    } else {
-      current = &emptyItem;
-      if (onError != nullptr) {
-        onError(NULL, F("wrong position"));
-      }
-    }
-  }
-
+  Playlist* playlists;
+  
 public:
-  PlaylistItem emptyItem;
-  PlaylistItem *current = &emptyItem;
-  static const uint8_t nbr = NBR_PLAYLISTS;
-  static const uint8_t size = NBR_PLAYLIST_ITEMS;
+  Playlist emptyPlaylist;
+  Playlist *currentPlaylist = &emptyPlaylist;
+  static const uint8_t size = NBR_PLAYLISTS; // Corrected size to NBR_PLAYLISTS
+
+  uint8_t playlistPosition = 0; // Corrected variable name from position to playlistPosition
   // Define event function pointers
   void (*onSetPosition)(uint8_t position[2]) = nullptr;
   void (*onError)(const char *label, const __FlashStringHelper *message) = nullptr; // Nouveau callback pour les erreurs
   void (*onConfirm)(const char *label, const __FlashStringHelper *message) = nullptr; // Nouveau callback pour les erreurs
 
-  PlaylistManager(PlaylistItem (*playlists)[NBR_PLAYLIST_ITEMS]) : playlists(playlists) {}
+  PlaylistManager(Playlist* playlists, size_t size) : playlists(playlists) {}
 
   // Set callback functions
   void setCallbacks(void (*onConfirmCallback)(const char *, const __FlashStringHelper *),
@@ -70,89 +93,64 @@ public:
     onSetPosition = setPositionCallback;
   }
 
-  // Retourne les deux curseurs de position
-  uint8_t getPlayListPosition() {
-    return position[0];
-  }
-  // Retourne les deux curseurs de position
-  uint8_t getPlayPosition() {
-    return position[1];
+  Playlist& getPlaylist(int index) {
+    if (index >= 0 && index < size) {
+      return playlists[index]; // Corrected variable name from Playlist to playlists
+    }
+    return emptyPlaylist;
   }
 
-  bool currentPositionIsEmpty() {
-    return current->isEmpty();
+  // Définit la position dans la playlist
+  void setPlaylistPosition(uint8_t index[2], bool silent = false) {
+    setPosition(index[0],true);
+    setPlayPosition(index[1],silent);
   }
-
   // Définit la playlist
-  void setPlaylistPosition(uint8_t index, bool silent = false) {
-    if (0 <= index && index < NBR_PLAYLISTS) {
-      position[0] = index;
-      updateCurrentItem();
-      // Trigger the onSetPosition event
+  void setPosition(uint8_t index, bool silent = false) { // Corrected function name from setPosition to setPlaylistPosition
+    if (0 <= index && index < size) {
+      playlistPosition = index; // Corrected variable name from position to playlistPosition
+      currentPlaylist = &playlists[playlistPosition]; // Corrected variable name from Playlist to playlists
       if (!silent && onSetPosition != nullptr) {
         onSetPosition(position);
       }
-    } else if (onError != nullptr) {
-      onError(NULL, F("Wrong playlist index"));
-      Serial.println(index);
-      Serial.println(NBR_PLAYLISTS);
     }
+  }
+
+  // Retourne la position de la playlist
+  uint8_t getPosition() {
+    return playlistPosition; // Corrected variable name from position to playlistPosition
+  }
+
+  // Retourne la position dans la playlist
+  uint8_t getPlayPosition() {
+    return currentPlaylist->getPosition();
+  }
+
+  bool currentPositionIsEmpty() {
+    return currentPlaylist->getCurrent().isEmpty();
   }
 
   // Définit la position dans la playlist
   void setPlayPosition(uint8_t index, bool silent = false) {
-    if (0 <= index && index < NBR_PLAYLIST_ITEMS) {
-      position[1] = index;
-      updateCurrentItem();
-      // Trigger the onSetPlayPosition event
-      if (!silent && onSetPosition != nullptr) {
-        onSetPosition(position);
-      }
-    } else if (onError != nullptr) {
-      onError(NULL, F("Wrong item index"));
-    }
-  }
-
-  PlaylistItem *getItem() {
-    return current;
-  }
-
-  PlaylistItem *getItem(uint8_t index) {
-    if (0 <= index < NBR_PLAYLIST_ITEMS) {
-      return &playlists[position[0]][index];
-    } else if (onError != nullptr) {
-      onError(NULL, F("Wrong item index"));
-    }
-    return &emptyItem;
-  }
-
-  // Définit les deux curseurs de position
-  void setPosition(uint8_t index[2], bool silent = false) {
-    if (0 <= index[0] < NBR_PLAYLISTS && 0 <= index[1] < NBR_PLAYLIST_ITEMS) {
-      position[0] = index[0];
-      position[1] = index[1];
-      // Trigger the onSetPosition event
-      if (!silent && onSetPosition != nullptr) {
-        onSetPosition(position);
-      }
-    } else if (onError != nullptr) {
-      onError(NULL, F("Wrong playlist or item index"));
+    currentPlaylist->setPosition(index);
+    if (!silent && onSetPosition != nullptr) {
+      onSetPosition(position);
     }
   }
 
   // Sauve le fichier du filePicker dans la position
   void addCurrentFile(FilePicker *filePicker) {
     if (filePicker->exist()) {
-      current->dirNum = filePicker->dirNum;
-      current->fileNum = filePicker->fileNum;
-      strncpy(current->dirName, filePicker->dirname + 3, nameSize);
-      strncpy(current->fileName, filePicker->filename, nameSize);
+      currentPlaylist->getCurrent().dirNum = filePicker->dirNum;
+      currentPlaylist->getCurrent().fileNum = filePicker->fileNum;
+      strncpy(currentPlaylist->getCurrent().dirName, filePicker->dirname + 3, nameSize);
+      strncpy(currentPlaylist->getCurrent().fileName, filePicker->filename, nameSize);
     }
   }
-  // charge le contenu de fichiers playlist par numéro: 00 nom de ma playlist.m3u -> playlist 0
+  // Sauve le fichier du filePicker dans la position
   void loadM3U(FilePicker *filePicker) {
 
-    for (uint8_t i = 0; i < NBR_PLAYLISTS; ++i) {
+    for (uint8_t i = 0; i < size; ++i) {
 
       File file = filePicker->getByNum(filePicker->SD->open("/"), i, FILE_ONLY, ".m3u");
 
@@ -164,13 +162,13 @@ public:
       size_t n;
       uint8_t playPosition = 0;
 
-      setPlaylistPosition(i);
+      setPosition(i); // Corrected function name from setPosition to setPlaylistPosition
 
       while ((n = file.fgets(line, sizeof(line))) > 0) {
 
         if (line[0] != '#') {
 
-          if (playPosition < NBR_PLAYLIST_ITEMS) {
+          if (playPosition < currentPlaylist->size) {
 
             int8_t dirNum = -1;
             int8_t fileNum = -1;
@@ -181,7 +179,7 @@ public:
 
               if (filePicker->exist()) {
 
-                setPlayPosition(playPosition);
+                currentPlaylist->setPosition(playPosition); // Corrected function name from setPosition to setPlayPosition
                 addCurrentFile(filePicker);
                 playPosition++;
                 continue;
@@ -203,7 +201,7 @@ public:
       file.close();
     }
     // On réinitialise les positions
-    setPlaylistPosition(0);
+    setPosition(0); // Corrected function name from setPosition to setPlaylistPosition
     setPlayPosition(0);
     onConfirm(NULL, F("M3U Chargement OK!"));
   }

@@ -16,7 +16,7 @@ bool SERIAL_WAIT = false; //It true, wait serial to start
 #define BEATSOUND           "/.ASF/Beat.mp3"
 #define BEATSOUND2          "/.ASF/Beat2.mp3"
 #define PLAYLISTS_FILENAME  "/.Playlists.bin"
-#define MARKERS_FILENAME    "/.Markers.bin"
+#define DATA_FILENAME       "/.Datas.bin"
 #define STATE_FILENAME      "/.State.bin"
 
 /**********************
@@ -104,14 +104,14 @@ const byte ROT_P_PIN[2] = {1 , 0 };
 #define DFT_BITRATE           128  //kbps pas utilisé, mais si problème on se rabatera dessus
 #define SECONDS_PER_JUMP      5
 
-#define NBR_MARKERS           8     //Nombre de marqueurs par fichier
-#define NBR_MARKER_ARRAYS     50    //Nombre de tableaux de marqueurs pour le boitier
+#define NBR_MARKERS           10     //Nombre de marqueurs par fichier
+#define NBR_AUDIO_DATA        100     //Nombre de tableaux de marqueurs pour le boitier
 
 #define MAX_VOLUME            0      // Un petit nombre signifie un volume fort
 #define MIN_VOLUME            100    // Au dela de ce nombre 255 (Volume OFF) est envoyé.
 
-#define NBR_PLAYLISTS         5    //Nombre de tableaux de marqueurs pour le boitier
-#define NBR_PLAYLIST_ITEMS    30    //Nombre de marqueurs par fichier
+#define NBR_PLAYLISTS         6    //Nombre de tableaux de marqueurs pour le boitier
+#define NBR_PLAYLIST_ITEMS    50    //Nombre de marqueurs par fichier
 
 /********************** 
 * UX

@@ -2,14 +2,14 @@
 #define Markers_h   // Définit MACLASSE_H pour éviter les inclusions multiples
   
   #ifndef NBR_MARKERS
-  #define NBR_MARKERS 20 // Nombre de playlists
+    #define NBR_MARKERS 10 // Nombre de playlists
   #endif
 
-  #ifndef NBR_MARKER_ARRAYS
-  #define NBR_MARKER_ARRAYS 100 // Nombre de références par playlist
+  #ifndef NBR_AUDIO_DATA
+    #define NBR_AUDIO_DATA 100 // Nombre de références par playlist
   #endif
 
-  struct markerArray {
+  struct audioData {
       int8_t dirNum = -1;
       int8_t fileNum = -1;
       uint8_t pitchStep = 5;
@@ -26,26 +26,33 @@
       }
   };
 
-  class MarkersManager {
+  class audioDataManager {
     private:
-      markerArray (*markerArrays)[NBR_MARKERS];
-      markerArray *active;
+      audioData* audioDatas;
+      audioData* active;
+      audioData  emptyData;
+      size_t size;
+      // Méthode pour accéder à une instance spécifique du tableau
+      audioData& getInstance(int index) {
+          if (index >= 0 && index < size) {
+            return audioDatas[index];
+          }
+          return emptyData;
+      }
     public:
-      static const uint8_t nbr = NBR_MARKER_ARRAYS;
-      static const uint8_t size = NBR_MARKERS;
       FilePicker *filePicker;
       // Define event function pointers
       void (*onAdd)(uint32_t position) = nullptr;
 
-      MarkersManager(FilePicker *filePicker, markerArray (*markerArrays)[NBR_MARKERS]) : filePicker(filePicker), markerArrays(markerArrays) {}
+      audioDataManager(FilePicker *filePicker, audioData* data, size_t size) : filePicker(filePicker), audioDatas(data), size(size) {}
 
       // Set callback functions
       void setCallbacks(void (*onAddCallback)(uint32_t)) {
           onAdd = onAddCallback;
       }
       
-      void selectArray(){
-        active = getFileArray();
+      void select(){
+        active = getFileData();
       }
 
 
@@ -63,7 +70,7 @@
 
       void addMarker(uint32_t position) {
           if (active == nullptr || active->isUnset()) {
-              active = getFileArray();
+              active = getFileData();
               if (active == nullptr) {
                   // Gérer le cas où il n'y a plus d'espace pour les références de fichiers
                   return;
@@ -89,19 +96,20 @@
           return (active == nullptr) ? 0 : active->markers.getPreviousFrom(position);
       }
 
-      markerArray *getFileArray() {
+
+      audioData *getFileData() {
         if (filePicker->exist()) {
           // Si il existe et n'est pas vide, on l'utilise
-          for (byte i = 0; i < NBR_MARKER_ARRAYS; i = i + 1) {
-              if (filePicker->dirNum == markerArrays[i]->dirNum && markerArrays[i]->fileNum == filePicker->fileNum) {
-                  return markerArrays[i];
+          for (byte i = 0; i < size; i = i + 1) {
+              if (filePicker->dirNum == getInstance(i).dirNum && getInstance(i).fileNum == filePicker->fileNum) {
+                  return &getInstance(i);
               }
           }
 
           // Sinon on prend le prochain espace vide comme référence
-          for (byte i = 0; i < NBR_MARKER_ARRAYS; i = i + 1) {
-              if (markerArrays[i]->markers.isEmpty()) {            
-                  return markerArrays[i];
+          for (byte i = 0; i < size; i = i + 1) {
+              if (getInstance(i).markers.isEmpty()) {            
+                  return &getInstance(i);
               }
           }
 
