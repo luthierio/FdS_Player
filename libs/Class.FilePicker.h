@@ -186,6 +186,9 @@
         }        
         return true;
       }
+      bool isPlaying(FdS_Adafruit_VS1053_FilePlayer *player) {
+        return (player->currentTrack.size() == getSize());
+      }
 
       File getByNum(File root, uint8_t num, FileType fileType, const char* fileExtension = nullptr) {
           

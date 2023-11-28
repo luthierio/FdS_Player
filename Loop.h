@@ -11,7 +11,7 @@ void smallLoop() {
       DISPLAY_.analogs.gauges(VUSB, VBat,VOLUME, 100, -2, 30, 18);
       DISPLAY_.display.cleanZone(0, 51, 128, 12 );  
 
-      if(FILE_.exist() && DATA_MANAGER.getPitchStep() != 5){
+      if(FILE_.exist() &&  DATA_MANAGER.hasData() && DATA_MANAGER.getPitchStep() != 5){
         DISPLAY_.pitcher.print(128-PITCH_WIDTH + 2  , 52 , 10 , 10 ); 
         DISPLAY_.playing.progressBar(3, 57, 125-PITCH_WIDTH, 57, true);
         DISPLAY_.playing.playMode(125-PITCH_WIDTH, 57);     

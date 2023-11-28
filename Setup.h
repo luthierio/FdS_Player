@@ -90,6 +90,7 @@ void setup() {
   
   FILE_.select(STATE.dirNum, STATE.fileNum); // Initialisation selon carte  
   PLAYLISTS_.setPlaylistPosition( STATE.playlistPosition); 
+  DATA_MANAGER.init();
 
   DEBUG_.print(F("✓✓✓ ⋅ Position "), STATE.playlistPosition[0]);
   DEBUG_.print(F("✓✓✓ ⋅ Playing "), STATE.playlistPosition[1]);

@@ -4,6 +4,8 @@
 ***********************/
 
 void onPlay(){
+  Serial.println(DATA_MANAGER.getPitchStep());
+  Serial.println(DATA_MANAGER.getPitchDirection());
   PITCHER.setPitchStep(DATA_MANAGER.getPitchStep());
   PITCHER.setDirection(DATA_MANAGER.getPitchDirection());
 }
@@ -117,7 +119,7 @@ void onRotChange(Rotary &rotary) {
       if(&rotary == R_FILES) {
         FILE_.selectFile(currentPosition);
       }
-      if(&rotary == R_PITCH) {
+      if(&rotary == R_PITCH ) {
         DATA_MANAGER.setPitchStep(currentPosition);
       }   
 
@@ -574,8 +576,6 @@ void onAddFileMarker(uint32_t position){
 }
 void onSetFilePitch(uint8_t step, bool direction){
 
-  PITCHER.setPitchStep(step);
-  PITCHER.setDirection(direction);
   DISPLAY_.pitcher.print(128-PITCH_WIDTH + 2  , 52 , 10 , 10 );     
 
 }

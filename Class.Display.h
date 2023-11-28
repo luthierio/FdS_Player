@@ -393,10 +393,9 @@
 
   class PitcherDisplay : public Display {
   public:
-      PitcherDisplay(Adafruit_SSD1306 *ecran, Pitcher *pitcher, audioDataManager *datas) : 
+      PitcherDisplay(Adafruit_SSD1306 *ecran, audioDataManager *datas) : 
         Display(ecran),
-        datas (datas),
-        pitcher (pitcher){}
+        datas (datas){}
 
       void show(){  
         print(128-22  , 52 , 10 , 10 );
@@ -414,7 +413,7 @@
             ecran_->drawLine    ( x     , y+h/2 , x+w   , y+h/2 , WHITE );   // Ligne H
             ecran_->drawLine    ( x+w   , y+2   , x+w   , y+h-2 , WHITE );   // Ligne V 2 
           
-          if(pitcher->getStep() < 5){   //TODO pitcher.getRatio() > 100
+          if(datas->getPitchStep() < 5){   //TODO pitcher.getRatio() > 100
             
             ecran_->fillTriangle( x     , y+2   , x     , y+h-2 , x+w   , y+h/2 , WHITE);
             
@@ -454,7 +453,6 @@
         
       }
   private:
-    Pitcher *pitcher;
     audioDataManager *datas;
   };
   /**********************
@@ -631,7 +629,7 @@
           display(ecran),
           files(ecran,filePicker),
           playing(ecran,player,filePicker,state, datas),
-          pitcher(ecran,pitcher, datas),
+          pitcher(ecran,datas),
           playlists(ecran,playlists,state),
           menu(ecran) ,
           analogs(ecran) {

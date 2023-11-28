@@ -12,7 +12,7 @@
   struct audioData {
       int8_t dirNum = -1;
       int8_t fileNum = -1;
-      uint8_t pitchStep = 0;
+      uint8_t pitchStep = 5;
       bool pitchDirection = true;
       Array<uint32_t, NBR_MARKERS> markers;
       void clear() {
@@ -55,6 +55,9 @@
           onAdd = onAddCallback;
           onSetPitch = onSetPichCallback;
       }
+      void init(){
+        activate();
+      }
       
       audioData *getActive(){
         return active;
@@ -91,7 +94,7 @@
 
 
       bool hasData() const {
-          return (active == nullptr) ? true : false;
+          return (active != nullptr && !active->isUnset()) ? true : false;
       }
       bool markersIsEmpty() const {
           return (active == nullptr) ? true : active->markers.isEmpty();
@@ -115,13 +118,8 @@
           }
       }
       void activate() {
-
-          if (active == nullptr || active->isUnset()) {
-              active = getFileData();
-              if (active == nullptr) {
-                  // Gérer le cas où il n'y a plus d'espace pour les références de fichiers
-                  return;
-              }
+          active = getFileData();
+          if (active != nullptr && active->isUnset()) {
               active->dirNum = filePicker->dirNum;
               active->fileNum = filePicker->fileNum;
           }
@@ -149,7 +147,7 @@
 
           // Sinon on prend le prochain espace vide comme référence
           for (byte i = 0; i < size; i = i + 1) {
-              if (getInstance(i).markers.isEmpty()) {            
+              if (getInstance(i).isUnset()) {            
                   return &getInstance(i);
               }
           }
