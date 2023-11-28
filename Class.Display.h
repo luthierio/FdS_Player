@@ -407,7 +407,7 @@
       }
       void printSymbol(uint8_t x, uint8_t y, uint8_t w, uint8_t h){  
         
-        if(!datas->getPitchDirection()){   
+        if(datas->getPitchDirection()){   
           //Pitch mode SPeed
             ecran_->drawLine    ( x     , y+2   , x     , y+h-2 , WHITE );   // Ligne V 1
             ecran_->drawLine    ( x     , y+h/2 , x+w   , y+h/2 , WHITE );   // Ligne H

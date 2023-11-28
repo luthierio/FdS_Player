@@ -23,40 +23,27 @@ class Pitcher {
       delay(10);
       reset();
     }
+    
     void reset() {
       setValue(16384);
     }
-    void applyPatch() {    
-      this->VS1053->applyPatch(pluginPitchShifter, PLUGIN_PITCHSHIFTER_SIZE);
-      this->VS1053->sciWrite(VS1053_SCI_AIADDR, 0x50);
-      //resetting the value to normal
-      //this->VS1053->sciWrite(VS1053_SCI_AICTRL0,  16384);
-    }
 
-    void setPitchStep(uint8_t pitchStep) {
+    void update() {
       if (0 <= pitchStep && pitchStep < PITCH_STEPS) {
           setValue(getSign() * PITCH_TONE_TABLE[pitchStep]);
       }
     }
-    /*
-    void setRatio(float pitchRatio) {
-      setValue(16384 * pitchRatio);
-    }
-    */
-    signed int readValue() {
-      return this->VS1053->sciRead(VS1053_SCI_AICTRL0);
-    }
-    signed int getValue() {
-      return AICTRL0;
-    }
-    signed int getDirection() {
-      return pitchDirection;
-    }
-    void setDirection(bool direction) {
-        pitchDirection = direction;
+    void setPitchStep(uint8_t step, bool direction) {
+      pitchStep = step;
+      pitchDirection = direction;
+      update();
     }
     void switchDirection() {
       pitchDirection = !pitchDirection;      
+      update();
+    }
+    signed int getDirection() {
+      return pitchDirection;
     }
     uint8_t getStep() {    
       for (int i = 0; i < PITCH_STEPS; ++i) {
@@ -65,6 +52,32 @@ class Pitcher {
           }
       }
       return 0; // Retourne -1 si la valeur n'est pas trouvée
+    }
+
+    signed int getValue() {
+      return AICTRL0;
+    }
+
+    signed int getSign() {
+      return pitchDirection ? -1 : 1 ;
+    }
+    
+  private:
+
+    Adafruit_VS1053_FilePlayer *VS1053;
+    signed int AICTRL0 = 16384;
+    bool pitchDirection; //true = speed, false = pitch
+    uint8_t pitchStep; //true = speed, false = pitch
+
+    void applyPatch() {    
+      this->VS1053->applyPatch(pluginPitchShifter, PLUGIN_PITCHSHIFTER_SIZE);
+      this->VS1053->sciWrite(VS1053_SCI_AIADDR, 0x50);
+      //resetting the value to normal
+      //this->VS1053->sciWrite(VS1053_SCI_AICTRL0,  16384);
+    }
+
+    signed int readValue() {
+      return this->VS1053->sciRead(VS1053_SCI_AICTRL0);
     }
 
     void setValue(signed int aictrl0) {
@@ -85,14 +98,6 @@ class Pitcher {
         delay(10); // Laissez quelques millisecondes pour éviter le bruit.
         this->VS1053->pausePlaying(false);
       }
-    }
-    
-  private:
-    Adafruit_VS1053_FilePlayer *VS1053;
-    signed int AICTRL0 = 16384;
-    bool pitchDirection; //true = speed, false = pitch
-    signed int getSign() {
-      return pitchDirection ? 1 : -1 ;
     }
 };
 
