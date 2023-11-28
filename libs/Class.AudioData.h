@@ -13,7 +13,7 @@
       int8_t dirNum = -1;
       int8_t fileNum = -1;
       uint8_t pitchStep = 5;
-      bool pitchDirection = true;
+      bool pitchDirection;
       Array<uint32_t, NBR_MARKERS> markers;
       void clear() {
           // Remettez vos membres de structure à leurs valeurs par défaut ici
@@ -29,23 +29,24 @@
   class audioDataManager {
     private:
       audioData* audioDatas;
-      audioData* active;
       audioData  emptyData;
+      FilePicker *filePicker;
       size_t size;
       // Méthode pour accéder à une instance spécifique du tableau
       audioData& getInstance(int index) {
           if (index >= 0 && index < size) {
             return audioDatas[index];
           }
+          Serial.println("index out of range");
           return emptyData;
       }
     public:
-      FilePicker *filePicker;
+      audioData* active;
       // Define event function pointers
       void (*onAdd)(uint32_t position) = nullptr;
       void (*onSetPitch)(uint8_t step, bool direction) = nullptr;
 
-      audioDataManager(FilePicker *filePicker, audioData* data, size_t size) : filePicker(filePicker), audioDatas(data), size(size) {}
+      audioDataManager(FilePicker *filePicker, audioData* datas, size_t size) : filePicker(filePicker), audioDatas(datas), size(size) {}
 
       // Set callback functions
       void setCallbacks(
@@ -55,15 +56,21 @@
           onAdd = onAddCallback;
           onSetPitch = onSetPichCallback;
       }
-      void init(){
-        activate();
-      }
       
+      uint8_t getPitchStep(){
+        return active->pitchStep;
+      }
+
+      uint8_t getPitchDirection(){
+        return active->pitchDirection;
+      }
+
       audioData *getActive(){
         return active;
       }
+
       void select(){
-        active = getFileData();
+        active = getAvailableFileData();
       }
 
       void setPitchStep(uint8_t pitchStep){
@@ -72,13 +79,6 @@
         if (onSetPitch != nullptr) {
             onSetPitch(active->pitchStep,active->pitchDirection);
         }
-      }
-      uint8_t getPitchStep(){
-        return active->pitchStep;
-      }
-
-      uint8_t getPitchDirection(){
-        return active->pitchDirection;
       }
 
       void setPitchDirection(bool direction){
@@ -118,7 +118,7 @@
           }
       }
       void activate() {
-          active = getFileData();
+          active = getAvailableFileData();
           if (active != nullptr && active->isUnset()) {
               active->dirNum = filePicker->dirNum;
               active->fileNum = filePicker->fileNum;
@@ -136,7 +136,7 @@
       }
 
 
-      audioData *getFileData() {
+      audioData *getAvailableFileData() {
         if (filePicker->exist()) {
           // Si il existe et n'est pas vide, on l'utilise
           for (byte i = 0; i < size; i = i + 1) {

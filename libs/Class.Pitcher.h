@@ -90,9 +90,9 @@ class Pitcher {
   private:
     Adafruit_VS1053_FilePlayer *VS1053;
     signed int AICTRL0 = 16384;
-    bool pitchDirection = true; //true = speed, false = pitch
+    bool pitchDirection; //true = speed, false = pitch
     signed int getSign() {
-      return pitchDirection ? -1 : 1;
+      return pitchDirection ? 1 : -1 ;
     }
 };
 

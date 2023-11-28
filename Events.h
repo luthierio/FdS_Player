@@ -3,11 +3,11 @@
 * AUDIO:
 ***********************/
 
-void beforeStartPlaying(){
-  delay(10);
+void afterStartPlaying(){
+
   PITCHER.setPitchStep(DATA_MANAGER.getPitchStep());
   PITCHER.setDirection(DATA_MANAGER.getPitchDirection());
-  delay(10);
+
 }
 /**********************
 * MODE:
@@ -121,6 +121,8 @@ void onRotChange(Rotary &rotary) {
       }
       if(&rotary == R_PITCH ) {
         DATA_MANAGER.setPitchStep(currentPosition);
+        Serial.println(DATA_MANAGER.getPitchStep());
+        Serial.println(DATA_MANAGER.getPitchDirection());
       }   
 
   /**********************
@@ -283,9 +285,7 @@ void onLongPress(ButtonHandler* buttonHandler, int ID) {
         // Long press
         switch (ID) {
           case 0:
-            if(!DATA_MANAGER.hasData()){
-              SD_FS.save(DATA_FILENAME, &DATAS, sizeof(DATAS));
-            }
+            SD_FS.save(DATA_FILENAME, &DATAS, sizeof(DATAS));
             SD_FS.save(STATE_FILENAME, &STATE, sizeof(STATE));
             refreshDisplay();
             break;
@@ -350,8 +350,8 @@ void onRelease(ButtonHandler* buttonHandler, int ID) {
         switch (ID) {
           case 0:
             DEBUG_.print(F("Playing"), FILE_.path);
-            beforeStartPlaying();
             AUDIO.startPlayingFile(FILE_.path);
+            afterStartPlaying();
             break;
           default:
             break;
@@ -366,8 +366,8 @@ void onRelease(ButtonHandler* buttonHandler, int ID) {
           case 0:
             if(!PLAYLISTS_.currentPositionIsEmpty()){
               FILE_.select(PLAYLISTS_.currentPlaylist->currentItem->dirNum, PLAYLISTS_.currentPlaylist->currentItem->fileNum);
-              beforeStartPlaying();
               AUDIO.startPlayingFile(FILE_.path);
+              afterStartPlaying();
             }
             break;
           case 5:
@@ -429,8 +429,8 @@ void autoPlay(){
             SHOULD_PLAY_NEXT = false;
             break;
         }
-        beforeStartPlaying();
         AUDIO.startPlayingFile(FILE_.path); 
+            afterStartPlaying();
       }
     //PLAYLIST AUTOPLAY
     } else if(SHOULD_PLAY_NEXT && STATE.MODE == PLAYLIST) {
@@ -459,8 +459,8 @@ void autoPlay(){
         }        
         if(!PLAYLISTS_.currentPositionIsEmpty()){
           FILE_.select(PLAYLISTS_.currentPlaylist->currentItem->dirNum, PLAYLISTS_.currentPlaylist->currentItem->fileNum);
-          beforeStartPlaying();
           AUDIO.startPlayingFile(FILE_.path); 
+          afterStartPlaying();
         }
       }      
 
@@ -576,6 +576,10 @@ void onAddFileMarker(uint32_t position){
 }
 void onSetFilePitch(uint8_t step, bool direction){
 
+  if(FILE_.isPlaying(&AUDIO) ) {
+    PITCHER.setPitchStep(DATA_MANAGER.getPitchStep());
+    PITCHER.setDirection(DATA_MANAGER.getPitchDirection());
+  }
   DISPLAY_.pitcher.print(128-PITCH_WIDTH + 2  , 52 , 10 , 10 );     
 
 }
