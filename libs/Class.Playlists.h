@@ -15,8 +15,8 @@ struct PlaylistItem {
   int8_t dirNum = -1;
   int8_t fileNum = -1;
   static const uint8_t nameSize = 18;
-  char dirName[nameSize] = {};
-  char fileName[nameSize] = {};
+  char dirName[nameSize] = "/0";
+  char fileName[nameSize] = "/0";
   void clear() {
     dirNum = -1;
     fileNum = -1;

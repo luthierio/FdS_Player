@@ -43,8 +43,7 @@
 #include "libs/Class.Array.h"
 #include "libs/Class.AudioData.h"
 #include "libs/Class.Metronome.h"
-
-#include "Class.Display.h"
+#include "libs/Class.Display.h"
 
 /**********************
 * INIT
