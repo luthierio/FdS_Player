@@ -472,31 +472,32 @@
         playList();
         ecran_->display();
       }
-      void playing(){  
-
-        ecran_->fillRect(10, SCREEN_HEIGHT/2-2, 4 , 4, BLACK);
-        //Le fichier qui est sélectionné dans le player est celui ci
-        if(state->dirNum == playlists->currentPlaylist->currentItem->dirNum && state->fileNum == playlists->currentPlaylist->currentItem->fileNum ){
-            ecran_->fillTriangle( 10, SCREEN_HEIGHT/2-2 , 10, SCREEN_HEIGHT/2+2, 10+2,SCREEN_HEIGHT/2, WHITE);      // Triangles forward
-        }
-      }
-      void nav(){   
+      void nav(uint8_t x = 0){   
         ecran_->fillRect(0,0, 10, 64, BLACK);
         int plHeight = 64/playlists->size;
-        int x = 0;
         for (byte i = 0; i < playlists->size; i = i + 1) {  
           if(playlists->getPosition() == i){
-              ecran_->fillCircle(x+3, plHeight/2 + i*plHeight, 3, WHITE); 
+            ecran_->drawCircle(x+3, plHeight/2 + i*plHeight, 3, WHITE); 
           }else{
-              ecran_->fillCircle(x+3, plHeight/2 + i*plHeight, 1, WHITE); 
+            ecran_->fillCircle(x+3, plHeight/2 + i*plHeight, 1, WHITE); 
           }
         }
         //ecran_->display();
       }
       void playList(){
         ecran_->fillRect(10,0, 128-20, 64, BLACK); 
-        items(16);
+        items(10);
         mode(24); 
+      }
+      void playing(){  
+        uint8_t x = 10;
+        //Le fichier qui est sélectionné dans le player est celui ci
+        if(state->dirNum == playlists->currentPlaylist->currentItem->dirNum && state->fileNum == playlists->currentPlaylist->currentItem->fileNum ){
+
+          ecran_->fillTriangle( x,14    , x,14+4  , x+6 , 14 , WHITE);
+          ecran_->fillTriangle( x,50    , x,50-4  , x+6 , 50 , WHITE);
+          //ecran_->fillTriangle( 10, SCREEN_HEIGHT/2-2 , 10, SCREEN_HEIGHT/2+2, 10+2,SCREEN_HEIGHT/2, WHITE);      // Triangles forward
+        }
       }
       void mode(uint8_t x){
 
@@ -504,19 +505,16 @@
           ecran_->fillTriangle( x-6,14    , x,14-4  , x+6 , 14 , WHITE);      // Triangle haut vers le haut
         }
         if(state->playlistMode == AUTO || state->playlistMode == RANDOM){
-          ecran_->fillTriangle( x-6,48    , x,48+4  , x+6 , 48 , WHITE);      // Triangle bas vers le bas
+          ecran_->fillTriangle( x-6,50    , x,50+4  , x+6 , 50 , WHITE);      // Triangle bas vers le bas
         }  
         if(state->playlistMode == REPEATONE){
-          ecran_->fillTriangle( x-6,48    , x,48-4  , x+6 , 48 , WHITE);  // Triangle bas vers le haut
+          ecran_->fillTriangle( x-6,50    , x,50-4  , x+6 , 50 , WHITE);  // Triangle bas vers le haut
         } 
 
       }
       void items(uint8_t x){  
-       
-
 
         uint8_t position = playlists->getPlayPosition();
-
 
         PlaylistItem item =  playlists->currentPlaylist->getItem(); //Position courante
         PlaylistItem prevItem =  playlists->currentPlaylist->getItem(position-1);
@@ -525,10 +523,10 @@
         basename(item.fileName);
 
         printTxt(item.dirName, x+24,18, NULL, 0);
-        printTxt(item.fileName+3, x+24, 40, &FreeSerif9pt7b);
+        printTxt(item.fileName+3, x+24, 42, &FreeSerif9pt7b);
 
         ecran_->drawFastHLine(x, 14, SCREEN_WIDTH-10*2, WHITE);
-        ecran_->drawFastHLine(x, 48, SCREEN_WIDTH-10*2, WHITE);
+        ecran_->drawFastHLine(x, 50, SCREEN_WIDTH-10*2, WHITE);
         
         printTxtNum(position+1, x, SCREEN_HEIGHT/2+4, &FreeSans9pt7b); 
 
@@ -545,7 +543,7 @@
 
         if(position+1 == playlists->currentPlaylist->size ){
 
-          fillVHatch(x+2, 48, SCREEN_WIDTH-10*2, 14);
+          fillVHatch(x+2, 50, SCREEN_WIDTH-10*2, 14);
 
         }else if(!nextItem.isEmpty()){     
 
