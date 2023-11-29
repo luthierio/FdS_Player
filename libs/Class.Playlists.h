@@ -31,14 +31,14 @@ struct PlaylistItem {
 struct Playlist {
   PlaylistItem emptyItem;
   PlaylistItem *currentItem = &emptyItem;
-  static const uint8_t size = NBR_PLAYLIST_ITEMS; // Corrected size to NBR_PLAYLISTS
+  static const uint8_t size = NBR_PLAYLIST_ITEMS; 
   PlaylistItem items[NBR_PLAYLIST_ITEMS];
   uint8_t position = 0;
 
   PlaylistItem& getItem() { 
         return items[position];
   }
-  PlaylistItem& getItem(int index) { // Corrected function name from getItems to getItem
+  PlaylistItem& getItem(int index) { 
       if (index >= 0 && index < size) {
         return items[index];
       }
@@ -46,7 +46,7 @@ struct Playlist {
   }
 
   PlaylistItem& getCurrent() {
-      return *currentItem; // Corrected variable name from current to currentItem
+      return *currentItem; 
   }
 
   // Retourne la position
@@ -58,7 +58,7 @@ struct Playlist {
   void setPosition(int index) {
     if (index >= 0 && index < size) {
       position = index;
-      currentItem = &items[index]; // Corrected variable name from current to currentItem
+      currentItem = &items[index]; 
     }
   }
 };
@@ -74,16 +74,16 @@ private:
 public:
   Playlist emptyPlaylist;
   Playlist *currentPlaylist = &emptyPlaylist;
-  static const uint8_t size = NBR_PLAYLISTS; // Corrected size to NBR_PLAYLISTS
+  const uint8_t size = NBR_PLAYLISTS; 
 
-  uint8_t playlistPosition = 0; // Corrected variable name from position to playlistPosition
+  uint8_t playlistPosition = 0; 
   // Define event function pointers
   void (*onSetPosition)(uint8_t position) = nullptr;
   void (*onSetPlayPosition)(uint8_t position) = nullptr;
-  void (*onError)(const char *label, const __FlashStringHelper *message) = nullptr; // Nouveau callback pour les erreurs
-  void (*onConfirm)(const char *label, const __FlashStringHelper *message) = nullptr; // Nouveau callback pour les erreurs
+  void (*onError)(const char *label, const __FlashStringHelper *message) = nullptr; 
+  void (*onConfirm)(const char *label, const __FlashStringHelper *message) = nullptr;
 
-  PlaylistManager(Playlist* playlists, size_t size) : playlists(playlists) {}
+  PlaylistManager(Playlist* playlists, size_t size) : playlists(playlists), size(size) {}
 
   // Set callback functions
   void setCallbacks(
@@ -100,7 +100,7 @@ public:
 
   Playlist& getPlaylist(int index) {
     if (index >= 0 && index < size) {
-      return playlists[index]; // Corrected variable name from Playlist to playlists
+      return playlists[index]; 
     }
     return emptyPlaylist;
   }
@@ -111,10 +111,10 @@ public:
     setPlayPosition(index[1],silent);
   }
   // Définit la playlist
-  void setPosition(uint8_t index, bool silent = false) { // Corrected function name from setPosition to setPlaylistPosition
+  void setPosition(uint8_t index, bool silent = false) { 
     if (0 <= index && index < size) {
-      playlistPosition = index; // Corrected variable name from position to playlistPosition
-      currentPlaylist = &playlists[playlistPosition]; // Corrected variable name from Playlist to playlists
+      playlistPosition = index; 
+      currentPlaylist = &playlists[playlistPosition]; 
       if (!silent && onSetPosition != nullptr) {
         onSetPosition(index);
       }
@@ -123,7 +123,7 @@ public:
 
   // Retourne la position de la playlist
   uint8_t getPosition() {
-    return playlistPosition; // Corrected variable name from position to playlistPosition
+    return playlistPosition; 
   }
 
   // Retourne la position dans la playlist
@@ -163,11 +163,11 @@ public:
         continue;
       }
 
-      char line[560]; // Maximum line length plus space for zero byte.
+      char line[560]; 
       size_t n;
       uint8_t playPosition = 0;
 
-      setPosition(i); // Corrected function name from setPosition to setPlaylistPosition
+      setPosition(i); 
 
       while ((n = file.fgets(line, sizeof(line))) > 0) {
 
@@ -184,7 +184,7 @@ public:
 
               if (filePicker->exist()) {
 
-                currentPlaylist->setPosition(playPosition); // Corrected function name from setPosition to setPlayPosition
+                currentPlaylist->setPosition(playPosition);
                 addCurrentFile(filePicker);
                 playPosition++;
                 continue;
@@ -206,7 +206,7 @@ public:
       file.close();
     }
     // On réinitialise les positions
-    setPosition(0); // Corrected function name from setPosition to setPlaylistPosition
+    setPosition(0); 
     setPlayPosition(0);
     onConfirm(NULL, F("M3U Chargement OK!"));
   }
