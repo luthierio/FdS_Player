@@ -4,7 +4,7 @@
 ***********************/
 
 void afterStartPlaying(){
-
+  delay(50);
   PITCHER.setPitch(DATA_MANAGER.getPitchStep(), DATA_MANAGER.getPitchDirection());
   DEBUG_.print(F("DIRECTION"), DATA_MANAGER.getPitchDirection());
   DEBUG_.print(F("SIGN"), PITCHER.getSign());
@@ -46,6 +46,8 @@ void setMode(uint8_t mode) {
       R_FILES->setUpperBound(MAX_FILES_NUM);
       R_DIR->setCanLoop(true);
       R_FILES->setCanLoop(true);
+
+      R_PITCH->resetPosition(DATA_MANAGER.getPitchStep(), false);
   
   } else if (mode == PLAYLIST) {
 
@@ -55,6 +57,7 @@ void setMode(uint8_t mode) {
       R_FILES->setUpperBound(NBR_PLAYLIST_ITEMS-1);
       R_DIR->setCanLoop(false);
       R_FILES->setCanLoop(false);
+      R_PITCH->resetPosition(DATA_MANAGER.getPitchStep(), false);
 
   } else if (mode == MENU) {
       R_DIR->resetPosition(CONFIRM);
