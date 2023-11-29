@@ -58,7 +58,7 @@ void setup() {
   FILE_.setFileCallbacks( onBeforeSelectFile, onAfterSelectFile );
 
   PLAYLISTS_.setCallbacks( onPlayListConfirm, onPlayListError, onPlayListSetPosition, onPlayListSetPlayPosition );
-  DATA_MANAGER.setCallbacks( onAddFileMarker, onSetFilePitch );
+  DATA_MANAGER.setCallbacks( onAddFileMarker, onSetFilePitch, onError );
 
   SLEEP_WATCH.setCallbacks(onSleep, onWakeUp);
   SLEEP_WATCH.wakeUp();

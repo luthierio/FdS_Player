@@ -37,7 +37,9 @@
           if (index >= 0 && index < size) {
             return audioDatas[index];
           }
-          Serial.println("index out of range");
+          if (onError != nullptr) {
+            onError(NULL, F("Wrong index (bug)"));
+          }
           return emptyData;
       }
     public:
@@ -45,16 +47,19 @@
       // Define event function pointers
       void (*onAdd)(uint32_t position) = nullptr;
       void (*onSetPitch)(uint8_t step, bool speed) = nullptr;
+      void (*onError)(const char *label, const __FlashStringHelper *message) = nullptr; 
 
       audioDataManager(FilePicker *filePicker, audioData* datas, size_t size) : filePicker(filePicker), audioDatas(datas), size(size) {}
 
       // Set callback functions
       void setCallbacks(
             void (*onAddCallback)(uint32_t),
-            void (*onSetPichCallback)(uint8_t, bool)
+            void (*onSetPichCallback)(uint8_t, bool),
+            void (*onErrorCallback)(const char *, const __FlashStringHelper *)
           ) {
           onAdd = onAddCallback;
           onSetPitch = onSetPichCallback;
+          onError = onErrorCallback;
       }
       
       uint8_t getPitchStep(){
@@ -150,6 +155,9 @@
               if (getInstance(i).isUnset()) {            
                   return &getInstance(i);
               }
+          }
+          if (onError != nullptr) {
+            onError(NULL, F("Datas Full"));
           }
 
         }

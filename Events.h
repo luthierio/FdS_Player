@@ -125,8 +125,6 @@ void onRotChange(Rotary &rotary) {
       }
       if(&rotary == R_PITCH ) {
         DATA_MANAGER.setPitchStep(currentPosition);
-        Serial.println(DATA_MANAGER.getPitchStep());
-        Serial.println(DATA_MANAGER.getPitchMode());
       }   
 
   /**********************
@@ -506,6 +504,13 @@ void setVolume(uint8_t reqVolume) {
   }
 
 }
+
+/**********************
+* MULTICLASS ERRORS:
+***********************/
+void onError(const char* fileName, const __FlashStringHelper* message) {
+  sendMessage(fileName, message,ERROR_MSG_DELAY);
+}
 /**********************
 * FILEPICKER:
 * MANAGER:
@@ -563,7 +568,6 @@ void onAfterSelectFile(){
 
   STATE.fileNum = FILE_.fileNum;
   DATA_MANAGER.select();
-  DEBUG_.print(F("DIRECTION"), DATA_MANAGER.getPitchMode());
   MP3.open(FILE_.path); MP3.close();  //Open and close to load bitrate & tags ID3v1
 
   if(!MP3.bitrate) MP3.bitrate = DFT_BITRATE;
