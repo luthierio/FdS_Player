@@ -5,8 +5,8 @@
 
 void afterStartPlaying(){
   delay(50);
-  PITCHER.setPitch(DATA_MANAGER.getPitchStep(), DATA_MANAGER.getPitchDirection());
-  DEBUG_.print(F("DIRECTION"), DATA_MANAGER.getPitchDirection());
+  PITCHER.setPitch(DATA_MANAGER.getPitchStep(), DATA_MANAGER.getPitchMode());
+  DEBUG_.print(F("DIRECTION"), DATA_MANAGER.getPitchMode());
   DEBUG_.print(F("SIGN"), PITCHER.getSign());
 
 }
@@ -126,7 +126,7 @@ void onRotChange(Rotary &rotary) {
       if(&rotary == R_PITCH ) {
         DATA_MANAGER.setPitchStep(currentPosition);
         Serial.println(DATA_MANAGER.getPitchStep());
-        Serial.println(DATA_MANAGER.getPitchDirection());
+        Serial.println(DATA_MANAGER.getPitchMode());
       }   
 
   /**********************
@@ -210,7 +210,7 @@ void onPress(ButtonHandler* buttonHandler, int ID) {
           break;
 
         case 5:
-          DATA_MANAGER.switchPitchDirection();
+          DATA_MANAGER.switchPitchMode();
           DATA_MANAGER.setPitchStep(DFT_PITCH_STEP);
           break;
 
@@ -563,7 +563,7 @@ void onAfterSelectFile(){
 
   STATE.fileNum = FILE_.fileNum;
   DATA_MANAGER.select();
-  DEBUG_.print(F("DIRECTION"), DATA_MANAGER.getPitchDirection());
+  DEBUG_.print(F("DIRECTION"), DATA_MANAGER.getPitchMode());
   MP3.open(FILE_.path); MP3.close();  //Open and close to load bitrate & tags ID3v1
 
   if(!MP3.bitrate) MP3.bitrate = DFT_BITRATE;
@@ -579,10 +579,10 @@ void onAfterSelectFile(){
 ***********************/
 void onAddFileMarker(uint32_t position){
 }
-void onSetFilePitch(uint8_t step, bool direction){
+void onSetFilePitch(uint8_t step, bool speed){
 
   if(FILE_.isPlaying(&AUDIO) ) {
-    PITCHER.setPitch(DATA_MANAGER.getPitchStep(), DATA_MANAGER.getPitchDirection());
+    PITCHER.setPitch(DATA_MANAGER.getPitchStep(), DATA_MANAGER.getPitchMode());
   }
   DISPLAY_.pitcher.print(128-PITCH_WIDTH + 2  , 52 , 10 , 10 );     
 

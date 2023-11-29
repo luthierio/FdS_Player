@@ -29,21 +29,22 @@ class Pitcher {
     }
 
     void update() {
-      if (0 <= pitchStep && pitchStep < PITCH_STEPS) {
-          setValue(getSign() * PITCH_TONE_TABLE[pitchStep]);
+      uint8_t index = pitchSpeed ? PITCH_STEPS - pitchStep : pitchStep; //les valeurs sont inversées pour le speed
+      if (0 <= index && index < PITCH_STEPS) {
+          setValue(getSign() * PITCH_TONE_TABLE[index]);
       }
     }
-    void setPitch(uint8_t step, bool direction) {
+    void setPitch(uint8_t step, bool speed) {
       pitchStep = step;
-      pitchDirection = direction;
+      pitchSpeed = speed;
       update();
     }
-    void switchDirection() {
-      pitchDirection = !pitchDirection;      
+    void switchMode() {
+      pitchSpeed = !pitchSpeed;      
       update();
     }
-    signed int getDirection() {
-      return pitchDirection;
+    signed int getMode() {
+      return pitchSpeed;
     }
     uint8_t getStep() {    
       for (int i = 0; i < PITCH_STEPS; ++i) {
@@ -59,14 +60,14 @@ class Pitcher {
     }
 
     signed int getSign() {
-      return pitchDirection ? -1 : 1 ;
+      return pitchSpeed ? -1 : 1 ; //-1 = speed +1 = pitch
     }
     
   private:
 
     Adafruit_VS1053_FilePlayer *VS1053;
     signed int AICTRL0 = 16384;
-    bool pitchDirection; //true = speed, false = pitch
+    bool pitchSpeed; //true = speed, false = pitch
     uint8_t pitchStep; //true = speed, false = pitch
 
     void applyPatch() {    

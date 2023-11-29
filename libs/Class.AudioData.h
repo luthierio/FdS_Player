@@ -13,7 +13,7 @@
       int8_t dirNum = -1;
       int8_t fileNum = -1;
       uint8_t pitchStep = 5;
-      bool pitchDirection;
+      bool pitchSpeed;
       Array<uint32_t, NBR_MARKERS> markers;
       void clear() {
           // Remettez vos membres de structure à leurs valeurs par défaut ici
@@ -44,7 +44,7 @@
       audioData* active;
       // Define event function pointers
       void (*onAdd)(uint32_t position) = nullptr;
-      void (*onSetPitch)(uint8_t step, bool direction) = nullptr;
+      void (*onSetPitch)(uint8_t step, bool speed) = nullptr;
 
       audioDataManager(FilePicker *filePicker, audioData* datas, size_t size) : filePicker(filePicker), audioDatas(datas), size(size) {}
 
@@ -61,8 +61,8 @@
         return active->pitchStep;
       }
 
-      uint8_t getPitchDirection(){
-        return active->pitchDirection;
+      uint8_t getPitchMode(){
+        return active->pitchSpeed;
       }
 
       audioData *getActive(){
@@ -77,19 +77,19 @@
         activate();
         active->pitchStep = pitchStep;
         if (onSetPitch != nullptr) {
-            onSetPitch(active->pitchStep,active->pitchDirection);
+            onSetPitch(active->pitchStep,active->pitchSpeed);
         }
       }
 
-      void setPitchDirection(bool direction){
+      void setPitchSpeed(bool speed){
         activate();
-        active->pitchDirection = direction;
+        active->pitchSpeed = speed;
         if (onSetPitch != nullptr) {
-            onSetPitch(active->pitchStep,active->pitchDirection);
+            onSetPitch(active->pitchStep,active->pitchSpeed);
         }
       }
-      void switchPitchDirection(){
-        setPitchDirection(!active->pitchDirection);
+      void switchPitchMode(){
+        setPitchSpeed(!active->pitchSpeed);
       }
 
 

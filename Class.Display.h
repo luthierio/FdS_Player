@@ -407,17 +407,17 @@
       }
       void printSymbol(uint8_t x, uint8_t y, uint8_t w, uint8_t h){  
         
-        if(datas->getPitchDirection()){   
+        if(datas->getPitchMode()){   
           //Pitch mode SPeed
             ecran_->drawLine    ( x     , y+2   , x     , y+h-2 , WHITE );   // Ligne V 1
             ecran_->drawLine    ( x     , y+h/2 , x+w   , y+h/2 , WHITE );   // Ligne H
             ecran_->drawLine    ( x+w   , y+2   , x+w   , y+h-2 , WHITE );   // Ligne V 2 
           
-          if(datas->getPitchStep() < 5){   
+          if(datas->getPitchStep() > 5){   
                         
             ecran_->fillTriangle( x     , y+2   , x     , y+h-2 , x+w   , y+h/2 , WHITE);
             
-          }else if(datas->getPitchStep() > 5){
+          }else if(datas->getPitchStep() < 5){
             
             ecran_->fillTriangle(x+w   , y+2   , x+w    , y+h-2 , x     , y+h/2 , WHITE);
             
