@@ -439,7 +439,7 @@ void autoPlay(){
 
       //Fin du répertoire dans la lecture en
       if(STATE.playlistMode == AUTO && PLAYLISTS_.getPlayPosition() == NBR_PLAYLIST_ITEMS-1){    
-        PLAYLISTS_.setPosition(0);
+        PLAYLISTS_.setPlayPosition(0);
         SHOULD_PLAY_NEXT = false;
         DEBUG_.print(F("FIN AutoPlay"));
 
