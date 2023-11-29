@@ -61,6 +61,11 @@ struct Playlist {
       currentItem = &items[index]; 
     }
   }
+  void clear(){
+    for (uint8_t i = 0; i < size; ++i) {
+      items[i].clear();
+    }
+  }
 };
 
 class PlaylistManager {
@@ -168,7 +173,7 @@ public:
       uint8_t playPosition = 0;
 
       setPosition(i); 
-
+      currentPlaylist->clear();
       while ((n = file.fgets(line, sizeof(line))) > 0) {
 
         if (line[0] != '#') {
