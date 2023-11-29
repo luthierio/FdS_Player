@@ -39,7 +39,8 @@ public:
   bool save(const char* nomFichier, const void* dataPointer, size_t dataSize, bool silent = false) {
     
     if (backupEnabled && sd->exists(nomFichier) && !createBackup(nomFichier) ) {
-      if (errorCallback) errorCallback(nomFichier, F("Error: Backup Fail"));
+      if (errorCallback) errorCallback(nomFichier, F("Erreur backup"));
+      if (onAfterSave && !silent) onAfterSave(nomFichier,F("Pas de sauvegarde!"));  // Appel de la fonction de rappel après la sauvegarde
       return false;
     }
 
@@ -53,7 +54,8 @@ public:
       } else {
         fichier.close();
         restoreBackup(nomFichier);
-        if (errorCallback) errorCallback(nomFichier,F("Error writing"));
+        if (errorCallback) errorCallback(nomFichier,F("Erreur d'écriture"));
+        if (onAfterSave && !silent) onAfterSave(nomFichier,F("Pas de sauvegarde!"));  // Appel de la fonction de rappel après la sauvegarde
       }
     }
     fichier.close();
@@ -73,7 +75,8 @@ public:
           if (onAfterLoad && !silent) onAfterLoad(nomFichier, F("OK"));  // Appel de la fonction de rappel après le chargement
           return true;
         } else {
-          if (errorCallback) errorCallback(nomFichier, F("Error reading"));
+          if (errorCallback) errorCallback(nomFichier, F("Erreur de lecture"));
+          if (onAfterLoad && !silent) onAfterLoad(nomFichier, F("Pas de chargement"));  // Appel de la fonction de rappel après le chargement
           return false;
         }
       }
@@ -107,7 +110,7 @@ private:
     if (sd->exists(nomFichierBackup)) {
       return true;
     } else {
-      if (errorCallback) errorCallback(nomFichier, F("Error: no backup"));
+      if (errorCallback) errorCallback(nomFichier, F("Erreur: backup"));
     }
 
     return false;

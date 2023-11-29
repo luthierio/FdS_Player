@@ -543,11 +543,6 @@ void onAfterSDReadWrite(const char* fileName, const __FlashStringHelper* message
   sendMessage(fileName, message,MSG_DELAY);
   INTERRUPTS = true;
 }
-void onSDError(const char* fileName, const __FlashStringHelper* message) {
-  onAfterSDWork();
-  sendMessage(fileName, message,ERROR_MSG_DELAY);
-  INTERRUPTS = true;
-}
 
 
 

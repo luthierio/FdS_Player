@@ -49,7 +49,7 @@ void setup() {
   }
 
   // Définir les callbacks
-  SD_FS.setCallbacks(onSDError, onBeforeSDReadWrite, onAfterSDReadWrite , onBeforeSDReadWrite, onAfterSDReadWrite );
+  SD_FS.setCallbacks(onError, onBeforeSDReadWrite, onAfterSDReadWrite , onBeforeSDReadWrite, onAfterSDReadWrite );
   SD_FS.setBackupEnabled(BACKUP_REQUIRED);
 
   DEBUG_.print(F("✓✓✓ ⋅ FILES ok "));
@@ -57,7 +57,7 @@ void setup() {
   FILE_.setDirCallbacks( onBeforeSelectDir, onAfterSelectDir );
   FILE_.setFileCallbacks( onBeforeSelectFile, onAfterSelectFile );
 
-  PLAYLISTS_.setCallbacks( onPlayListConfirm, onPlayListError, onPlayListSetPosition, onPlayListSetPlayPosition );
+  PLAYLISTS_.setCallbacks( onPlayListConfirm, onError, onPlayListSetPosition, onPlayListSetPlayPosition );
   DATA_MANAGER.setCallbacks( onAddFileMarker, onSetFilePitch, onError );
 
   SLEEP_WATCH.setCallbacks(onSleep, onWakeUp);
