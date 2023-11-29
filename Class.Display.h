@@ -495,23 +495,23 @@
       }
       void playList(){
         ecran_->fillRect(10,0, 128-20, 64, BLACK); 
-        items();
-        mode(); 
+        items(16);
+        mode(24); 
       }
-      void mode(){
+      void mode(uint8_t x){
 
         if(state->playlistMode == RANDOM){
-          ecran_->fillTriangle( 28-6,14 , 28,14-4 , 28+6,14 , WHITE);      // Triangle vers le haut
+          ecran_->fillTriangle( x-6,14    , x,14-4  , x+6 , 14 , WHITE);      // Triangle haut vers le haut
         }
         if(state->playlistMode == AUTO || state->playlistMode == RANDOM){
-          ecran_->fillTriangle( 28-6,48 , 28,48+4 , 28+6,48 , WHITE);      // Triangle vers le bas
+          ecran_->fillTriangle( x-6,48    , x,48+4  , x+6 , 48 , WHITE);      // Triangle bas vers le bas
         }  
         if(state->playlistMode == REPEATONE){
-          ecran_->fillTriangle( 28-6,48-2 , 28,48-6 , 28+6,48-2 , WHITE);      // Triangle vers le bas
+          ecran_->fillTriangle( x-6,48    , x,48-4  , x+6 , 48 , WHITE);  // Triangle bas vers le haut
         } 
 
       }
-      void items(){  
+      void items(uint8_t x){  
        
 
 
@@ -524,33 +524,33 @@
 
         basename(item.fileName);
 
-        printTxt(item.dirName, 10+34,18, NULL, 0);
-        printTxt(item.fileName+3, 10+34, 40, &FreeSerif9pt7b);
+        printTxt(item.dirName, x+24,18, NULL, 0);
+        printTxt(item.fileName+3, x+24, 40, &FreeSerif9pt7b);
 
-        ecran_->drawFastHLine(10, 14, SCREEN_WIDTH-10*2, WHITE);
-        ecran_->drawFastHLine(10, 48, SCREEN_WIDTH-10*2, WHITE);
+        ecran_->drawFastHLine(x, 14, SCREEN_WIDTH-10*2, WHITE);
+        ecran_->drawFastHLine(x, 48, SCREEN_WIDTH-10*2, WHITE);
         
-        printTxtNum(position+1, 16, SCREEN_HEIGHT/2+4, &FreeSans9pt7b); 
+        printTxtNum(position+1, x, SCREEN_HEIGHT/2+4, &FreeSans9pt7b); 
 
         if(position == 0){
 
-          fillVHatch(12,  0, SCREEN_WIDTH-10*2, 14);
+          fillVHatch(x+2,  0, SCREEN_WIDTH-10*2, 14);
           
         }else if(!prevItem.isEmpty()){          
 
           basename(prevItem.fileName);
-          printTxt(prevItem.fileName+3, 10+34,2, NULL, 0);
+          printTxt(prevItem.fileName+3, x+24,2, NULL, 0);
 
         }
 
         if(position+1 == playlists->currentPlaylist->size ){
 
-          fillVHatch(12, 48, SCREEN_WIDTH-10*2, 14);
+          fillVHatch(x+2, 48, SCREEN_WIDTH-10*2, 14);
 
         }else if(!nextItem.isEmpty()){     
 
           basename(nextItem.fileName);
-          printTxt(nextItem.fileName+3, 10+34,54, NULL, 0);
+          printTxt(nextItem.fileName+3, x+24,54, NULL, 0);
 
         }
 
