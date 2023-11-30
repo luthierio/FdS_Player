@@ -19,9 +19,9 @@ void refreshDisplay() {
 
       DISPLAY_.files.printPath(&FILE_, &MP3); 
   
-  } else if (STATE.MODE == MENU) {
+  } else if (STATE.MODE == PROMPT) {
 
-      DISPLAY_.menu.show(ACTION, CONFIRM); 
+      DISPLAY_.menu.show(PROMPT_ID, CONFIRM); 
 
   } else if (STATE.MODE == PLAYLIST) {
 
@@ -60,7 +60,7 @@ void setMode(uint8_t mode) {
       R_FILES->setCanLoop(false);
       R_PITCH->resetPosition(DATA_MANAGER.getPitchStep(), false);
 
-  } else if (mode == MENU) {
+  } else if (mode == PROMPT) {
       R_DIR->resetPosition(CONFIRM);
       R_FILES->setLowerBound(0);
       R_FILES->setUpperBound(1);
@@ -71,10 +71,10 @@ void setMode(uint8_t mode) {
   refreshDisplay();
 }
 //Define action and context
-void setAction(uint8_t actionID, uint8_t context) {
-  ACTION = actionID;
+void setPrompt(uint8_t promptID, uint8_t context) {
+  PROMPT_ID = promptID;
   CONTEXT = context;
-  setMode(MENU);
+  setMode(PROMPT);
 }
 /**********************
 * MESSAGE:
@@ -142,11 +142,11 @@ void onRotChange(Rotary &rotary) {
        
 
   /**********************
-  * MENU:
+  * PROMPT:
   ***********************/
-  } else if (STATE.MODE == MENU) {
+  } else if (STATE.MODE == PROMPT) {
     CONFIRM = !CONFIRM;
-    DISPLAY_.menu.show(ACTION, CONFIRM); 
+    DISPLAY_.menu.show(PROMPT_ID, CONFIRM); 
   }  
 }
 
@@ -234,7 +234,7 @@ void onPress(ButtonHandler* buttonHandler, int ID) {
           }
           break;
         case 2:
-          setMode(MENU);
+          setMode(PROMPT);
           break;
         case 3:
           setMode(PLAYER);
@@ -259,16 +259,16 @@ void onPress(ButtonHandler* buttonHandler, int ID) {
       setMode(PLAYER);
 
   /**********************
-  * ACTION:
+  * PROMPT_ID:
   ***********************/
-  } else if (STATE.MODE == MENU) {
+  } else if (STATE.MODE == PROMPT) {
 
     if(ID == 5 && CONTEXT == PLAYLIST){
 
-      if       (ACTION == PL_IMPORT){
-        setAction(PL_EXPORT, PLAYLIST);
+      if       (PROMPT_ID == PL_IMPORT){
+        setPrompt(PL_EXPORT, PLAYLIST);
       }else {
-        setAction(PL_IMPORT, PLAYLIST);
+        setPrompt(PL_IMPORT, PLAYLIST);
       }
       CONTINUE = false;
 
@@ -276,7 +276,7 @@ void onPress(ButtonHandler* buttonHandler, int ID) {
 
       //Tout les boutons lancent l'action si nécessaire puis retournent au contexte
       if(CONFIRM){
-        doAction(ACTION);
+        executePrompt(PROMPT_ID);
       }
       setMode(CONTEXT);
       CONTINUE = false;
@@ -319,7 +319,7 @@ void onLongPress(ButtonHandler* buttonHandler, int ID) {
             break;
 
           case 5:
-            setMode(MENU);
+            setMode(PROMPT);
             break;
           default:
             break;
@@ -338,7 +338,7 @@ void onLongPress(ButtonHandler* buttonHandler, int ID) {
             refreshDisplay();
             break;
           case 5:        
-            setAction(PL_IMPORT, PLAYLIST);
+            setPrompt(PL_IMPORT, PLAYLIST);
             CONTINUE = false;
             
             break;

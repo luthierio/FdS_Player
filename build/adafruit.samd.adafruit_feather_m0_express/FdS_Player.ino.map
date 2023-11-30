@@ -669,11 +669,11 @@ Discarded input sections
                 0x0000000000000000        0x4 /tmp/arduino/sketches/0B9604B8FE3AA07AD283FEBD6937CD8F/libraries/Adafruit_GFX_Library/Adafruit_SPITFT.cpp.o
  .text._ZN15Adafruit_SPITFT8color565Ehhh
                 0x0000000000000000       0x16 /tmp/arduino/sketches/0B9604B8FE3AA07AD283FEBD6937CD8F/libraries/Adafruit_GFX_Library/Adafruit_SPITFT.cpp.o
- .text._ZN15Adafruit_SPITFT21SPI_BEGIN_TRANSACTIONEv
+ .text._ZN15Adafruit_SPITFT21SPI_BEGIN_TRANSPROMPT_IDEv
                 0x0000000000000000       0x16 /tmp/arduino/sketches/0B9604B8FE3AA07AD283FEBD6937CD8F/libraries/Adafruit_GFX_Library/Adafruit_SPITFT.cpp.o
  .text._ZN15Adafruit_SPITFT10startWriteEv
                 0x0000000000000000       0x1a /tmp/arduino/sketches/0B9604B8FE3AA07AD283FEBD6937CD8F/libraries/Adafruit_GFX_Library/Adafruit_SPITFT.cpp.o
- .text._ZN15Adafruit_SPITFT19SPI_END_TRANSACTIONEv
+ .text._ZN15Adafruit_SPITFT19SPI_END_TRANSPROMPT_IDEv
                 0x0000000000000000       0x14 /tmp/arduino/sketches/0B9604B8FE3AA07AD283FEBD6937CD8F/libraries/Adafruit_GFX_Library/Adafruit_SPITFT.cpp.o
  .text._ZN15Adafruit_SPITFT8endWriteEv
                 0x0000000000000000       0x18 /tmp/arduino/sketches/0B9604B8FE3AA07AD283FEBD6937CD8F/libraries/Adafruit_GFX_Library/Adafruit_SPITFT.cpp.o
@@ -3136,9 +3136,9 @@ LOAD /home/laron/.arduino15/packages/adafruit/tools/arm-none-eabi-gcc/9-2019q4/b
  .text._Z11onRotChangeR6Rotary
                 0x0000000000003da0       0xf8 /tmp/arduino/sketches/0B9604B8FE3AA07AD283FEBD6937CD8F/sketch/FdS_Player.ino.cpp.o
                 0x0000000000003da0                onRotChange(Rotary&)
- .text._Z8doActioni
+ .text._Z8executePrompti
                 0x0000000000003e98      0x104 /tmp/arduino/sketches/0B9604B8FE3AA07AD283FEBD6937CD8F/sketch/FdS_Player.ino.cpp.o
-                0x0000000000003e98                doAction(int)
+                0x0000000000003e98                executePrompt(int)
  .text._Z14refreshDisplayv
                 0x0000000000003f9c       0x7c /tmp/arduino/sketches/0B9604B8FE3AA07AD283FEBD6937CD8F/sketch/FdS_Player.ino.cpp.o
                 0x0000000000003f9c                refreshDisplay()
@@ -3293,9 +3293,9 @@ LOAD /home/laron/.arduino15/packages/adafruit/tools/arm-none-eabi-gcc/9-2019q4/b
  .text._ZN16Adafruit_ZeroDMA10setTriggerEh
                 0x0000000000005d2c       0x48 /tmp/arduino/sketches/0B9604B8FE3AA07AD283FEBD6937CD8F/libraries/Adafruit_ZeroDMA/Adafruit_ZeroDMA.cpp.o
                 0x0000000000005d2c                Adafruit_ZeroDMA::setTrigger(unsigned char)
- .text._ZN16Adafruit_ZeroDMA9setActionE27dma_transfer_trigger_action
+ .text._ZN16Adafruit_ZeroDMA9setPromptE27dma_transfer_trigger_action
                 0x0000000000005d74       0x48 /tmp/arduino/sketches/0B9604B8FE3AA07AD283FEBD6937CD8F/libraries/Adafruit_ZeroDMA/Adafruit_ZeroDMA.cpp.o
-                0x0000000000005d74                Adafruit_ZeroDMA::setAction(dma_transfer_trigger_action)
+                0x0000000000005d74                Adafruit_ZeroDMA::setPrompt(dma_transfer_trigger_action)
  .text._ZN16Adafruit_ZeroDMA10getChannelEv
                 0x0000000000005dbc        0x4 /tmp/arduino/sketches/0B9604B8FE3AA07AD283FEBD6937CD8F/libraries/Adafruit_ZeroDMA/Adafruit_ZeroDMA.cpp.o
                 0x0000000000005dbc                Adafruit_ZeroDMA::getChannel()
@@ -4747,7 +4747,7 @@ LOAD /home/laron/.arduino15/packages/adafruit/tools/arm-none-eabi-gcc/9-2019q4/b
                 0x0000000000011ce3       0x29 /tmp/arduino/sketches/0B9604B8FE3AA07AD283FEBD6937CD8F/sketch/FdS_Player.ino.cpp.o
  .rodata._Z11onRotChangeR6Rotary.str1.1
                 0x0000000000011d0c        0x4 /tmp/arduino/sketches/0B9604B8FE3AA07AD283FEBD6937CD8F/sketch/FdS_Player.ino.cpp.o
- .rodata._Z8doActioni.str1.1
+ .rodata._Z8executePrompti.str1.1
                 0x0000000000011d10       0x40 /tmp/arduino/sketches/0B9604B8FE3AA07AD283FEBD6937CD8F/sketch/FdS_Player.ino.cpp.o
  .rodata._Z7setModeh.str1.1
                 0x0000000000011d50        0x5 /tmp/arduino/sketches/0B9604B8FE3AA07AD283FEBD6937CD8F/sketch/FdS_Player.ino.cpp.o
@@ -4971,8 +4971,8 @@ LOAD /home/laron/.arduino15/packages/adafruit/tools/arm-none-eabi-gcc/9-2019q4/b
  *(.data*)
  .data          0x0000000020000000        0x4 /home/laron/.arduino15/packages/adafruit/tools/arm-none-eabi-gcc/9-2019q4/bin/../lib/gcc/arm-none-eabi/9.2.1/thumb/v6-m/nofp/crtbegin.o
                 0x0000000020000000                __dso_handle
- .data.ACTIONS  0x0000000020000004       0x6c /tmp/arduino/sketches/0B9604B8FE3AA07AD283FEBD6937CD8F/sketch/FdS_Player.ino.cpp.o
-                0x0000000020000004                ACTIONS
+ .data.PROMPT_IDS  0x0000000020000004       0x6c /tmp/arduino/sketches/0B9604B8FE3AA07AD283FEBD6937CD8F/sketch/FdS_Player.ino.cpp.o
+                0x0000000020000004                PROMPT_IDS
  .data.BTN_CHANNEL
                 0x0000000020000070       0x18 /tmp/arduino/sketches/0B9604B8FE3AA07AD283FEBD6937CD8F/sketch/FdS_Player.ino.cpp.o
                 0x0000000020000070                BTN_CHANNEL
@@ -5060,9 +5060,9 @@ LOAD /home/laron/.arduino15/packages/adafruit/tools/arm-none-eabi-gcc/9-2019q4/b
                 0x0000000020001c80                __bss_start__ = .
  *(.bss*)
  .bss           0x0000000020001c80       0x1c /home/laron/.arduino15/packages/adafruit/tools/arm-none-eabi-gcc/9-2019q4/bin/../lib/gcc/arm-none-eabi/9.2.1/thumb/v6-m/nofp/crtbegin.o
- .bss.ACTION_ID
+ .bss.PROMPT_ID_ID
                 0x0000000020001c9c        0x1 /tmp/arduino/sketches/0B9604B8FE3AA07AD283FEBD6937CD8F/sketch/FdS_Player.ino.cpp.o
-                0x0000000020001c9c                ACTION_ID
+                0x0000000020001c9c                PROMPT_ID_ID
  *fill*         0x0000000020001c9d        0x3 
  .bss.AUDIO     0x0000000020001ca0       0x80 /tmp/arduino/sketches/0B9604B8FE3AA07AD283FEBD6937CD8F/sketch/FdS_Player.ino.cpp.o
                 0x0000000020001ca0                AUDIO
@@ -6184,8 +6184,8 @@ OUTPUT(/tmp/arduino/sketches/0B9604B8FE3AA07AD283FEBD6937CD8F/FdS_Player.ino.elf
 Cross Reference Table
 
 Symbol                                            File
-ACTIONS                                           /tmp/arduino/sketches/0B9604B8FE3AA07AD283FEBD6937CD8F/sketch/FdS_Player.ino.cpp.o
-ACTION_ID                                         /tmp/arduino/sketches/0B9604B8FE3AA07AD283FEBD6937CD8F/sketch/FdS_Player.ino.cpp.o
+PROMPT_IDS                                           /tmp/arduino/sketches/0B9604B8FE3AA07AD283FEBD6937CD8F/sketch/FdS_Player.ino.cpp.o
+PROMPT_ID_ID                                         /tmp/arduino/sketches/0B9604B8FE3AA07AD283FEBD6937CD8F/sketch/FdS_Player.ino.cpp.o
 AC_Handler                                        /tmp/arduino/sketches/0B9604B8FE3AA07AD283FEBD6937CD8F/../../cores/6f0683724203daedfaf4dd084bd3eada/core.a(cortex_handlers.c.o)
 ADC_Handler                                       /tmp/arduino/sketches/0B9604B8FE3AA07AD283FEBD6937CD8F/../../cores/6f0683724203daedfaf4dd084bd3eada/core.a(cortex_handlers.c.o)
 AUDIO                                             /tmp/arduino/sketches/0B9604B8FE3AA07AD283FEBD6937CD8F/sketch/FdS_Player.ino.cpp.o
@@ -6387,8 +6387,8 @@ Adafruit_SPITFT::Adafruit_SPITFT(unsigned short, unsigned short, signed char, si
 Adafruit_SPITFT::Adafruit_SPITFT(unsigned short, unsigned short, signed char, signed char, signed char, signed char, signed char, signed char) /tmp/arduino/sketches/0B9604B8FE3AA07AD283FEBD6937CD8F/libraries/Adafruit_GFX_Library/Adafruit_SPITFT.cpp.o
 Adafruit_SPITFT::Adafruit_SPITFT(unsigned short, unsigned short, tftBusWidth, signed char, signed char, signed char, signed char, signed char, signed char) /tmp/arduino/sketches/0B9604B8FE3AA07AD283FEBD6937CD8F/libraries/Adafruit_GFX_Library/Adafruit_SPITFT.cpp.o
 Adafruit_SPITFT::Adafruit_SPITFT(unsigned short, unsigned short, tftBusWidth, signed char, signed char, signed char, signed char, signed char, signed char) /tmp/arduino/sketches/0B9604B8FE3AA07AD283FEBD6937CD8F/libraries/Adafruit_GFX_Library/Adafruit_SPITFT.cpp.o
-Adafruit_SPITFT::SPI_BEGIN_TRANSACTION()          /tmp/arduino/sketches/0B9604B8FE3AA07AD283FEBD6937CD8F/libraries/Adafruit_GFX_Library/Adafruit_SPITFT.cpp.o
-Adafruit_SPITFT::SPI_END_TRANSACTION()            /tmp/arduino/sketches/0B9604B8FE3AA07AD283FEBD6937CD8F/libraries/Adafruit_GFX_Library/Adafruit_SPITFT.cpp.o
+Adafruit_SPITFT::SPI_BEGIN_TRANSPROMPT_ID()          /tmp/arduino/sketches/0B9604B8FE3AA07AD283FEBD6937CD8F/libraries/Adafruit_GFX_Library/Adafruit_SPITFT.cpp.o
+Adafruit_SPITFT::SPI_END_TRANSPROMPT_ID()            /tmp/arduino/sketches/0B9604B8FE3AA07AD283FEBD6937CD8F/libraries/Adafruit_GFX_Library/Adafruit_SPITFT.cpp.o
 Adafruit_SPITFT::SPI_WRITE16(unsigned short)      /tmp/arduino/sketches/0B9604B8FE3AA07AD283FEBD6937CD8F/libraries/Adafruit_GFX_Library/Adafruit_SPITFT.cpp.o
 Adafruit_SPITFT::SPI_WRITE32(unsigned long)       /tmp/arduino/sketches/0B9604B8FE3AA07AD283FEBD6937CD8F/libraries/Adafruit_GFX_Library/Adafruit_SPITFT.cpp.o
 Adafruit_SPITFT::TFT_WR_STROBE()                  /tmp/arduino/sketches/0B9604B8FE3AA07AD283FEBD6937CD8F/libraries/Adafruit_GFX_Library/Adafruit_SPITFT.cpp.o
@@ -6538,7 +6538,7 @@ Adafruit_ZeroDMA::isActive()                      /tmp/arduino/sketches/0B9604B8
 Adafruit_ZeroDMA::loop(bool)                      /tmp/arduino/sketches/0B9604B8FE3AA07AD283FEBD6937CD8F/libraries/Adafruit_ZeroDMA/Adafruit_ZeroDMA.cpp.o
 Adafruit_ZeroDMA::printStatus(ZeroDMAstatus)      /tmp/arduino/sketches/0B9604B8FE3AA07AD283FEBD6937CD8F/libraries/Adafruit_ZeroDMA/Adafruit_ZeroDMA.cpp.o
 Adafruit_ZeroDMA::resume()                        /tmp/arduino/sketches/0B9604B8FE3AA07AD283FEBD6937CD8F/libraries/Adafruit_ZeroDMA/Adafruit_ZeroDMA.cpp.o
-Adafruit_ZeroDMA::setAction(dma_transfer_trigger_action) /tmp/arduino/sketches/0B9604B8FE3AA07AD283FEBD6937CD8F/libraries/Adafruit_ZeroDMA/Adafruit_ZeroDMA.cpp.o
+Adafruit_ZeroDMA::setPrompt(dma_transfer_trigger_action) /tmp/arduino/sketches/0B9604B8FE3AA07AD283FEBD6937CD8F/libraries/Adafruit_ZeroDMA/Adafruit_ZeroDMA.cpp.o
                                                   /tmp/arduino/sketches/0B9604B8FE3AA07AD283FEBD6937CD8F/libraries/SPI/SPI.cpp.o
 Adafruit_ZeroDMA::setCallback(void (*)(Adafruit_ZeroDMA*), dma_callback_type) /tmp/arduino/sketches/0B9604B8FE3AA07AD283FEBD6937CD8F/libraries/Adafruit_ZeroDMA/Adafruit_ZeroDMA.cpp.o
                                                   /tmp/arduino/sketches/0B9604B8FE3AA07AD283FEBD6937CD8F/libraries/SPI/SPI.cpp.o
@@ -8151,7 +8151,7 @@ digitalWrite                                      /tmp/arduino/sketches/0B9604B8
                                                   /tmp/arduino/sketches/0B9604B8FE3AA07AD283FEBD6937CD8F/libraries/Adafruit_GFX_Library/Adafruit_SPITFT.cpp.o
                                                   /tmp/arduino/sketches/0B9604B8FE3AA07AD283FEBD6937CD8F/libraries/Adafruit_GFX_Library/Adafruit_GrayOLED.cpp.o
                                                   /tmp/arduino/sketches/0B9604B8FE3AA07AD283FEBD6937CD8F/sketch/FdS_Player.ino.cpp.o
-doAction(int)                                     /tmp/arduino/sketches/0B9604B8FE3AA07AD283FEBD6937CD8F/sketch/FdS_Player.ino.cpp.o
+executePrompt(int)                                     /tmp/arduino/sketches/0B9604B8FE3AA07AD283FEBD6937CD8F/sketch/FdS_Player.ino.cpp.o
 end                                               /home/laron/.arduino15/packages/adafruit/tools/arm-none-eabi-gcc/9-2019q4/bin/../lib/gcc/arm-none-eabi/9.2.1/../../../../arm-none-eabi/lib/thumb/v6-m/nofp/libnosys.a(sbrk.o)
 errno                                             /home/laron/.arduino15/packages/adafruit/tools/arm-none-eabi-gcc/9-2019q4/bin/../lib/gcc/arm-none-eabi/9.2.1/../../../../arm-none-eabi/lib/thumb/v6-m/nofp/libc_nano.a(lib_a-reent.o)
                                                   /home/laron/.arduino15/packages/adafruit/tools/arm-none-eabi-gcc/9-2019q4/bin/../lib/gcc/arm-none-eabi/9.2.1/../../../../arm-none-eabi/lib/thumb/v6-m/nofp/libnosys.a(write.o)

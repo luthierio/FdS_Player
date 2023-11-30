@@ -1,10 +1,10 @@
 
 /**********************
-* ACTIONS
+* PROMPT_IDS
 ***********************/
   
-void doAction(int ID){ 
-  DEBUG_.print(F("ACTION "), ID);
+void executePrompt(int ID){ 
+  DEBUG_.print(F("PROMPT_ID "), ID);
   
   SLEEP_WATCH.wakeUp();
   AUDIO.stopPlaying();

@@ -560,7 +560,7 @@
   };
 
   /**********************
-  * ACTIONS:
+  * PROMPT_IDS:
   ***********************/
 
   class MenuDisplay : public Display {
@@ -569,14 +569,14 @@
 
       }
 
-      void show(uint8_t action_ID, bool confirm){  
+      void show(uint8_t prompt_ID, bool confirm){  
 
         ecran_->clearDisplay();        
         ecran_->drawFastHLine(0, 24, 128, WHITE);
 
-        if       (action_ID == PL_IMPORT) {
+        if       (prompt_ID == PL_IMPORT) {
           drawCentreString(F("Import M3U"), 64, 22, &FreeSerif9pt7b);
-        }else if (action_ID == PL_EXPORT) {
+        }else if (prompt_ID == PL_EXPORT) {
           drawCentreString(F("Export M3U"), 64, 22, &FreeSerif9pt7b);
 
         }

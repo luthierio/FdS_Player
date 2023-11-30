@@ -71,50 +71,12 @@ SleepWatch SLEEP_WATCH(SLEEP_INTERVAL);
 float VUSB;           // Tension mesurée pour USB (si >
 float VBat;
 
-/**********************
-* Interface
-***********************/
-
-char  activeSoundPath[512];
 
 /**********************
-* Markers
-***********************/
-//Toutes les variables à sauvegarder sur la carte SD
-
-
-
-
-/**********************
-* ACTIONS:
+* PROMPT_IDS:
 ***********************/
 
-
-
-/*
-struct Command {
-  CommandIDs id;
-  const __FlashStringHelper* title;
-  const __FlashStringHelper* action;
-};
-Command ACTIONS[] = {
-  { A_PROPOS, F("A propos"),   F("Credits") },
-  { SAVE_ALL, F("ASF"),        F("Sauver")  },
-  { ST_SAVE,  F("Statut"),     F("Sauver")  },
-  { MAR_SAVE, F("Marqueurs"),  F("Sauver")  },
-  { PL_SAVE,  F("Playlists"),  F("Sauver")  },
-  { LOAD_ALL, F("ASF"),        F("Charger") },
-  { ST_LOAD,  F("Statut"),     F("Charger") },
-  { MAR_LOAD, F("Marqueurs"),  F("Charger") },
-  { PL_LOAD,  F("Playlists"),  F("Charger") },
-  { PL_IMPORT, F("Playlists"),  F("Import M3U")},
-  { PL_EXPOR, F("Playlists"),  F("Export M3U")},
-  { DEBUG_ON, F("Debug"),      F("Commuter")},
-  { ACCORD,   F("Accordage"),  F("Ecouter") },
-};
-const size_t NBR_ACTIONS = sizeof(ACTIONS) / sizeof(ACTIONS[0]) - 1;
-*/
-uint8_t ACTION;
+uint8_t PROMPT_ID;
 uint8_t CONTEXT;
 bool CONFIRM = true;
 

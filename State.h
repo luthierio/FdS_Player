@@ -5,9 +5,6 @@
 
 bool SHOULD_PLAY_NEXT = false;  
 
-enum asfMode    { PLAYER,   PLAYLIST, BEAT, MENU, LOGO  };// Entier déguisé en string :-)
-enum playMode   { ONEPLAY,  AUTO,   RANDOM,   REPEATONE };// Entier déguisé en string :-)
-enum pitchMode  { OFF,      TEMPO,  PITCH };// Entier déguisé en string :-)
 
 struct t_state{
   uint8_t MODE = PLAYER;

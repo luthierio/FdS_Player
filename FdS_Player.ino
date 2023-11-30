@@ -52,7 +52,7 @@
 * INIT
 ***********************/
 #include "Init.h"
-#include "Actions.h"
+#include "Prompts.h"
 /**********************
 * Display
 ***********************/
