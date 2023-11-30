@@ -18,6 +18,7 @@
 #include <Adafruit_VS1053.h>
 
 #include "inc/Icons.h"
+#include "inc/UrlEncode.h"
 
 /**********************
 * CONFIG
@@ -28,6 +29,8 @@
 /**********************
 * Local Classes & Functions
 ***********************/
+
+
 #include "libs/Class.FdS_Adafruit_VS1053.h"
 #include "libs/Class.Pitcher.h"
 #include "libs/Class.UTF8Converter.h"

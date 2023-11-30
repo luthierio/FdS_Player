@@ -574,9 +574,13 @@
         ecran_->clearDisplay();        
         ecran_->drawFastHLine(0, 24, 128, WHITE);
 
-        if (action_ID == PL_IMPORT) {
+        if       (action_ID == PL_IMPORT) {
           drawCentreString(F("Import M3U"), 64, 22, &FreeSerif9pt7b);
+        }else if (action_ID == PL_EXPORT) {
+          drawCentreString(F("Export M3U"), 64, 22, &FreeSerif9pt7b);
+
         }
+
         drawCentreString(F("Confirm ?"), 128/2, 36);
         if(confirm){
           drawCentreString(F("Yes"), 128/2, 64, &FreeSerif9pt7b);

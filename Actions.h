@@ -13,6 +13,9 @@ void doAction(int ID){
     case PL_IMPORT:
       PLAYLISTS_.loadM3U(&FILE_);
       break;
+    case PL_EXPORT:
+      PLAYLISTS_.saveM3U(&FILE_);
+      break;
     /*
     case ACCORD:
       // statements

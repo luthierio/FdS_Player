@@ -1,7 +1,6 @@
 #ifndef Playlists_H
 #define Playlists_H
 
-#include <Arduino.h>
 
 #ifndef NBR_PLAYLISTS
 #define NBR_PLAYLISTS 6 // Nombre de playlists
@@ -65,6 +64,14 @@ struct Playlist {
     for (uint8_t i = 0; i < size; ++i) {
       items[i].clear();
     }
+  }
+  bool isEmpty(){    
+    for (uint8_t i = 0; i < size; ++i) {
+      if(!items[i].isEmpty()){
+        return false;
+      }
+    }
+    return true;
   }
 };
 
@@ -157,7 +164,7 @@ public:
       strncpy(currentPlaylist->getCurrent().fileName, filePicker->filename, nameSize);
     }
   }
-  // Sauve le fichier du filePicker dans la position
+  // charge une playlist m3u depuis la carte SD
   void loadM3U(FilePicker *filePicker) {
 
     for (uint8_t i = 0; i < size; ++i) {
@@ -214,6 +221,56 @@ public:
     setPosition(0); 
     setPlayPosition(0);
     onConfirm(NULL, F("M3U Chargement OK!"));
+  }
+  // charge une playlist m3u depuis la carte SD
+  void saveM3U(FilePicker *filePicker) {
+
+    for (uint8_t i = 0; i < size; ++i) {
+      
+      setPosition(i); 
+      currentPlaylist->setPosition(0);
+      if (currentPlaylist->isEmpty()){
+        // On s'arrete la pour celle ci
+        continue;
+      }
+
+      char prefix[3]; // Ajout d'un élément pour le caractère nul '\0'
+      snprintf(prefix, sizeof(prefix), "%02d", i);
+    
+
+      File existingfile = filePicker->getByNum(filePicker->SD->open("/"), i, FILE_ONLY, ".m3u");
+
+      char filename[250];
+      if (!existingfile) {
+        strcpy (filename,prefix);
+        strcat (filename," ");
+        strcat (filename,"playlist.m3u");  
+        //onError(filename, F("Impossible de créer le fichier"));  
+      }else{
+        existingfile.getName(filename, sizeof(filename));
+      }
+      File file = filePicker->SD->open(filename, O_RDWR | O_CREAT | O_TRUNC);
+      file.println("#EXTM3U");
+
+      for (uint8_t p = 0; p < currentPlaylist->size; ++p) {
+        currentPlaylist->setPosition(p);
+        if(!currentPlaylist->currentItem->isEmpty()){
+          filePicker->select(currentPlaylist->currentItem->dirNum, currentPlaylist->currentItem->fileNum);
+
+          file.print("#EXTINF:-1,");
+          file.println(filePicker->path);
+
+          file.println(urlEncode(filePicker->path));
+          file.println("");// ligne vide
+        }
+      }
+
+      file.close();
+    }
+    // On réinitialise les positions
+    setPosition(0); 
+    setPlayPosition(0);
+    onConfirm(NULL, F("M3U Chargement OK!"));    
   }
 };
 

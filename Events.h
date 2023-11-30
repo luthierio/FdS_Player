@@ -37,6 +37,7 @@ void refreshDisplay() {
 }
 void setMode(uint8_t mode) {
   DEBUG_.print(F("MODE"), mode);
+  DISPLAY_.clear();
 
   if (mode == PLAYER) {
 
@@ -70,9 +71,9 @@ void setMode(uint8_t mode) {
   refreshDisplay();
 }
 //Define action and context
-void setAction(uint8_t actionID) {
+void setAction(uint8_t actionID, uint8_t context) {
   ACTION = actionID;
-  CONTEXT = STATE.MODE;
+  CONTEXT = context;
   setMode(MENU);
 }
 /**********************
@@ -261,17 +262,29 @@ void onPress(ButtonHandler* buttonHandler, int ID) {
   * ACTION:
   ***********************/
   } else if (STATE.MODE == MENU) {
-    //Tout les boutons lancent l'action si nécessaire puis retournent au contexte
-    if(CONFIRM){
-      doAction(ACTION);
+
+    if(ID == 5 && CONTEXT == PLAYLIST){
+
+      if       (ACTION == PL_IMPORT){
+        setAction(PL_EXPORT, PLAYLIST);
+      }else {
+        setAction(PL_IMPORT, PLAYLIST);
+      }
+      CONTINUE = false;
+
+    }else{
+
+      //Tout les boutons lancent l'action si nécessaire puis retournent au contexte
+      if(CONFIRM){
+        doAction(ACTION);
+      }
+      setMode(CONTEXT);
+      CONTINUE = false;
+
     }
 
-    DEBUG_.print(F("CONTEXT"), CONTEXT);
-    setMode(CONTEXT);
-    CONTINUE = false;
   }
 
-  DEBUG_.print(F("MODE"), STATE.MODE);
   DEBUG_.print(F("Pressed"), ID);
   delay(10);
 }
@@ -325,7 +338,7 @@ void onLongPress(ButtonHandler* buttonHandler, int ID) {
             refreshDisplay();
             break;
           case 5:        
-            setAction(PL_IMPORT);
+            setAction(PL_IMPORT, PLAYLIST);
             CONTINUE = false;
             
             break;

@@ -144,8 +144,8 @@
         if(this->DIR.isDir()){
           
           this->DIR.getName(this->dirname, MAX_FILENAME_LENGTH);
-          strcpy (this->path,"/");
-          strcat (this->path,this->dirname);
+          //strcpy (this->path,"/");
+          strcpy (this->path,this->dirname);
           strcat (this->path,"/");
 
           if(this->FILE.getName(this->filename, MAX_FILENAME_LENGTH) != 0){  
@@ -155,7 +155,8 @@
         }
       }
 
-      bool getNumsFromPath(const char* link, int8_t& dirNum, int8_t& fileNum) {
+      bool getNumsFromPath(const char* link, int8_t& dirNum, int8_t& fileNum) {        
+
         // Extraire le dirNum (deux premiers caractères)
         char dirNumStr[3];
         strncpy(dirNumStr, link, 2);
