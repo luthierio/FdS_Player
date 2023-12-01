@@ -24,7 +24,8 @@
       }
 
       void clear() {
-          ecran_->clearDisplay();
+        ecran_->clearDisplay();
+        ecran_->display();
       }
 
       void show() {
@@ -65,8 +66,8 @@
         ecran_->drawBitmap (0,0, LOGO_128x64, 128,64, 1); 
         //ecran_->display();
       }
-      void cleanZone(uint8_t x, uint8_t y, uint8_t w, uint8_t h){  
-        ecran_->fillRect(x ,y , w, h,  BLACK);
+      void cleanZone(uint8_t x, uint8_t y, uint8_t w, uint8_t h, bool color = BLACK){  
+        ecran_->fillRect(x ,y , w, h,  color);
       }
 
       // Afficher un texte
@@ -169,6 +170,11 @@
       FileDisplay(Adafruit_SSD1306 *ecran, FilePicker *filePicker) :
         Display(ecran),
         filePicker (filePicker){}
+
+      // TOTO use filePicker & MP3 from instance
+      void show(FilePicker *selectedPath, MP3File *mp3) {
+        printPath(selectedPath, mp3);
+      }
 
       void printPath(FilePicker *selectedPath, MP3File *mp3) {
         
@@ -578,7 +584,8 @@
           drawCentreString(F("Import M3U"), 64, 22, &FreeSerif9pt7b);
         }else if (prompt_ID == PL_EXPORT) {
           drawCentreString(F("Export M3U"), 64, 22, &FreeSerif9pt7b);
-
+        }else if (prompt_ID == PL_ADD) {
+          drawCentreString(F("Playlist: ajouter"), 64, 22, &FreeSerif9pt7b);
         }
 
         drawCentreString(F("Confirm ?"), 128/2, 36);

@@ -15,10 +15,12 @@ void afterStartPlaying(){
 ***********************/
 void refreshDisplay() {
 
+  DISPLAY_.clear();
+  
   if (STATE.MODE == PLAYER) {
 
-      DISPLAY_.files.printPath(&FILE_, &MP3); 
-  
+      DISPLAY_.files.show(&FILE_, &MP3); 
+
   } else if (STATE.MODE == PROMPT) {
 
       DISPLAY_.menu.show(PROMPT_ID, CONFIRM); 
@@ -32,14 +34,15 @@ void refreshDisplay() {
       DISPLAY_.display.logo();
 
   }
+  //This function should receive all
   DISPLAY_.show();
 
 }
 void setMode(uint8_t mode) {
   DEBUG_.print(F("MODE"), mode);
-  DISPLAY_.clear();
+  STATE.MODE = mode;
 
-  if (mode == PLAYER) {
+  if (STATE.MODE == PLAYER) {
 
       R_DIR->resetPosition(FILE_.dirNum, false);
       R_DIR->setUpperBound(MAX_DIR_NUM);
@@ -50,7 +53,7 @@ void setMode(uint8_t mode) {
 
       R_PITCH->resetPosition(DATA_MANAGER.getPitchStep(), false);
   
-  } else if (mode == PLAYLIST) {
+  } else if (STATE.MODE == PLAYLIST) {
 
       R_DIR->resetPosition(PLAYLISTS_.getPosition(), false);
       R_DIR->setUpperBound(NBR_PLAYLISTS-1);
@@ -60,14 +63,12 @@ void setMode(uint8_t mode) {
       R_FILES->setCanLoop(false);
       R_PITCH->resetPosition(DATA_MANAGER.getPitchStep(), false);
 
-  } else if (mode == PROMPT) {
+  } else if (STATE.MODE == PROMPT) {
       R_DIR->resetPosition(CONFIRM);
       R_FILES->setLowerBound(0);
       R_FILES->setUpperBound(1);
       R_FILES->setCanLoop(true);
   }
-  
-  STATE.MODE = mode;
   refreshDisplay();
 }
 //Define action and context
@@ -200,7 +201,6 @@ void onPress(ButtonHandler* buttonHandler, int ID) {
           break;
 
         case 3:
-          setMode(PLAYLIST);
           break;
 
         case 4:
@@ -237,7 +237,6 @@ void onPress(ButtonHandler* buttonHandler, int ID) {
           setMode(PROMPT);
           break;
         case 3:
-          setMode(PLAYER);
           break;
         case 4:
           if(STATE.playlistMode < REPEATONE){STATE.playlistMode++;}        
@@ -317,9 +316,12 @@ void onLongPress(ButtonHandler* buttonHandler, int ID) {
               DATA_MANAGER.deletePrevious(AUDIO.getFilePosition());
             }
             break;
-
+          case 3:
+            setPrompt(PL_ADD, PLAYER);
+            CONTINUE = false;
+            break;
           case 5:
-            setMode(PROMPT);
+            //setMode(PROMPT);
             break;
           default:
             break;
@@ -362,36 +364,40 @@ void onRelease(ButtonHandler* buttonHandler, int ID) {
     * PLAYER:
     ***********************/
     if (STATE.MODE == PLAYER) {
-        switch (ID) {
-          case 0:
-            DEBUG_.print(F("Playing"), FILE_.path);
-            AUDIO.startPlayingFile(FILE_.path);
-            afterStartPlaying();
-            break;
-          default:
-            break;
-        }
+      switch (ID) {
+        case 0:
+          DEBUG_.print(F("Playing"), FILE_.path);
+          AUDIO.startPlayingFile(FILE_.path);
+          afterStartPlaying();
+          break;
+        case 3:
+          setMode(PLAYLIST);
+        default:
+          break;
+      }
 
     /**********************
     * PLAYLIST:
     ***********************/
     } else if (STATE.MODE == PLAYLIST) {
 
-        switch (ID) {
-          case 0:
-            if(!PLAYLISTS_.currentPositionIsEmpty()){
-              FILE_.select(PLAYLISTS_.currentPlaylist->currentItem->dirNum, PLAYLISTS_.currentPlaylist->currentItem->fileNum);
-              AUDIO.startPlayingFile(FILE_.path);
-              afterStartPlaying();
-            }
-            break;
-          case 5:
-            //Add selected file on Release
-            PLAYLISTS_.addCurrentFile(&FILE_);
-            DISPLAY_.playlists.playList(); 
-          default:
-            break;
-        }
+      switch (ID) {
+        case 0:
+          if(!PLAYLISTS_.currentPositionIsEmpty()){
+            FILE_.select(PLAYLISTS_.currentPlaylist->currentItem->dirNum, PLAYLISTS_.currentPlaylist->currentItem->fileNum);
+            AUDIO.startPlayingFile(FILE_.path);
+            afterStartPlaying();
+          }
+          break;
+        case 3:
+          setMode(PLAYER);
+        case 5:
+          //Add selected file on Release
+          PLAYLISTS_.addCurrentFile(&FILE_);
+          DISPLAY_.playlists.playList(); 
+        default:
+          break;
+      }
 
     }
     DEBUG_.print(F("Release"), ID);

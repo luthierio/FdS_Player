@@ -10,6 +10,9 @@ void executePrompt(int ID){
   AUDIO.stopPlaying();
   
   switch (ID) {
+    case PL_ADD:
+      PLAYLISTS_.addCurrentFile(&FILE_);
+      break;
     case PL_IMPORT:
       PLAYLISTS_.loadM3U(&FILE_);
       break;

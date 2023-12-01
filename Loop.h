@@ -7,7 +7,7 @@ void smallLoop() {
 
   switch (STATE.MODE) {
     case PLAYER:
-
+      //To be moved to display player show()
       DISPLAY_.analogs.gauges(VUSB, VBat,VOLUME, 100, -2, 30, 18);
       DISPLAY_.display.cleanZone(0, 51, 128, 12 );  
       if(FILE_.exist() &&  DATA_MANAGER.hasData() && DATA_MANAGER.getPitchStep() != 5){
@@ -18,19 +18,20 @@ void smallLoop() {
         DISPLAY_.playing.progressBar(3, 57, 125, 57, true);
         DISPLAY_.playing.playMode(125, 57); 
       }  
+      //Should only be once...
+      DISPLAY_.files.show(&FILE_, &MP3); 
 
       break;
 
     case PLAYLIST:
       DISPLAY_.display.cleanZone(118, 0, 10 , 64 );  
       DISPLAY_.playing.progressBar(124, 4, 124, 60);
-      DISPLAY_.playlists.playing();  
+      DISPLAY_.playlists.playing(); 
       break;
 
     default:
       break;
   }
-
 
   if(!SLEEP_WATCH.isSleeping()){
     DISPLAY_.show();

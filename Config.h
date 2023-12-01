@@ -132,7 +132,7 @@ const byte ROT_P_PIN[2] = {1 , 0 };
 * DISPLAY
 ***********************/
 #define PITCH_WIDTH 25
-enum Prompts { PL_IMPORT, PL_EXPORT};
+enum Prompts { PL_ADD, PL_IMPORT, PL_EXPORT};
 enum asfMode    { PLAYER,   PLAYLIST, BEAT, PROMPT, LOGO  };// Entier déguisé en string :-)
 enum playMode   { ONEPLAY,  AUTO,   RANDOM,   REPEATONE };// Entier déguisé en string :-)
 //enum pitchMode  { OFF,      TEMPO,  PITCH };// Entier déguisé en string :-)
