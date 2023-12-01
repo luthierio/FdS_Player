@@ -154,9 +154,24 @@ public:
         onSetPlayPosition(index);
     }
   }
-
+  uint8_t getNextFreePosition(){
+    for (uint8_t p = 0; p < currentPlaylist->size; ++p) {
+      currentPlaylist->setPosition(p);
+      if(currentPlaylist->currentItem->isEmpty()){
+        return p;
+      }      
+    }
+    onError(NULL, F("Playlist FULL"));
+    return currentPlaylist->size-1;
+  }
   // Sauve le fichier du filePicker dans la position
   void addCurrentFile(FilePicker *filePicker) {
+    uint8_t freePosition = getNextFreePosition();
+    currentPlaylist->setPosition(freePosition);
+    addCurrentFileToCurrentPosition(filePicker);
+  }
+  // Sauve le fichier du filePicker dans la position
+  void addCurrentFileToCurrentPosition(FilePicker *filePicker) {
     if (filePicker->exist()) {
       currentPlaylist->getCurrent().dirNum = filePicker->dirNum;
       currentPlaylist->getCurrent().fileNum = filePicker->fileNum;
