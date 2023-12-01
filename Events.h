@@ -234,7 +234,7 @@ void onPress(ButtonHandler* buttonHandler, int ID) {
           }
           break;
         case 2:
-          setMode(PROMPT);
+          setPrompt(PL_ADD, PLAYLIST);
           break;
         case 3:
           break;

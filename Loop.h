@@ -18,7 +18,7 @@ void smallLoop() {
         DISPLAY_.playing.progressBar(3, 57, 125, 57, true);
         DISPLAY_.playing.playMode(125, 57); 
       }  
-      //Should only be once...
+      //Should only be once... but I don't understand why setMode is not enough
       DISPLAY_.files.show(&FILE_, &MP3); 
 
       break;
