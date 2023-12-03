@@ -19,7 +19,7 @@ void refreshDisplay() {
   
   if (STATE.MODE == PLAYER) {
 
-      DISPLAY_.files.show(&FILE_, &MP3); 
+      DISPLAY_.files.show(); 
 
   } else if (STATE.MODE == PROMPT) {
 
@@ -197,7 +197,6 @@ void onPress(ButtonHandler* buttonHandler, int ID) {
             JumpPosition =DATA_MANAGER.getPrevious(AUDIO.getFilePosition()- MP3.getBytePerSecond()); 
           } 
           AUDIO.jumpTo(JumpPosition);
-
           break;
 
         case 3:
@@ -226,6 +225,7 @@ void onPress(ButtonHandler* buttonHandler, int ID) {
         case 0:
           //Play on Release
           break;
+
         case 1:
           if (AUDIO.playingMusic) {
             AUDIO.pausePlaying(true);
@@ -233,19 +233,24 @@ void onPress(ButtonHandler* buttonHandler, int ID) {
             AUDIO.pausePlaying(false);
           }
           break;
+
         case 2:
           setPrompt(PL_ADD, PLAYLIST);
           break;
+
         case 3:
           break;
+
         case 4:
           if(STATE.playlistMode < REPEATONE){STATE.playlistMode++;}        
           else{STATE.playlistMode = ONEPLAY;}
           DISPLAY_.playlists.playList(); 
           break;
+
         case 5:
           //Add selected file on Release
           break;
+
         default:
           break;
       }
@@ -298,11 +303,13 @@ void onLongPress(ButtonHandler* buttonHandler, int ID) {
 
         // Long press
         switch (ID) {
+
           case 0:
             SD_FS.save(DATA_FILENAME, &DATAS, sizeof(DATAS));
             SD_FS.save(STATE_FILENAME, &STATE, sizeof(STATE));
             refreshDisplay();
             break;
+
           case 1:
             //On vérifie que le fichier Sélectionné est bien celui qui joue pour ajouter un marqueur
             if(AUDIO.getFilePosition() && AUDIO.currentTrack.size() == FILE_.getSize()){
@@ -316,13 +323,16 @@ void onLongPress(ButtonHandler* buttonHandler, int ID) {
               DATA_MANAGER.deletePrevious(AUDIO.getFilePosition());
             }
             break;
+
           case 3:
             setPrompt(PL_ADD, PLAYER);
             CONTINUE = false;
             break;
+
           case 5:
             //setMode(PROMPT);
             break;
+
           default:
             break;
         }
@@ -391,9 +401,11 @@ void onRelease(ButtonHandler* buttonHandler, int ID) {
           break;
         case 3:
           setMode(PLAYER);
+          break;
         case 5:
           //Add selected file on Release
           PLAYLISTS_.addCurrentFile(&FILE_);
+          //refreshDisplay();
           DISPLAY_.playlists.playList(); 
         default:
           break;
@@ -451,7 +463,7 @@ void autoPlay(){
             break;
         }
         AUDIO.startPlayingFile(FILE_.path); 
-            afterStartPlaying();
+        afterStartPlaying();
       }
     //PLAYLIST AUTOPLAY
     } else if(SHOULD_PLAY_NEXT && STATE.MODE == PLAYLIST) {
@@ -586,7 +598,7 @@ void onAfterSelectFile(){
 
   if(!MP3.bitrate) MP3.bitrate = DFT_BITRATE;
   if(STATE.MODE == PLAYER){
-    DISPLAY_.files.printPath(&FILE_, &MP3);
+    DISPLAY_.files.printPath();
   }
   
   DEBUG_.print(F("SelectFile"),FILE_.fileNum,FILE_.path);  
@@ -602,7 +614,7 @@ void onSetFilePitch(uint8_t step, bool speed){
   if(FILE_.isPlaying(&AUDIO) ) {
     PITCHER.setPitch(DATA_MANAGER.getPitchStep(), DATA_MANAGER.getPitchMode());
   }
-  DISPLAY_.pitcher.print(128-PITCH_WIDTH + 2  , 52 , 10 , 10 );     
+  DISPLAY_.playing.pitch(105 , 52 , 10 , 10 );     
 
 }
 
@@ -612,7 +624,6 @@ void onSetFilePitch(uint8_t step, bool speed){
 void onPlayListPositionUpdate(){
   DISPLAY_.playlists.nav(); 
   DISPLAY_.playlists.playList(); 
-
 }
 void onPlayListSetPosition(uint8_t position){
   STATE.playlistPosition[0] = position;

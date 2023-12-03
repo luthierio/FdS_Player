@@ -84,6 +84,6 @@ bool CONFIRM = true;
 * DISPLAY:
 ***********************/
 #define SILENT true
-DisplayController DISPLAY_(&SCREEN_,&AUDIO, &FILE_, &PITCHER, &PLAYLISTS_, &STATE, &DATA_MANAGER);
+DisplayController DISPLAY_(&SCREEN_,&AUDIO, &FILE_, &PITCHER, &PLAYLISTS_, &STATE, &DATA_MANAGER, &MP3);
 
 

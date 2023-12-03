@@ -9,24 +9,14 @@ void smallLoop() {
     case PLAYER:
       //To be moved to display player show()
       DISPLAY_.analogs.gauges(VUSB, VBat,VOLUME, 100, -2, 30, 18);
-      DISPLAY_.display.cleanZone(0, 51, 128, 12 );  
-      if(FILE_.exist() &&  DATA_MANAGER.hasData() && DATA_MANAGER.getPitchStep() != 5){
-        DISPLAY_.pitcher.print(128-PITCH_WIDTH + 2  , 52 , 10 , 10 ); 
-        DISPLAY_.playing.progressBar(3, 57, 125-PITCH_WIDTH, 57, true);
-        DISPLAY_.playing.playMode(125-PITCH_WIDTH, 57);     
-      }else if(FILE_.exist()){
-        DISPLAY_.playing.progressBar(3, 57, 125, 57, true);
-        DISPLAY_.playing.playMode(125, 57); 
-      }  
-      //Should only be once... but I don't understand why setMode is not enough
-      DISPLAY_.files.show(&FILE_, &MP3); 
-
+      DISPLAY_.display.cleanZone(0, 52, 128, 64);  
+      DISPLAY_.playing.fullProgressBar(0, 58, 128, 58, 10, 25);
       break;
 
     case PLAYLIST:
-      DISPLAY_.display.cleanZone(118, 0, 10 , 64 );  
-      DISPLAY_.playing.progressBar(124, 4, 124, 60);
-      DISPLAY_.playlists.playing(); 
+      DISPLAY_.display.cleanZone(118, 0, 118, 64 );  
+      DISPLAY_.playing.progressBar(124, 0, 124, 64, 10);
+      DISPLAY_.playlists.loop(); 
       break;
 
     default:

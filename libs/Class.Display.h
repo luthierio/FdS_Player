@@ -17,6 +17,7 @@
 
       void init() {
           ecran_->clearDisplay();
+          ecran_->display();
           ecran_->setTextSize(1);
           ecran_->setTextWrap(false);
           ecran_->setTextColor(SSD1306_WHITE);
@@ -167,40 +168,44 @@
   ***********************/
   class FileDisplay : public Display {
   public:
-      FileDisplay(Adafruit_SSD1306 *ecran, FilePicker *filePicker) :
+      FileDisplay(
+          Adafruit_SSD1306 *ecran, 
+          FilePicker *filePicker, 
+          MP3File *mp3) :
         Display(ecran),
-        filePicker (filePicker){}
+        filePicker (filePicker),
+        mp3 (mp3){}
 
       // TOTO use filePicker & MP3 from instance
-      void show(FilePicker *selectedPath, MP3File *mp3) {
-        printPath(selectedPath, mp3);
+      void show() {
+        printPath();
       }
 
-      void printPath(FilePicker *selectedPath, MP3File *mp3) {
+      void printPath() {
         
         //On efface la zone   
         ecran_->fillRect(0, 0, 100, 16, BLACK); 
         ecran_->fillRect(0, 16, 128, 35, BLACK); 
 
 
-        if(!selectedPath->dirExist()){
+        if(!filePicker->dirExist()){
 
           ecran_->drawBitmap (2, 32, folderIcon16, 16, 16 ,WHITE);
-          printTxtNum(selectedPath->dirNum, 30, 48, &FreeSans12pt7b); 
+          printTxtNum(filePicker->dirNum, 30, 48, &FreeSans12pt7b); 
           printTxt(F("/"), 64, 48, &FreeSans12pt7b); 
-          printTxtNum(selectedPath->fileNum, 80, 48, &FreeSans12pt7b); 
+          printTxtNum(filePicker->fileNum, 80, 48, &FreeSans12pt7b); 
 
         }else{
 
-          printDirPath(selectedPath, 0, 3);
+          printDirPath(0, 3);
 
-          if (!selectedPath->exist()) {
-            printTxtNum(selectedPath->fileNum, 48, 48, &FreeSans18pt7b);             
+          if (!filePicker->exist()) {
+            printTxtNum(filePicker->fileNum, 48, 48, &FreeSans18pt7b);             
           }else{
             if(mp3->hasID3V1){
-              printID3(mp3, 0, 32, &FreeSerif9pt7b);
+              printID3(0, 32, &FreeSerif9pt7b);
             }else{
-              printFilePath(selectedPath, 0, 32, &FreeSerif9pt7b);
+              printFilePath(0, 32, &FreeSerif9pt7b);
             }
           }
 
@@ -208,14 +213,14 @@
 
       }
 
-      void printDirPath(FilePicker *selectedPath, int x, int y, const GFXfont *font = NULL, uint8_t textSize = 1){
+      void printDirPath(int x, int y, const GFXfont *font = NULL, uint8_t textSize = 1){
         
           ecran_->drawBitmap (x, y, folderIcon8, 8,8,WHITE);
-          printTxt(UTF8.convertToASCII(selectedPath->dirname+3), x+12, y);
+          printTxt(UTF8.convertToASCII(filePicker->dirname+3), x+12, y);
 
       }
       
-      void printID3(MP3File *mp3, int x, int y, const GFXfont *font = NULL, uint8_t textSize = 1) {
+      void printID3(int x, int y, const GFXfont *font = NULL, uint8_t textSize = 1) {
 
           printTxt(UTF8.convertToASCII(mp3->ID3V1.title), x, y, font, textSize);
 
@@ -232,17 +237,17 @@
             printTxt(UTF8.convertToASCII(mp3->ID3V1.album), x+shift, y + 10, NULL, textSize);
           }
       }
-      void printFilePath(FilePicker *selectedPath, int x, int y, const GFXfont *font = NULL, uint8_t textSize = 1) {
+      void printFilePath(int x, int y, const GFXfont *font = NULL, uint8_t textSize = 1) {
 
           char displayedFile[255]; // Assurez-vous que la taille est suffisamment grande
           char fileInfos[255]; // Assurez-vous que la taille est suffisamment grande
           fileInfos[0] = '\0';
-          strcpy(displayedFile, selectedPath->filename + 3); // Copie à partir du 4ème caractère
+          strcpy(displayedFile, filePicker->filename + 3); // Copie à partir du 4ème caractère
           displayedFile[strcspn(displayedFile, ".")] = '\0'; // Ajoute un caractère de fin de chaîne à la position du point
           const char *startBracket = strchr(displayedFile, '[');
           if (startBracket != NULL) {
             displayedFile[strcspn(displayedFile, "[")] = '\0'; // Ajoute un caractère de fin de chaîne à la position du point
-            getBracketContent(selectedPath->filename, fileInfos, sizeof(fileInfos));
+            getBracketContent(filePicker->filename, fileInfos, sizeof(fileInfos));
           }
 
           printTxt(UTF8.convertToASCII(displayedFile), x, y, font, textSize);
@@ -264,6 +269,7 @@
 
   protected:
       FilePicker *filePicker;
+      MP3File *mp3;
   };
 
   /**********************
@@ -316,6 +322,18 @@
         datas (datas),
         state (state){}
 
+      void fullProgressBar(uint8_t x1, uint8_t y1, uint8_t x2, uint8_t y2, uint8_t L, uint8_t pitchSpaceWidth){   
+
+        if(filePicker->exist() &&  datas->hasData() && datas->getPitchStep() != 5){
+          pitch(x2-pitchSpaceWidth + 2  , y2-L/2 , L , L ); 
+          progressBar(x1, y1, x2-pitchSpaceWidth, y2, true);
+          playMode(x2-pitchSpaceWidth, y2-L/2);     
+        }else if(filePicker->exist()){
+          progressBar(x1, y1, x2, y2, true);
+          playMode(x2, y2-L/2); 
+        }  
+
+      }
       void playMode(uint8_t x, uint8_t y){   
         if(state->playMode == AUTO){
 
@@ -332,12 +350,11 @@
 
         }
       }
-      void progressBar(uint8_t x1, uint8_t y1, uint8_t x2, uint8_t y2, bool disPlayMarkers = false){  
+      void progressBar(uint8_t x1, uint8_t y1, uint8_t x2, uint8_t y2, uint8_t l, bool disPlayMarkers = false){  
         
+        //int l = l; //Longeur segment perpendiculaire souhaité  
         int playingSize = Player->currentTrack.size();
         int pickedSize = filePicker->getSize();
-
-        ecran_->fillRect( x1-2, y1-2, x2-x1 + 4, y2-y1 + 4,  BLACK);
         
         ecran_->drawLine(x1,y1,x2,y2, WHITE);
         ecran_->fillCircle(x1,y1, 2, WHITE);
@@ -351,7 +368,6 @@
         float delta_x = delta_Y/L;
         float delta_y = delta_X/L;        
             
-        int l = 5; //Longeur segment perpendiculaire souhaité  
 
         //marqueurs
         if(disPlayMarkers && pickedSize){
@@ -386,32 +402,15 @@
 
         }
         
+        
       }
-  private:
-    FdS_Adafruit_VS1053_FilePlayer *Player;
-    FilePicker *filePicker;
-    audioDataManager *datas;
-    t_state *state;
-  };
-  /**********************
-  * PITCH:
-  ***********************/
-
-  class PitcherDisplay : public Display {
-  public:
-      PitcherDisplay(Adafruit_SSD1306 *ecran, audioDataManager *datas) : 
-        Display(ecran),
-        datas (datas){}
-
-      void show(){  
-        print(128-22  , 52 , 10 , 10 );
-      }
-      void print(uint8_t x, uint8_t y, uint8_t w, uint8_t h){     
+        
+      void pitch(uint8_t x, uint8_t y, uint8_t w, uint8_t h){  
         ecran_->fillRect(x,y, w, h, BLACK);
-        printSymbol(x + 2  , y , w , h);            
-        printValue (x + 12+4 , y+2 );  
+        pitchSymbol(x + 2  , y , w , h);            
+        pitchValue (x + 12+4 , y+2 );  
       }
-      void printSymbol(uint8_t x, uint8_t y, uint8_t w, uint8_t h){  
+      void pitchSymbol(uint8_t x, uint8_t y, uint8_t w, uint8_t h){  
         
         if(datas->getPitchMode()){   
           //Pitch mode SPeed
@@ -448,7 +447,7 @@
 
       }
 
-      void printValue(uint8_t x, uint8_t y){  
+      void pitchValue(uint8_t x, uint8_t y){  
 
         ecran_->setCursor(x, y); 
         
@@ -458,6 +457,23 @@
         ecran_->print(abs(datas->getPitchStep()-5));
         
       }
+  private:
+    FdS_Adafruit_VS1053_FilePlayer *Player;
+    FilePicker *filePicker;
+    audioDataManager *datas;
+    t_state *state;
+  };
+  /**********************
+  * PITCH:
+  ***********************/
+
+  class PitcherDisplay : public Display {
+  public:
+      PitcherDisplay(Adafruit_SSD1306 *ecran, audioDataManager *datas) : 
+        Display(ecran),
+        datas (datas){}
+
+
   private:
     audioDataManager *datas;
   };
@@ -477,6 +493,9 @@
         nav();
         playList();
         ecran_->display();
+      }
+      void loop(){  
+        playing(); 
       }
       void nav(uint8_t x = 0){   
         ecran_->fillRect(0,0, 10, 64, BLACK);
@@ -634,9 +653,18 @@
       PitcherDisplay pitcher;
       PlaylistsDisplay playlists;
       MenuDisplay menu;
-      DisplayController(Adafruit_SSD1306 *ecran, FdS_Adafruit_VS1053_FilePlayer *player, FilePicker *filePicker, Pitcher *pitcher, PlaylistManager *playlists, t_state *state, audioDataManager *datas) :
+      DisplayController(
+            Adafruit_SSD1306 *ecran, 
+            FdS_Adafruit_VS1053_FilePlayer *player, 
+            FilePicker *filePicker, 
+            Pitcher *pitcher, 
+            PlaylistManager *playlists, 
+            t_state *state, 
+            audioDataManager *datas,
+            MP3File *mp3
+            ) :
           display(ecran),
-          files(ecran,filePicker),
+          files(ecran,filePicker, mp3),
           playing(ecran,player,filePicker,state, datas),
           pitcher(ecran,datas),
           playlists(ecran,playlists,state),

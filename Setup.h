@@ -41,7 +41,7 @@ void setup() {
   * FILES:
   ***********************/
   if (!SD.begin(CARDCS,SPI_SPEED)) {
-    DISPLAY_.display.error(F("SD Card Failed"));
+    DISPLAY_.display.error(F("Pas de carte SD?"));
     DEBUG_.print(F("××× ⋅ SD failed, or not present"));
     while (1);  // don't do anything more
   }else{
@@ -83,7 +83,7 @@ void setup() {
   SD_FS.load(STATE_FILENAME, &STATE, sizeof(STATE), SILENT);
 
   DISPLAY_.display.message(CREDITS);
-  DISPLAY_.show();
+  //delay(5000);
 
   // Play a file in the background, REQUIRES interrupts!  
   AUDIO.playFullFile(STARTSOUND);
@@ -91,8 +91,6 @@ void setup() {
   FILE_.select(STATE.dirNum, STATE.fileNum); // Initialisation selon carte  
   PLAYLISTS_.setPlaylistPosition( STATE.playlistPosition); 
 
-  DEBUG_.print(F("✓✓✓ ⋅ Position "), STATE.playlistPosition[0]);
-  DEBUG_.print(F("✓✓✓ ⋅ Playing "), STATE.playlistPosition[1]);
   DEBUG_.printRam();
     
   setMode(STATE.MODE);
