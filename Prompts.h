@@ -12,6 +12,7 @@ void executePrompt(int ID){
   switch (ID) {
     case PL_ADD:
       PLAYLISTS_.addCurrentFile(&FILE_);
+      SD_FS.save(PLAYLISTS_FILENAME, &PLAYLISTS, sizeof(PLAYLISTS));
       break;
     case PL_IMPORT:
       PLAYLISTS_.loadM3U(&FILE_);

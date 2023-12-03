@@ -131,6 +131,7 @@ const byte ROT_P_PIN[2] = {1 , 0 };
 /**********************
 * DISPLAY
 ***********************/
+#define DFT_CONFIRM         true 
 enum Prompts { PL_ADD, PL_IMPORT, PL_EXPORT};
 enum asfMode    { PLAYER,   PLAYLIST, BEAT, PROMPT, LOGO  };// Entier déguisé en string :-)
 enum playMode   { ONEPLAY,  AUTO,   RANDOM,   REPEATONE };// Entier déguisé en string :-)

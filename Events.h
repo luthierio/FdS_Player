@@ -14,6 +14,7 @@ void afterStartPlaying(){
 * MODE:
 ***********************/
 void refreshDisplay() {
+  DEBUG_.print(F("CONFIRM"), CONFIRM);
 
   DISPLAY_.clear();
   
@@ -39,6 +40,7 @@ void refreshDisplay() {
 
 }
 void setMode(uint8_t mode) {
+  
   DEBUG_.print(F("MODE"), mode);
   STATE.MODE = mode;
 
@@ -64,7 +66,7 @@ void setMode(uint8_t mode) {
       R_PITCH->resetPosition(DATA_MANAGER.getPitchStep(), false);
 
   } else if (STATE.MODE == PROMPT) {
-      R_DIR->resetPosition(CONFIRM);
+      //R_DIR->resetPosition(CONFIRM);
       R_FILES->setLowerBound(0);
       R_FILES->setUpperBound(1);
       R_FILES->setCanLoop(true);
@@ -73,6 +75,7 @@ void setMode(uint8_t mode) {
 }
 //Define action and context
 void setPrompt(uint8_t promptID, uint8_t context) {
+  CONFIRM = DFT_CONFIRM; //(defautl)
   PROMPT_ID = promptID;
   CONTEXT = context;
   setMode(PROMPT);

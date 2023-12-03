@@ -78,7 +78,7 @@ float VBat;
 
 uint8_t PROMPT_ID;
 uint8_t CONTEXT;
-bool CONFIRM = true;
+bool CONFIRM = DFT_CONFIRM;
 
 /**********************
 * DISPLAY:

@@ -3132,7 +3132,7 @@ LOAD /home/laron/.arduino15/packages/adafruit/tools/arm-none-eabi-gcc/9-2019q4/b
                 0x0000000000003c84                onPlayListSetPosition(unsigned char*)
  .text._ZN11MenuDisplay4showEPKcS1_
                 0x0000000000003cac       0xf4 /tmp/arduino/sketches/0B9604B8FE3AA07AD283FEBD6937CD8F/sketch/FdS_Player.ino.cpp.o
-                0x0000000000003cac                MenuDisplay::show(char const*, char const*)
+                0x0000000000003cac                PromptDisplay::show(char const*, char const*)
  .text._Z11onRotChangeR6Rotary
                 0x0000000000003da0       0xf8 /tmp/arduino/sketches/0B9604B8FE3AA07AD283FEBD6937CD8F/sketch/FdS_Player.ino.cpp.o
                 0x0000000000003da0                onRotChange(Rotary&)
@@ -7049,7 +7049,7 @@ MUST_RESUME                                       /tmp/arduino/sketches/0B9604B8
 MUX                                               /tmp/arduino/sketches/0B9604B8FE3AA07AD283FEBD6937CD8F/sketch/FdS_Player.ino.cpp.o
 audioDataManager::addMarker(unsigned long)          /tmp/arduino/sketches/0B9604B8FE3AA07AD283FEBD6937CD8F/sketch/FdS_Player.ino.cpp.o
 audioDataManager::getFileData()                    /tmp/arduino/sketches/0B9604B8FE3AA07AD283FEBD6937CD8F/sketch/FdS_Player.ino.cpp.o
-MenuDisplay::show(char const*, char const*)       /tmp/arduino/sketches/0B9604B8FE3AA07AD283FEBD6937CD8F/sketch/FdS_Player.ino.cpp.o
+PromptDisplay::show(char const*, char const*)       /tmp/arduino/sketches/0B9604B8FE3AA07AD283FEBD6937CD8F/sketch/FdS_Player.ino.cpp.o
 Multiplex::setAddress(unsigned char)              /tmp/arduino/sketches/0B9604B8FE3AA07AD283FEBD6937CD8F/sketch/FdS_Player.ino.cpp.o
 Multiplex::value(unsigned char)                   /tmp/arduino/sketches/0B9604B8FE3AA07AD283FEBD6937CD8F/sketch/FdS_Player.ino.cpp.o
 NMI_Handler                                       /tmp/arduino/sketches/0B9604B8FE3AA07AD283FEBD6937CD8F/../../cores/6f0683724203daedfaf4dd084bd3eada/core.a(WInterrupts.c.o)

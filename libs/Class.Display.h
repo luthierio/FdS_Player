@@ -588,9 +588,9 @@
   * PROMPT_IDS:
   ***********************/
 
-  class MenuDisplay : public Display {
+  class PromptDisplay : public Display {
   public:
-      MenuDisplay(Adafruit_SSD1306 *ecran) : Display(ecran){
+      PromptDisplay(Adafruit_SSD1306 *ecran) : Display(ecran){
 
       }
 
@@ -652,7 +652,7 @@
       PlayingDisplay playing;
       PitcherDisplay pitcher;
       PlaylistsDisplay playlists;
-      MenuDisplay menu;
+      PromptDisplay menu;
       DisplayController(
             Adafruit_SSD1306 *ecran, 
             FdS_Adafruit_VS1053_FilePlayer *player, 
