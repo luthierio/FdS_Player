@@ -490,14 +490,14 @@
 
       void show(){
         //ecran_->clearDisplay();
-        nav();
-        playList();
+        printNav();
+        printList();
         ecran_->display();
       }
       void loop(){  
         playing(); 
       }
-      void nav(uint8_t x = 0){   
+      void printNav(uint8_t x = 0){   
         ecran_->fillRect(0,0, 10, 64, BLACK);
         int plHeight = 64/playlists->size;
         for (byte i = 0; i < playlists->size; i = i + 1) {  
@@ -509,7 +509,7 @@
         }
         //ecran_->display();
       }
-      void playList(){
+      void printList(){
         ecran_->fillRect(10,0, 128-20, 64, BLACK); 
         items(10);
         mode(24); 

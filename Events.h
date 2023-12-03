@@ -244,7 +244,7 @@ void onPress(ButtonHandler* buttonHandler, int ID) {
         case 4:
           if(STATE.playlistMode < REPEATONE){STATE.playlistMode++;}        
           else{STATE.playlistMode = ONEPLAY;}
-          DISPLAY_.playlists.playList(); 
+          DISPLAY_.playlists.printList(); 
           break;
 
         case 5:
@@ -406,7 +406,7 @@ void onRelease(ButtonHandler* buttonHandler, int ID) {
           //Add selected file on Release
           PLAYLISTS_.addCurrentFile(&FILE_);
           //refreshDisplay();
-          DISPLAY_.playlists.playList(); 
+          DISPLAY_.playlists.printList(); 
         default:
           break;
       }
@@ -622,8 +622,8 @@ void onSetFilePitch(uint8_t step, bool speed){
 * PLAYLISTS:
 ***********************/
 void onPlayListPositionUpdate(){
-  DISPLAY_.playlists.nav(); 
-  DISPLAY_.playlists.playList(); 
+  DISPLAY_.playlists.printNav(); 
+  DISPLAY_.playlists.printList(); 
 }
 void onPlayListSetPosition(uint8_t position){
   STATE.playlistPosition[0] = position;
