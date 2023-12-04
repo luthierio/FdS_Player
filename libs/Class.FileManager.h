@@ -39,8 +39,8 @@ public:
   bool save(const char* nomFichier, const void* dataPointer, size_t dataSize, bool silent = false) {
     
     if (backupEnabled && sd->exists(nomFichier) && !createBackup(nomFichier) ) {
-      if (errorCallback) errorCallback(nomFichier, F("Erreur backup"));
-      if (onAfterSave && !silent) onAfterSave(nomFichier,F("Pas de sauvegarde!"));  // Appel de la fonction de rappel après la sauvegarde
+      if (errorCallback) errorCallback(nomFichier, F("Backup error"));
+      if (onAfterSave && !silent) onAfterSave(nomFichier,F("Saving fail!"));  // Appel de la fonction de rappel après la sauvegarde
       return false;
     }
 
@@ -54,8 +54,8 @@ public:
       } else {
         fichier.close();
         restoreBackup(nomFichier);
-        if (errorCallback) errorCallback(nomFichier,F("Erreur d'écriture"));
-        if (onAfterSave && !silent) onAfterSave(nomFichier,F("Pas de sauvegarde!"));  // Appel de la fonction de rappel après la sauvegarde
+        if (errorCallback) errorCallback(nomFichier,F("Writing error"));
+        if (onAfterSave && !silent) onAfterSave(nomFichier,F("Saving fail!"));  // Appel de la fonction de rappel après la sauvegarde
       }
     }
     fichier.close();
@@ -75,8 +75,8 @@ public:
           if (onAfterLoad && !silent) onAfterLoad(nomFichier, F("OK"));  // Appel de la fonction de rappel après le chargement
           return true;
         } else {
-          if (errorCallback) errorCallback(nomFichier, F("Erreur de lecture"));
-          if (onAfterLoad && !silent) onAfterLoad(nomFichier, F("Pas de chargement"));  // Appel de la fonction de rappel après le chargement
+          if (errorCallback) errorCallback(nomFichier, F("Reading error"));
+          if (onAfterLoad && !silent) onAfterLoad(nomFichier, F("Loading fail"));  // Appel de la fonction de rappel après le chargement
           return false;
         }
       }
@@ -110,7 +110,7 @@ private:
     if (sd->exists(nomFichierBackup)) {
       return true;
     } else {
-      if (errorCallback) errorCallback(nomFichier, F("Erreur: backup"));
+      if (errorCallback) errorCallback(nomFichier, F("Backup error"));
     }
 
     return false;
