@@ -373,7 +373,8 @@
             
 
         //marqueurs
-        if(disPlayMarkers && playingSize == pickedSize){
+        //Test pour voir si il y a des marqueurs sur le fichier actuel
+        if(disPlayMarkers && pickedSize){
           uint32_t* markersArray = datas->getMarkers();
 
           for (byte i = 0; i < datas->getMarkerCount(); i = ++i) {  

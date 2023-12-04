@@ -4,7 +4,6 @@
 ***********************/
 void smallLoop() {
 
-
   switch (STATE.MODE) {
     case PLAYER:
       //To be moved to display player show()
@@ -26,6 +25,7 @@ void smallLoop() {
   if(!SLEEP_WATCH.isSleeping()){
     DISPLAY_.show();
   }
+
 }
 void bigLoop() {
 
