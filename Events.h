@@ -312,6 +312,9 @@ void onLongPress(ButtonHandler* buttonHandler, int ID) {
             //On vérifie que le fichier Sélectionné est bien celui qui joue pour ajouter un marqueur
             if(AUDIO.getFilePosition() && AUDIO.currentTrack.size() == FILE_.getSize()){
               DATA_MANAGER.addMarker(AUDIO.getFilePosition());
+
+              DEBUG_.print(F("New marker"), (int)DATA_MANAGER.getMarkerCount());
+              
               AUDIO.pausePlaying(false);
             }
             break;

@@ -5,7 +5,6 @@
 
 bool SHOULD_PLAY_NEXT = false;  
 
-
 struct t_state{
   uint8_t MODE = PLAYER;
   uint8_t playMode = ONEPLAY;
@@ -19,7 +18,3 @@ struct t_state{
   uint8_t BeatsUp = 0;
 };
 t_state STATE;
-
-/**********************
-* STATE:
-***********************/

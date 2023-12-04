@@ -10,7 +10,7 @@ void smallLoop() {
       //To be moved to display player show()
       DISPLAY_.analogs.gauges(VUSB, VBat,VOLUME, 100, -2, 30, 18);
       DISPLAY_.display.cleanZone(0, 52, 128, 64);  
-      DISPLAY_.playing.fullProgressBar(0, 58, 128, 58, 10, 25);
+      DISPLAY_.playing.fullProgressBar(2, 58, 126, 58, 10, 25);
       break;
 
     case PLAYLIST:

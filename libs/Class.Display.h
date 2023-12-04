@@ -327,10 +327,13 @@
         if(filePicker->exist() &&  datas->hasData() && datas->getPitchStep() != 5){
           pitch(x2-pitchSpaceWidth + 2  , y2-L/2 , L , L ); 
           progressBar(x1, y1, x2-pitchSpaceWidth, y2, true);
-          playMode(x2-pitchSpaceWidth, y2-L/2);     
+          playMode(x2-pitchSpaceWidth, y2-L/2); 
+
         }else if(filePicker->exist()){
+
           progressBar(x1, y1, x2, y2, true);
           playMode(x2, y2-L/2); 
+
         }  
 
       }
@@ -350,9 +353,9 @@
 
         }
       }
-      void progressBar(uint8_t x1, uint8_t y1, uint8_t x2, uint8_t y2, uint8_t l, bool disPlayMarkers = false){  
+      void progressBar(uint8_t x1, uint8_t y1, uint8_t x2, uint8_t y2, bool disPlayMarkers = false){  
         
-        //int l = l; //Longeur segment perpendiculaire souhaité  
+        int l = 6; //Longeur segment perpendiculaire souhaité  
         int playingSize = Player->currentTrack.size();
         int pickedSize = filePicker->getSize();
         
@@ -370,11 +373,10 @@
             
 
         //marqueurs
-        if(disPlayMarkers && pickedSize){
+        if(disPlayMarkers && playingSize == pickedSize){
           uint32_t* markersArray = datas->getMarkers();
 
           for (byte i = 0; i < datas->getMarkerCount(); i = ++i) {  
-
             float relativeMarkerPosition = (float)markersArray[i]/(float)pickedSize;       
             float markerPosition[] = {x1+delta_X*relativeMarkerPosition,y1+delta_Y*relativeMarkerPosition};
                     
