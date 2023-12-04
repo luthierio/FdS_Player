@@ -604,7 +604,7 @@
         }else if (prompt_ID == PL_EXPORT) {
           drawCentreString(F("Export M3U"), 64, 22, &FreeSerif9pt7b);
         }else if (prompt_ID == PL_ADD) {
-          drawCentreString(F("Playlist: ajouter"), 64, 22, &FreeSerif9pt7b);
+          drawCentreString(F("Add to Playlist"), 64, 22, &FreeSerif9pt7b);
         }
 
         drawCentreString(F("Confirm ?"), 128/2, 36);
@@ -613,22 +613,7 @@
         }else {
           drawCentreString(F("No"), 128/2, 64, &FreeSerif9pt7b);
 
-        }        /*
-        if (action == F("Credits")) {
-            //ecran_->drawBitmap(128/2-8, 34+2, heart, 16, 12, 1);
-            drawCentreString(CREDITS, 128/2, 34+2);
-        } else if (action == F("Sauver")) {
-            ecran_->drawBitmap(128/2-40-8, 34, folderIcon16, 16, 16, 1);
-            ecran_->drawBitmap(128/2-8, 34, arrowRight16, 16, 16, 1);
-            ecran_->drawBitmap(128/2+40-8, 34, sdIcon16, 16, 16, 1);
-        } else if (action ==F("Charger")) {
-            ecran_->drawBitmap(128/2-40-8, 34, sdIcon16, 16, 16, 1);
-            ecran_->drawBitmap(128/2-8, 34, arrowRight16, 16, 16, 1);
-            ecran_->drawBitmap(128/2+40-8, 34, folderIcon16, 16, 16, 1);
-        } else {
-            ecran_->drawBitmap(128/2-8, 34+2, heart, 16, 12, 1);
-        }
-        */
+        }  
       }
   private:
   };

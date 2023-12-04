@@ -6,15 +6,11 @@
 void afterStartPlaying(){
   delay(50);
   PITCHER.setPitch(DATA_MANAGER.getPitchStep(), DATA_MANAGER.getPitchMode());
-  DEBUG_.print(F("DIRECTION"), DATA_MANAGER.getPitchMode());
-  DEBUG_.print(F("SIGN"), PITCHER.getSign());
-
 }
 /**********************
 * MODE:
 ***********************/
 void refreshDisplay() {
-  DEBUG_.print(F("CONFIRM"), CONFIRM);
 
   DISPLAY_.clear();
   
@@ -46,10 +42,10 @@ void setMode(uint8_t mode) {
 
   if (STATE.MODE == PLAYER) {
 
-      R_DIR->resetPosition(FILE_.dirNum, false);
       R_DIR->setUpperBound(MAX_DIR_NUM);
-      R_FILES->resetPosition(FILE_.fileNum, false);
+      R_DIR->resetPosition(FILE_.dirNum, false);
       R_FILES->setUpperBound(MAX_FILES_NUM);
+      R_FILES->resetPosition(FILE_.fileNum, false);
       R_DIR->setCanLoop(true);
       R_FILES->setCanLoop(true);
 
@@ -57,25 +53,24 @@ void setMode(uint8_t mode) {
   
   } else if (STATE.MODE == PLAYLIST) {
 
-      R_DIR->resetPosition(PLAYLISTS_.getPosition(), false);
       R_DIR->setUpperBound(NBR_PLAYLISTS-1);
-      R_FILES->resetPosition(PLAYLISTS_.getPlayPosition(), false);
+      R_DIR->resetPosition(PLAYLISTS_.getPosition(), false);
       R_FILES->setUpperBound(NBR_PLAYLIST_ITEMS-1);
+      R_FILES->resetPosition(PLAYLISTS_.getPlayPosition(), false);
       R_DIR->setCanLoop(false);
       R_FILES->setCanLoop(false);
       R_PITCH->resetPosition(DATA_MANAGER.getPitchStep(), false);
 
   } else if (STATE.MODE == PROMPT) {
-      //R_DIR->resetPosition(CONFIRM);
       R_FILES->setLowerBound(0);
       R_FILES->setUpperBound(1);
+      R_DIR->resetPosition(CONFIRM);
       R_FILES->setCanLoop(true);
   }
   refreshDisplay();
 }
 //Define action and context
 void setPrompt(uint8_t promptID, uint8_t context) {
-  CONFIRM = DFT_CONFIRM; //(defautl)
   PROMPT_ID = promptID;
   CONTEXT = context;
   setMode(PROMPT);

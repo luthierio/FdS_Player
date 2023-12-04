@@ -217,7 +217,7 @@ public:
                 continue;
 
               } else if (onError != nullptr) {
-                onError(NULL, F("La référence n'existe pas"));
+                onError(NULL, F("Reference doen't exist"));
               }
             }
 
@@ -235,7 +235,7 @@ public:
     // On réinitialise les positions
     setPosition(0); 
     setPlayPosition(0);
-    onConfirm(NULL, F("M3U Chargement OK!"));
+    onConfirm(NULL, F("Loading M3U OK!"));
   }
   // charge une playlist m3u depuis la carte SD
   void saveM3U(FilePicker *filePicker) {
@@ -285,7 +285,7 @@ public:
     // On réinitialise les positions
     setPosition(0); 
     setPlayPosition(0);
-    onConfirm(NULL, F("M3U Chargement OK!"));    
+    onConfirm(NULL, F("SAving M3U OK!"));    
   }
 };
 

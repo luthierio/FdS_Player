@@ -102,16 +102,16 @@ const byte ROT_P_PIN[2] = {1 , 0 };
 /**********************
 * Audio
 ***********************/
-#define DFT_BITRATE           128  //kbps pas utilisé, mais si problème on se rabatera dessus
+#define DFT_BITRATE           128   //kbps, pas utilisé, mais si problème on se rabatera dessus
 #define SECONDS_PER_JUMP      5
 
-#define NBR_MARKERS           10     //Nombre de marqueurs par fichier
-#define NBR_AUDIO_DATA        100     //Nombre de tableaux de marqueurs pour le boitier
+#define NBR_MARKERS           10    //Nombre de marqueurs par fichier
+#define NBR_AUDIO_DATA        100   //Nombre de tableaux de marqueurs pour le boitier
 
-#define MAX_VOLUME            0      // Un petit nombre signifie un volume fort
-#define MIN_VOLUME            100    // Au dela de ce nombre 255 (Volume OFF) est envoyé.
+#define MAX_VOLUME            0     // Un petit nombre signifie un volume fort
+#define MIN_VOLUME            100   // Au dela de ce nombre 255 (Volume OFF) est envoyé.
 
-#define NBR_PLAYLISTS         6    //Nombre de tableaux de marqueurs pour le boitier
+#define NBR_PLAYLISTS         6     //Nombre de playlists
 #define NBR_PLAYLIST_ITEMS    50    //Nombre de marqueurs par fichier
 
 /********************** 
