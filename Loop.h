@@ -14,7 +14,7 @@ void smallLoop() {
 
     case PLAYLIST:
       DISPLAY_.display.cleanZone(118, 0, 118, 64 );  
-      DISPLAY_.playing.progressBar(124, 0, 124, 64, 10);
+      DISPLAY_.playing.progressBar(124, 0, 124, 64, false);
       DISPLAY_.playlists.loop(); 
       break;
 
