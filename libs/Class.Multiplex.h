@@ -15,10 +15,10 @@
       pinMode(MUX_PIN_ADDR_A, OUTPUT);
       pinMode(MUX_PIN_ADDR_B, OUTPUT);
       pinMode(MUX_PIN_ADDR_C, OUTPUT);
-      digitalWrite(PIN_ADDR_A, LOW);
-      digitalWrite(PIN_ADDR_B, LOW);
-      digitalWrite(PIN_ADDR_C, LOW);
-      //pinMode(MUX_PIN_SIG, INPUT);
+      //digitalWrite(PIN_ADDR_A, LOW);
+      //digitalWrite(PIN_ADDR_B, LOW);
+      //digitalWrite(PIN_ADDR_C, LOW);
+      pinMode(MUX_PIN_SIG, INPUT);
     }
     // Méthode pour lire les valeurs analogiques sur toutes les broches
     void readAnalogValues(int analogValues[8]) {
