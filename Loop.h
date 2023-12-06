@@ -28,8 +28,7 @@ void smallLoop() {
 
 }
 void bigLoop() {
-  Serial.println(VUSB);
-
+  //Serial.println(VUSB);
 }
 
 uint32_t smallLoopTime;

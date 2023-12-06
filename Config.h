@@ -103,17 +103,33 @@ const byte ROT_P_PIN[2] = {1 , 0 };
 /**********************
 * Audio
 ***********************/
+#define MAX_VOLUME            0     // Un petit nombre signifie un volume fort
+#define MIN_VOLUME            100   // Au dela de ce nombre 255 (Volume OFF) est envoyé.
 #define DFT_BITRATE           128   //kbps, pas utilisé, mais si problème on se rabatera dessus
 #define SECONDS_PER_JUMP      5
 
-#define NBR_MARKERS           10    //Nombre de marqueurs par fichier
-#define NBR_AUDIO_DATA        100   //Nombre de tableaux de marqueurs pour le boitier
+//SAMD_FEATHER_M0_EXPRESS
+//These need a lot of RAM
+//Not Fully tested...
+#if defined(FEATHER_M4)
 
-#define MAX_VOLUME            0     // Un petit nombre signifie un volume fort
-#define MIN_VOLUME            100   // Au dela de ce nombre 255 (Volume OFF) est envoyé.
+  #define NBR_MARKERS           20    //Nombre de marqueurs par fichier
+  #define NBR_AUDIO_DATA        200   //Nombre de tableaux de marqueurs pour le boitier
 
-#define NBR_PLAYLISTS         6     //Nombre de playlists
-#define NBR_PLAYLIST_ITEMS    50    //Nombre de marqueurs par fichier
+  #define NBR_PLAYLISTS         8     //Nombre de playlists
+  #define NBR_PLAYLIST_ITEMS    50    //Nombre de marqueurs par fichier
+
+#else
+
+  #define NBR_MARKERS           12    //Nombre de marqueurs par fichier
+  #define NBR_AUDIO_DATA        100   //Nombre de tableaux de marqueurs pour le boitier
+
+  #define NBR_PLAYLISTS         6     //Nombre de playlists
+  #define NBR_PLAYLIST_ITEMS    50    //Nombre de marqueurs par fichier
+
+#endif
+
+
 
 /********************** 
 * UX
