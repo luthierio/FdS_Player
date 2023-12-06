@@ -28,7 +28,7 @@ void smallLoop() {
 
 }
 void bigLoop() {
-
+  Serial.println(VUSB);
 
 }
 
@@ -56,8 +56,8 @@ void loop() {
     }
     // Passez les états des boutons à la classe ButtonHandler pour la gestion
     BUTTONS.update(BTN_STATE);
-    VUSB = (float)round(10*(MUX.value(BTN_CHANNEL[0])* 3.3 * 2 )/ 1024.0)/10.0;
-    VBat = (float)round(10*(MUX.value(BTN_CHANNEL[1])* 3.3 * 2 )/ 1024.0)/10.0;
+    VUSB = (float)round(10*(MUX.value(0)* 3.3 * 2 )/ 1024.0)/10.0;
+    VBat = (float)round(10*(MUX.value(1)* 3.3 * 2 )/ 1024.0)/10.0;    
     setVolume(map(analogRead(VOLUME_PIN), 5, 1023, MAX_VOLUME, MIN_VOLUME));
   }
 

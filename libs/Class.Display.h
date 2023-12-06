@@ -283,7 +283,8 @@
       
         ecran_->fillRect(x,y, w, h,  BLACK);
         ecran_->drawRoundRect(x,y, w, h ,1, WHITE);
-        if ( VUsb > 3.2) {
+        
+        if ( VUsb > VUSB_PLUGGED) {
           ecran_->drawBitmap (x+5, y+3, alimIconH, 16, 7 ,WHITE);
         }else{
           uint8_t batLevel = map((int)(VBat*10), (int)(MIN_VBAT*10) , (int)(MAX_VBAT*10), 0, w); 

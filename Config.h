@@ -85,8 +85,9 @@ bool SERIAL_WAIT = false; //It true, wait serial to start
 #define PIN_SIG           A0                           // Broche de signal
 #define SEUIL_ANALOGIQUE  512          //Valeur sous laquelle on considère que c'est LOW en lecture analogique (requis avec des résistances de 100k)
 
-#define MIN_VBAT              3.2    //3.5; // Voltage avec lequel la batterie est considérée vide https://learn.adafruit.com/adafruit-feather-m0-adalogger/power-management  
-#define MAX_VBAT              4      // Voltage avec lequel la batterie est considérée pleine
+#define MIN_VBAT          3.2    //3.5; // Voltage avec lequel la batterie est considérée vide https://learn.adafruit.com/adafruit-feather-m0-adalogger/power-management  
+#define MAX_VBAT          4      // Voltage avec lequel la batterie est considérée pleine
+#define VUSB_PLUGGED      4.2     //Voltage pour lequel le cable est considéré branché
 /**********************
 * Interface
 ***********************/
