@@ -35,6 +35,7 @@ void setup() {
     PITCHER.init();
     // Set volume for left, right channels. lower numbers == louder volume!
     AUDIO.setVolume(VOLUME,VOLUME);
+    METRONOME_.setCallbacks(onBeat);
   }
 
   /**********************

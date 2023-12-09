@@ -284,8 +284,8 @@ void onPress(ButtonHandler* buttonHandler, int ID) {
   * METRONOME:
   ***********************/
   } else if (STATE.MODE == METRONOME) {
-
-      setMode(PLAYER);
+      METRONOME_.switchOnOff();
+      //setMode(PLAYER);
 
   /**********************
   * PROMPT_ID:
@@ -386,6 +386,12 @@ void onLongPress(ButtonHandler* buttonHandler, int ID) {
             break;
         }
 
+    /**********************
+    * METRONOME:
+    ***********************/
+    } else if (STATE.MODE == METRONOME) {
+        METRONOME_.switchOff();
+        setMode(PLAYER);
     } 
     
     DEBUG_.print(F("LongPress"), ID);
@@ -672,4 +678,10 @@ void onPlayListError(const char* label, const __FlashStringHelper* message){
 }
 void onPlayListConfirm(const char* label, const __FlashStringHelper* message){
   sendMessage(label, message,MSG_DELAY);
+}
+/**********************
+* METRONOME:
+***********************/
+void onBeat(){  
+  SLEEP_WATCH.keepAlive();
 }

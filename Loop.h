@@ -46,6 +46,7 @@ void loop() {
   
   SLEEP_WATCH.listen();
   autoPlay();
+  METRONOME_.update();
 
   if(INTERRUPTS){
     // Mettre à jour en continu le rotary encoder

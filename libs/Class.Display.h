@@ -661,7 +661,7 @@
         
         int BeatWidth = 128/metronome->getBeatsPerBar();
         for (byte i = 0; i < metronome->getBeatsPerBar(); i = i + 1) {   
-          if(metronome->getBeat() == i){
+          if(metronome->getBeatCount() == i){
               ecran_->fillCircle(BeatWidth/2 + i*BeatWidth,60, 6, WHITE);
           }else{
               ecran_->fillCircle(BeatWidth/2 + i*BeatWidth,60, 2, WHITE); 
