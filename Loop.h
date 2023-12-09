@@ -18,6 +18,11 @@ void smallLoop() {
       DISPLAY_.playlists.loop(); 
       break;
 
+    case METRONOME:
+      DISPLAY_.metronome.bpm();
+      DISPLAY_.metronome.beats();
+      break;
+
     default:
       break;
   }

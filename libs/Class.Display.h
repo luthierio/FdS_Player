@@ -627,7 +627,49 @@
   ***********************/
   class MetronomeDisplay : public Display {
   public:
+      MetronomeDisplay(Adafruit_SSD1306 *ecran, Metronome *metronome) : 
+        Display(ecran),
+        metronome (metronome){}
+      void show(){
+        graphics();
+        bpm();
+        beats();
+      }
+      void graphics(){
+        ecran_->fillCircle(64,26, 22, BLACK);
+        ecran_->drawCircle(64,26, 22, WHITE);
+        ecran_->setFont();
+        ecran_->setCursor(64-8,26+10);
+        ecran_->print("BPM");   
+      }
+      void bpm(){
+              
+        ecran_->fillRect(64-12,26-14, 26, 16, BLACK); 
+        
+        ecran_->setFont(&FreeSerif9pt7b);
+
+        if(metronome->getBpm() < 100){    
+          ecran_->setCursor(64-8, 26);
+        }else{
+          ecran_->setCursor(64-14, 26);    
+        }
+        ecran_->print(metronome->getBpm()); 
+
+      }
+      void beats(){
+        ecran_->fillRect(0,50, 128, 14, BLACK); 
+        
+        int BeatWidth = 128/metronome->getBeatsPerBar();
+        for (byte i = 0; i < metronome->getBeatsPerBar(); i = i + 1) {   
+          if(metronome->getBeat() == i){
+              ecran_->fillCircle(BeatWidth/2 + i*BeatWidth,60, 6, WHITE);
+          }else{
+              ecran_->fillCircle(BeatWidth/2 + i*BeatWidth,60, 2, WHITE); 
+          }
+        }
+      }
   private:
+    Metronome *metronome;
   };
   
   /**********************
@@ -641,6 +683,7 @@
       PlayingDisplay playing;
       PitcherDisplay pitcher;
       PlaylistsDisplay playlists;
+      MetronomeDisplay metronome;
       PromptDisplay menu;
       DisplayController(
             Adafruit_SSD1306 *ecran, 
@@ -650,13 +693,15 @@
             PlaylistManager *playlists, 
             t_state *state, 
             audioDataManager *datas,
-            MP3File *mp3
+            MP3File *mp3,
+            Metronome *metronome
             ) :
           display(ecran),
           files(ecran,filePicker, mp3),
           playing(ecran,player,filePicker,state, datas),
           pitcher(ecran,datas),
           playlists(ecran,playlists,state),
+          metronome(ecran,metronome),
           menu(ecran) ,
           analogs(ecran) {
           // Initialisez d'autres instances de classes ici si nécessaire

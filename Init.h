@@ -84,6 +84,6 @@ bool CONFIRM = DFT_CONFIRM;
 * DISPLAY:
 ***********************/
 #define SILENT true
-DisplayController DISPLAY_(&SCREEN_,&AUDIO, &FILE_, &PITCHER, &PLAYLISTS_, &STATE, &DATA_MANAGER, &MP3);
+DisplayController DISPLAY_(&SCREEN_,&AUDIO, &FILE_, &PITCHER, &PLAYLISTS_, &STATE, &DATA_MANAGER, &MP3, &METRONOME_);
 
 

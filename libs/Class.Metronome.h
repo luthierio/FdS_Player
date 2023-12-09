@@ -33,10 +33,21 @@ public:
   void setBpm(int bpm) {
     this->bpm = bpm;
   }
-
+  int getBpm() {
+    return this->bpm;
+  }
+  
   void setBeatsPerBar(int beatsPerBar) {
     this->beatsPerBar = beatsPerBar;
   }
+  int getBeatsPerBar() {
+    return this->beatsPerBar;
+  }
+
+  int getBeat() {
+    return this->beatCount;
+  }
+
 
   void playClick(const char *filename) {
     player->startPlayingFile(filename);

@@ -26,6 +26,10 @@ void refreshDisplay() {
 
       DISPLAY_.playlists.show(); 
 
+  } else if (STATE.MODE == METRONOME) {
+
+      DISPLAY_.metronome.show();
+
   } else if (STATE.MODE == LOGO) {
 
       DISPLAY_.display.logo();
@@ -60,6 +64,19 @@ void setMode(uint8_t mode) {
       R_DIR->setCanLoop(false);
       R_FILES->setCanLoop(false);
       R_PITCH->resetPosition(DATA_MANAGER.getPitchStep(), false);
+
+  } else if (STATE.MODE == METRONOME) {
+
+      R_DIR->setLowerBound(MIN_BEATS);
+      R_DIR->setUpperBound(MAX_BEATS);
+      R_DIR->setCanLoop(false);
+      R_DIR->resetPosition(METRONOME_.getBeatsPerBar(), false);
+
+      R_FILES->setLowerBound(MIN_BPM);
+      R_FILES->setUpperBound(MAX_BPM);
+      R_FILES->setCanLoop(false);
+      R_FILES->resetPosition(METRONOME_.getBpm(), false);
+
 
   } else if (STATE.MODE == PROMPT) {
       R_FILES->setLowerBound(0);
@@ -138,7 +155,17 @@ void onRotChange(Rotary &rotary) {
       if(&rotary == R_FILES) {
         PLAYLISTS_.setPlayPosition(currentPosition);
       }
-       
+
+  /**********************
+  * METRONOME:
+  ***********************/
+  } else if (STATE.MODE == METRONOME) {       
+      if(&rotary == R_DIR) {
+        METRONOME_.setBeatsPerBar(currentPosition);
+      }  
+      if(&rotary == R_FILES) {
+        METRONOME_.setBpm(currentPosition);
+      }
 
   /**********************
   * PROMPT:
@@ -198,6 +225,7 @@ void onPress(ButtonHandler* buttonHandler, int ID) {
           break;
 
         case 3:
+          //Got to playlist on release
           break;
 
         case 4:
@@ -206,8 +234,7 @@ void onPress(ButtonHandler* buttonHandler, int ID) {
           break;
 
         case 5:
-          DATA_MANAGER.switchPitchMode();
-          DATA_MANAGER.setPitchStep(DFT_PITCH_STEP);
+          //Switch mode on release
           break;
 
         default:
@@ -256,7 +283,7 @@ void onPress(ButtonHandler* buttonHandler, int ID) {
   /**********************
   * METRONOME:
   ***********************/
-  } else if (STATE.MODE == BEAT) {
+  } else if (STATE.MODE == METRONOME) {
 
       setMode(PLAYER);
 
@@ -331,7 +358,7 @@ void onLongPress(ButtonHandler* buttonHandler, int ID) {
             break;
 
           case 5:
-            //setMode(PROMPT);
+            setMode(METRONOME);
             break;
 
           default:
@@ -384,6 +411,11 @@ void onRelease(ButtonHandler* buttonHandler, int ID) {
           break;
         case 3:
           setMode(PLAYLIST);
+          break;
+        case 5:
+          DATA_MANAGER.switchPitchMode();
+          DATA_MANAGER.setPitchStep(DFT_PITCH_STEP);
+          break;
         default:
           break;
       }
