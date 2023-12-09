@@ -377,6 +377,7 @@ void onRelease(ButtonHandler* buttonHandler, int ID) {
     if (STATE.MODE == PLAYER) {
       switch (ID) {
         case 0:
+          AUDIO.stopPlaying();
           DEBUG_.print(F("Playing"), FILE_.path);
           AUDIO.startPlayingFile(FILE_.path);
           afterStartPlaying();
@@ -405,7 +406,7 @@ void onRelease(ButtonHandler* buttonHandler, int ID) {
           break;
         case 5:
           //Add selected file on Release
-          PLAYLISTS_.addCurrentFile(&FILE_);
+          PLAYLISTS_.addCurrentFileToCurrentPosition(&FILE_);
           //refreshDisplay();
           DISPLAY_.playlists.printList(); 
         default:

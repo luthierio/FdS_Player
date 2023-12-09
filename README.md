@@ -7,10 +7,16 @@ Arduino Sketch and set of librairies for utilizing the FdS Audio Interface with 
 When formatting SD cards on a Linux computer, avoid using the OS formatting software. Instead, use the following command, where /dev/sdbX represents the SD Card.
 
 ```bash
-sudo mkfs.vfat -F 32 -s 64 -S 512 /dev/sdbX
+sudo mkfs.vfat -c -F 32 -s 64 -S 512 -n FAT /dev/sdbX
 ```
+-c  Check the device for bad blocks before creating the filesystem.
+-F FAT-SIZE (12, 16 or 32 bit)
+-s SECTORS-PER-CLUSTER Specify the number of disk sectors per cluster. Must be a power of 2, i.e. 1, 2, 4, 8, ... 128.
+-S SECTOR-SIZE Specify the number of bytes per filesystem sector.  Must be a power of 2 and greater than or equal to 512
+-n VOLUME-NAME
 
 This is the recommended method for achieving optimal writing speed when saving data. Exercise caution when executing this command, as it can potentially destroy your data (verify sdbX carefully).
+See https://forum.arduino.cc/t/dont-format-sd-cards-with-os-utilities/222016/6
 
 ### Files structure
 
