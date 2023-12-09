@@ -94,6 +94,6 @@ void setup() {
 
   DEBUG_.printRam();
     
-  //setMode(STATE.MODE);
-  setMode(METRONOME);
+  setMode(STATE.MODE);
+  //setMode(METRONOME);
 };
