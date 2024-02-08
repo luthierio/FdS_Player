@@ -634,15 +634,27 @@ void onAfterSelectFile(){
 
   STATE.fileNum = FILE_.fileNum;
   DATA_MANAGER.select();
-  MP3.open(FILE_.path); MP3.close();  //Open and close to load bitrate & tags ID3v1
+  //MP3.open(FILE_.path); MP3.close();  //Open and close to load bitrate & tags ID3v1
+  MP3_MUST_LOAD = true; //Prochaine boucle on charge les MP3
 
-  if(!MP3.bitrate) MP3.bitrate = DFT_BITRATE;
   if(STATE.MODE == PLAYER){
     DISPLAY_.files.printPath();
   }
   
   DEBUG_.print(F("SelectFile"),FILE_.fileNum,FILE_.path);  
   onAfterSDWork();
+}
+void onMp3Load(){  
+
+  MP3.open(FILE_.path); MP3.close();
+  if(!MP3.bitrate) MP3.bitrate = DFT_BITRATE;
+  if(STATE.MODE == PLAYER){
+    DISPLAY_.files.printPath();
+  }
+    
+  if(STATE.MODE == PLAYER){
+    DISPLAY_.files.printPath();
+  }
 }
 /**********************
 * DATAS:

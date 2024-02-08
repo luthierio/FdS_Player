@@ -18,6 +18,7 @@ FilePicker FILE_(&SD);
 FileManager SD_FS(&SD);
 
 MP3File MP3;
+bool MP3_MUST_LOAD = false; //Boolean pour charger les MP3 via les loops
 
 Metronome METRONOME_(&AUDIO, BEATSOUND, BEATSOUND2); // BPM = 120, 4 beats per bar, with specific beat files
 
