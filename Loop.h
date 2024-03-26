@@ -33,10 +33,12 @@ void smallLoop() {
 
 }
 void bigLoop() {
+  /*
   if(MP3_MUST_LOAD){
     onMp3Load();
     MP3_MUST_LOAD = false;
   }
+  */
 }
 
 uint32_t smallLoopTime;
