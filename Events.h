@@ -3,9 +3,17 @@
 * AUDIO:
 ***********************/
 
-void afterStartPlaying(){
-  delay(50);
-  PITCHER.setPitch(DATA_MANAGER.getPitchStep(), DATA_MANAGER.getPitchMode());
+void onPlayFile(){
+    AUDIO.stopPlaying();
+    MP3.open(FILE_.path); MP3.close();
+    if(!MP3.bitrate) MP3.bitrate = DFT_BITRATE;
+    DEBUG_.print(F("Playing"), FILE_.path);
+    if(STATE.MODE == PLAYER){
+      DISPLAY_.files.printPath();
+    }
+    AUDIO.startPlayingFile(FILE_.path);
+    delay(50);
+    PITCHER.setPitch(DATA_MANAGER.getPitchStep(), DATA_MANAGER.getPitchMode());
 }
 /**********************
 * MODE:
@@ -410,10 +418,7 @@ void onRelease(ButtonHandler* buttonHandler, int ID) {
     if (STATE.MODE == PLAYER) {
       switch (ID) {
         case 0:
-          AUDIO.stopPlaying();
-          DEBUG_.print(F("Playing"), FILE_.path);
-          AUDIO.startPlayingFile(FILE_.path);
-          afterStartPlaying();
+          onPlayFile();
           break;
         case 3:
           setMode(PLAYLIST);
@@ -435,8 +440,7 @@ void onRelease(ButtonHandler* buttonHandler, int ID) {
         case 0:
           if(!PLAYLISTS_.currentPositionIsEmpty()){
             FILE_.select(PLAYLISTS_.currentPlaylist->currentItem->dirNum, PLAYLISTS_.currentPlaylist->currentItem->fileNum);
-            AUDIO.startPlayingFile(FILE_.path);
-            afterStartPlaying();
+            onPlayFile();
           }
           break;
         case 3:
@@ -502,8 +506,7 @@ void autoPlay(){
             SHOULD_PLAY_NEXT = false;
             break;
         }
-        AUDIO.startPlayingFile(FILE_.path); 
-        afterStartPlaying();
+        onPlayFile();
       }
     //PLAYLIST AUTOPLAY
     } else if(SHOULD_PLAY_NEXT && STATE.MODE == PLAYLIST) {
@@ -532,8 +535,7 @@ void autoPlay(){
         }        
         if(!PLAYLISTS_.currentPositionIsEmpty()){
           FILE_.select(PLAYLISTS_.currentPlaylist->currentItem->dirNum, PLAYLISTS_.currentPlaylist->currentItem->fileNum);
-          AUDIO.startPlayingFile(FILE_.path); 
-          afterStartPlaying();
+          onPlayFile();
         }
       }      
 
@@ -616,7 +618,6 @@ void onAfterSDReadWrite(const char* fileName, const __FlashStringHelper* message
 }
 
 
-
 void onBeforeSelectDir(){
   onBeforeSDWork();
 }
@@ -643,18 +644,6 @@ void onAfterSelectFile(){
   
   DEBUG_.print(F("SelectFile"),FILE_.fileNum,FILE_.path);  
   onAfterSDWork();
-}
-void onMp3Load(){  
-
-  MP3.open(FILE_.path); MP3.close();
-  if(!MP3.bitrate) MP3.bitrate = DFT_BITRATE;
-  if(STATE.MODE == PLAYER){
-    DISPLAY_.files.printPath();
-  }
-    
-  if(STATE.MODE == PLAYER){
-    DISPLAY_.files.printPath();
-  }
 }
 /**********************
 * DATAS:
