@@ -39,6 +39,7 @@ void bigLoop() {
     MP3_MUST_LOAD = false;
   }
   */
+  randomSeed(millis());
 }
 
 uint32_t smallLoopTime;
