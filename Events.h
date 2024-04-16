@@ -8,9 +8,6 @@ void onPlayFile(){
     MP3.open(FILE_.path); MP3.close();
     if(!MP3.bitrate) MP3.bitrate = DFT_BITRATE;
     DEBUG_.print(F("Playing"), FILE_.path);
-    if(STATE.MODE == PLAYER){
-      DISPLAY_.files.printPath();
-    }
     AUDIO.startPlayingFile(FILE_.path);
     delay(50);
     PITCHER.setPitch(DATA_MANAGER.getPitchStep(), DATA_MANAGER.getPitchMode());
@@ -635,8 +632,6 @@ void onAfterSelectFile(){
 
   STATE.fileNum = FILE_.fileNum;
   DATA_MANAGER.select();
-  //MP3.open(FILE_.path); MP3.close();  //Open and close to load bitrate & tags ID3v1
-  MP3_MUST_LOAD = true; //Prochaine boucle on charge les MP3
 
   if(STATE.MODE == PLAYER){
     DISPLAY_.files.printPath();
