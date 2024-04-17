@@ -202,11 +202,14 @@
           if (!filePicker->exist()) {
             printTxtNum(filePicker->fileNum, 48, 48, &FreeSans18pt7b);             
           }else{
+            /*
             if(mp3->hasID3V1){
               printID3(0, 32, &FreeSerif9pt7b);
             }else{
               printFilePath(0, 32, &FreeSerif9pt7b);
             }
+            */
+            printFilePath(0, 32, &FreeSerif9pt7b);
           }
 
         } 
