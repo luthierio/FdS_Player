@@ -61,13 +61,13 @@ bool SERIAL_WAIT = false; //It true, wait serial to start
 // AICTRL0 from table below. Voir https://www.vlsi.fi/fileadmin/software/VS10XX/pitchshifter.pdf
 // AICTRL0 = +16384 × ratio/100. Voir https://www.vlsi.fi/fileadmin/software/VS10XX/pitchshifter.pdf
 
-#define MIN_PITCH_STEP      0   
-#define MAX_PITCH_STEP      10  
-#define DFT_PITCH_STEP      5  
-#define MIN_PITCH_RATIO        70  
-#define MAX_PITCH_RATIO        134
-#define MIN_PITCH_TEMPO_RATIO  50  
-#define MAX_PITCH_TEMPO_RATIO  145 
+#define MIN_PITCH_STEP          0   
+#define MAX_PITCH_STEP          10  
+#define DFT_PITCH_STEP          5  
+#define MIN_PITCH_RATIO         70  
+#define MAX_PITCH_RATIO         134
+#define MIN_PITCH_TEMPO_RATIO   50  
+#define MAX_PITCH_TEMPO_RATIO   145 
 
 /**********************
 * INPUTS PINS

@@ -57,7 +57,6 @@ void setMode(uint8_t mode) {
       R_FILES->resetPosition(FILE_.fileNum, false);
       R_DIR->setCanLoop(true);
       R_FILES->setCanLoop(true);
-
       R_PITCH->resetPosition(DATA_MANAGER.getPitchStep(), false);
   
   } else if (STATE.MODE == PLAYLIST) {
@@ -421,8 +420,9 @@ void onRelease(ButtonHandler* buttonHandler, int ID) {
           setMode(PLAYLIST);
           break;
         case 5:
-          DATA_MANAGER.switchPitchMode();
           DATA_MANAGER.setPitchStep(DFT_PITCH_STEP);
+          DATA_MANAGER.switchPitchMode();
+          R_PITCH->resetPosition(DATA_MANAGER.getPitchStep(), false);
           break;
         default:
           break;
